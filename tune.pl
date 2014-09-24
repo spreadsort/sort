@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
-$usage = "usage: tune.pl [-tune] [-real] [-tune_verify] [-verbose] [-multiple_iterations] [-large] [-small] [fileSize]\n";
+$usage = "usage: tune.pl [-tune] [-real] [-tune_verify] [-verbose] "
+"[-multiple_iterations] [-large] [-small] [-windows] [fileSize]\n";
 #testing sorting on 40 million elements by default
 #don't test on below 2^22 (4 million) elements as that is the minimum
 #for MAX_SPLITS of 11 to be efficient
@@ -28,12 +29,13 @@ for (my $ii = 0; $ii < @ARGV; $ii++) {
 	    print STDERR $usage;
 	    exit(0);
 	}
-	#verification roughly doubles the runtime of this script, but it does make sure that results are correct during tuning
+        #verification roughly doubles the runtime of this script,
+        #but it does make sure that results are correct during tuning
 	#verification always runs during speed comparisons with std::sort
 	if ($currArg =~ /^-tune_verify$/) {
 	    $verifycorrect = 1;
-	#use real times only, don't use weighting and special-case tests; this saves about 5/6 of the script runtime
-	#but results are substantially different
+	#use real times only, don't use weighting and special-case tests
+        #this saves about 5/6 of the script runtime but results are different
 	} elsif ($currArg =~ /^-real$/) {
 	    $realtimes = 1;
 	} elsif ($currArg =~ /^-verbose$/) {
@@ -51,6 +53,8 @@ for (my $ii = 0; $ii < @ARGV; $ii++) {
 	    $defFileSize = 100000;
 	} elsif ($currArg =~ /^-tune$/) {
 	    $tune = 1;
+	} elsif ($currArg =~ /^-windows$/) {
+	    $makename = "..\\..\\".$makename;
 	} elsif ($currArg =~ /^-/) {
 	    print STDERR $usage;
 	    exit(0);
@@ -162,7 +166,7 @@ sub PerfTest {
 
 sub WriteConstants {
     # deleting the file
-    $const_file = '../../boost/sort/constants.hpp';
+    $const_file = 'include/boost/sort/constants.hpp';
     @cannot = grep {not unlink} $const_file;
     print "$0: could not unlink @cannot\n" if @cannot;
 
@@ -171,8 +175,8 @@ sub WriteConstants {
       print STDERR "Can't open output file: $const_file: $!\n";
       exit;
     }
-	print CONSTANTS "//constant definitions for the Sorting library\n\n";
-	print CONSTANTS "//          Copyright Steven J. Ross 2001 - 2009\n";
+	print CONSTANTS "//constant definitions for the Sort library\n\n";
+	print CONSTANTS "//          Copyright Steven J. Ross 2001 - 2014\n";
 	print CONSTANTS "// Distributed under the Boost Software License, Version 1.0.\n";
 	print CONSTANTS "//    (See accompanying file LICENSE_1_0.txt or copy at\n";
 	print CONSTANTS "//          http://www.boost.org/LICENSE_1_0.txt)\n\n";
