@@ -3,7 +3,7 @@ algorithm_sorting
 
 proposed boost/sort library using a hybrid radix sort that is faster than O(n*log(n))
 
-To install, download boost, run bootstrap, and copy this library into <your boost root>/libs/sort.  Then run .\b2 headers from your boost root to copy the headers into the boost tree.  Replace "\" with "/" in the above stated commands if running on windows.
+To install, download boost, run bootstrap, and copy this library into <your boost root>/libs/sort.  Then run ./b2 headers from your boost root to copy the headers into the boost tree.  Replace "/" with "\" in the above stated commands if running on windows.
 Then go to <your boost root>/libs/sort and run the unit tests:
 b2 test on linux
 ..\..\b2 test on windows
