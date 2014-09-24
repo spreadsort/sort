@@ -3,8 +3,12 @@ algorithm_sorting
 
 proposed boost/sort library using a hybrid radix sort that is faster than O(n*log(n))
 
-To install, download boost, run bootstrap, and copy this library into <your boost root>/libs/sort.  Then run ./b2 headers from your boost root to copy the headers into the boost tree.  Replace "/" with "\" in all commands if running on windows.
-Then run the unit tests from your boost root:
+To install, download boost, run bootstrap, and copy this library into <your boost root>/libs/sort.  Replace "/" with "\" in paths below if you're using Windows.
+On Windows only, from your boost root, run this command:
+xcopy /s libs\sort\include\boost\sort boost\sort\
+to copy all the files where they belong, and avoid a bug in b2 headers on Windows.
+
+Run the unit tests from your boost root:
 ./b2 libs/sort/test
 
 Then go to <your boost root>/libs/sort and run tune.pl:
