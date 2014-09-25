@@ -265,7 +265,7 @@
         improvement for changing other constants is usually minor.
 </p><p> 
         If you can afford to let it run for a day, and have at least 1GB of free memory, 
-        the perl command: "./tune.pl -large -tune" (UNIX) or "perl tune.pl -large -tune" (Windows) 
+        the perl command: "./tune.pl -large -tune" (UNIX) or "perl tune.pl -large -tune -windows" (Windows)
         can be used to automatically tune <a href="constants.html">these constants</a>.
         This should be run from the libs/sort/sort directory inside the boost home directory.
 		This will work to identify the ideal constants.hpp settings for your system, 
@@ -273,10 +273,10 @@
 		and additionally verifies that all sorting routines sort correctly across various data 
 		distributions.  
 		Alternatively, you can test with the file size you're most concerned with 
-		"./tune.pl number -tune" (UNIX) or "perl tune.pl number -tune" (Windows).
+		"./tune.pl number -tune" (UNIX) or "perl tune.pl number -tune -windows" (Windows).
 		Substitute the number of elements you want to test with for "number".
 		Otherwise, just use the options it comes with, they're decent.
-		With default settings "./tune.pl -tune" (UNIX) "perl tune.pl -tune" (Windows), 
+		With default settings "./tune.pl -tune" (UNIX) "perl tune.pl -tune -windows" (Windows),
 		the script will take hours to run (less than a day), 
 		but may not pick the correct <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> if it is over 10.
 		Alternatively, you can add the -small option to make it take just a few minutes,
@@ -287,7 +287,7 @@
         and see how much of a speedup it gets, by omiting the "-tune" option.  
         This runs at the end of tuning runs.
         Default args will take about an hour to run and give accurate results on decent-sized test vectors.
-        "./tune.pl -small" (UNIX) "perl tune.pl -small" (Windows) is a faster option,
+        "./tune.pl -small" (UNIX) "perl tune.pl -small -windows" (Windows) is a faster option,
         that tests on smaller vectors and isn't as accurate.
 </p><p> If any differences are encountered during tuning, please call tune.pl with -debug &gt; log_file_name.
     If the resulting log file contains compilation or permissions issues, it is likely an issue with your
