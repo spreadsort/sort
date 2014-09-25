@@ -60,9 +60,9 @@ namespace boost {
   template <class RandomAccessIter>
   inline typename boost::enable_if_c< 
     is_same<typename std::iterator_traits<RandomAccessIter>::value_type, 
-	    typename std::string>::value || 
+            typename std::string>::value || 
     is_same<typename std::iterator_traits<RandomAccessIter>::value_type, 
-	    typename std::wstring>::value, void >::type
+            typename std::wstring>::value, void >::type
   sort(RandomAccessIter first, RandomAccessIter last)
   {
     string_sort(first, last);
