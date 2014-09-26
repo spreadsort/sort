@@ -1,12 +1,12 @@
 // spreadsort key and data sorting example.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/sort.hpp>
 #include <time.h>
@@ -26,11 +26,15 @@ struct DATA_TYPE {
     };
 //functor example
 struct lessthan {
-  inline bool operator()(const DATA_TYPE &x, const DATA_TYPE &y) const { return x.key < y.key; }
+  inline bool operator()(const DATA_TYPE &x, const DATA_TYPE &y) const {
+    return x.key < y.key;
+  }
 };
 
 struct rightshift {
-  inline int operator()(const DATA_TYPE &x, const unsigned offset) { return x.key >> offset; }
+  inline int operator()(const DATA_TYPE &x, const unsigned offset) {
+    return x.key >> offset;
+  }
 };
 
 //Pass in an argument to test std::sort
@@ -71,18 +75,18 @@ int main(int argc, const char ** argv) {
     double elapsed;
     start = clock();
     if(stdSort)
-      //std::sort(&(array[0]), &(array[0]) + uCount, lessthan());
       std::sort(array.begin(), array.end(), lessthan());
     else
-      //integer_sort(&(array[0]), &(array[0]) + uCount, rightshift(), lessthan());
       integer_sort(array.begin(), array.end(), rightshift(), lessthan());
     end = clock();
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
     if(stdSort)
-      ofile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("standard_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     else
-      ofile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("boost_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     if(ofile.good()) {
       for(unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v].key), sizeof(array[v].key) );

@@ -1,12 +1,12 @@
 // spreadsort reverse string sorting example.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/string_sort.hpp>
 #include <time.h>
@@ -77,9 +77,11 @@ int main(int argc, const char ** argv) {
     end = clock();
     elapsed = ((double) (end - start));
     if(stdSort)
-      outfile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      outfile.open("standard_sort_out.txt", std::ios_base::out |
+                   std::ios_base::binary | std::ios_base::trunc);
     else
-      outfile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      outfile.open("boost_sort_out.txt", std::ios_base::out |
+                   std::ios_base::binary | std::ios_base::trunc);
     if(outfile.good()) {
       for(unsigned u = 0; u < array.size(); ++u)
         outfile << array[u] << "\n";
@@ -94,5 +96,3 @@ int main(int argc, const char ** argv) {
     printf("spreadsort elapsed time %f\n", total / CLOCKS_PER_SEC);
   return 0;
 }
-
-

@@ -1,12 +1,12 @@
 // spreadsort 64-bit integer sorting example.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/sort.hpp>
 #include <time.h>
@@ -67,9 +67,11 @@ int main(int argc, const char ** argv) {
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
     if(stdSort)
-      ofile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("standard_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     else
-      ofile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("boost_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     if(ofile.good()) {
       for(unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v]), sizeof(array[v]) );

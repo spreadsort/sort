@@ -1,12 +1,12 @@
 // integer with a rightshift functor reverse sorting example.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/sort.hpp>
 #include <time.h>
@@ -23,7 +23,9 @@ using namespace boost;
 #define DATA_TYPE int
 
 struct negrightshift {
-  inline int operator()(const int &x, const unsigned offset) { return -(x >> offset); }
+  inline int operator()(const int &x, const unsigned offset) {
+    return -(x >> offset);
+  }
 };
 
 //Pass in an argument to test std::sort
@@ -61,18 +63,19 @@ int main(int argc, const char ** argv) {
     double elapsed;
     start = clock();
     if(stdSort)
-      //std::sort(&(array[0]), &(array[0]) + uCount, std::greater<DATA_TYPE>());
       std::sort(array.begin(), array.end(), std::greater<DATA_TYPE>());
     else
-      //integer_sort(&(array[0]), &(array[0]) + uCount, negrightshift(), std::greater<DATA_TYPE>());
-      integer_sort(array.begin(), array.end(), negrightshift(), std::greater<DATA_TYPE>());
+      integer_sort(array.begin(), array.end(), negrightshift(),
+                   std::greater<DATA_TYPE>());
     end = clock();
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
     if(stdSort)
-      ofile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("standard_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     else
-      ofile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("boost_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     if(ofile.good()) {
       for(unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v]), sizeof(array[v]) );

@@ -1,12 +1,12 @@
 // spreadsort double sorting example.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/sort.hpp>
 #include <time.h>
@@ -23,7 +23,8 @@ using namespace boost;
 #define CAST_TYPE boost::int64_t
 
 //Pass in an argument to test std::sort
-//Note that this converts NaNs and -0.0 to 0.0, so that sorting results are identical every time
+//Note that this converts NaNs and -0.0 to 0.0, so that sorting results are
+//identical every time
 int main(int argc, const char ** argv) {
   size_t uCount,uSize=sizeof(DATA_TYPE);
   bool stdSort = false;
@@ -60,7 +61,8 @@ int main(int argc, const char ** argv) {
      //Checking for denormalized numbers
      if(!(float_mem_cast<DATA_TYPE, CAST_TYPE>(array[v]) & exponent_mask)) {
        //Make the top exponent bit high
-       CAST_TYPE temp = top_exponent_bit | float_mem_cast<DATA_TYPE, CAST_TYPE>(array[v]);
+       CAST_TYPE temp = top_exponent_bit |
+         float_mem_cast<DATA_TYPE, CAST_TYPE>(array[v]);
        memcpy(&(array[v]), &temp, sizeof(DATA_TYPE));
      }
      //Testcase doesn't sort NaNs; they just cause confusion
@@ -81,9 +83,11 @@ int main(int argc, const char ** argv) {
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
     if(stdSort)
-      ofile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("standard_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     else
-      ofile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("boost_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     if(ofile.good()) {
       for(unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v]), sizeof(array[v]) );

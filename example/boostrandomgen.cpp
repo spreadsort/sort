@@ -6,7 +6,7 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <stdio.h>
 #include "stdlib.h"
@@ -31,7 +31,8 @@ int main(int argc, const char ** argv) {
   if(argc > 1)
     mod_shift = atoi(argv[1]) - 1;
   std::ofstream ofile;
-  ofile.open("input.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+  ofile.open("input.txt", std::ios_base::out | std::ios_base::binary |
+             std::ios_base::trunc);
   if(ofile.bad()) {
     printf("could not open input.txt for writing!\n");
     return 1;

@@ -1,12 +1,12 @@
 // flexible random number generator providing multiple distributions.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <stdio.h>
 #include "stdlib.h"
@@ -32,7 +32,8 @@ int main(int argc, const char ** argv) {
   if(low_shift > 16)
     low_shift = 16;
   std::ofstream ofile;
-  ofile.open("input.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+  ofile.open("input.txt", std::ios_base::out | std::ios_base::binary |
+             std::ios_base::trunc);
   if(ofile.bad()) {
     printf("could not open input.txt for writing!\n");
     return 1;
@@ -48,7 +49,8 @@ int main(int argc, const char ** argv) {
     unsigned i = 0;
     for(; i< uDivideFactor; ++i) {
       //Generating a 32-bit random number
-      pNumbers[i] = (rand() % (1 << low_shift)) | ((rand() % (1 << high_shift)) << 16);
+      pNumbers[i] = (rand() % (1 << low_shift)) |
+        ((rand() % (1 << high_shift)) << 16);
       if(16 == low_shift && rand() % 2)
         pNumbers[i] |= 1 << 15;
       //Adding the sign bit

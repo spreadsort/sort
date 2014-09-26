@@ -1,12 +1,12 @@
 // a sorting example that uses the worst-case for conventional MSD radix sorts.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/sort.hpp>
 #include <time.h>
@@ -26,7 +26,8 @@ using namespace std;
 #define ALR_THRESHOLD 20
 
 const unsigned max_count = ALR_THRESHOLD - 1;
-const unsigned bit_shift = detail::rough_log_2_size(max_count) - detail::LOG_MEAN_BIN_SIZE;
+const unsigned bit_shift = detail::rough_log_2_size(max_count) -
+  detail::LOG_MEAN_BIN_SIZE;
 const unsigned radix_threshold = detail::rough_log_2_size(max_count) + 1;
 //Increase this size if too fast to test accurately
 const unsigned top_splits = 12;
@@ -34,24 +35,27 @@ const unsigned top_splits = 12;
 const DATA_TYPE typed_one = 1;
 
 void
-fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value, unsigned remaining_bits)
+fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
+            unsigned remaining_bits)
 {
   if(remaining_bits >= radix_threshold) {
-    input.push_back((base_value << remaining_bits) + ((typed_one << remaining_bits) - 1));
+    input.push_back((base_value << remaining_bits) +
+                    ((typed_one << remaining_bits) - 1));
     fill_vector(input, base_value << bit_shift, remaining_bits - bit_shift);
   }
   else {
     for(unsigned u = 0; u < max_count; ++u)
-      input.push_back((base_value << remaining_bits) + (rand() % (1 << remaining_bits)));
+      input.push_back((base_value << remaining_bits) +
+                      (rand() % (1 << remaining_bits)));
   }
 }
 
-//Pass in an argument to test std::sort
+//Tests boost::sort on the worst-case distribution for standard MSD radix sorts.
 int main(int argc, const char ** argv) {
   vector<DATA_TYPE> input;
   for(int ii = (1 << top_splits) - 1; ii >= 0; --ii)
     fill_vector(input, ii, (sizeof(DATA_TYPE) * 8) - top_splits);
-  //Run multiple loops, if requested
+  //Run both std::sort and boost::sort
   for(unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
     clock_t start, end;

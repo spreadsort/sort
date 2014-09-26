@@ -6,7 +6,7 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 #include <boost/sort/sort.hpp>
 #include <time.h>
 #include <stdio.h>
@@ -30,11 +30,15 @@ struct DATA_TYPE {
 
 // Casting to an integer before bitshifting
 struct rightshift {
-  int operator()(const DATA_TYPE &x, const unsigned offset) const { return float_mem_cast<KEY_TYPE, CAST_TYPE>(x.key) >> offset; }
+  int operator()(const DATA_TYPE &x, const unsigned offset) const {
+    return float_mem_cast<KEY_TYPE, CAST_TYPE>(x.key) >> offset;
+  }
 };
 
 struct lessthan {
-  bool operator()(const DATA_TYPE &x, const DATA_TYPE &y) const { return x.key < y.key; }
+  bool operator()(const DATA_TYPE &x, const DATA_TYPE &y) const {
+    return x.key < y.key;
+  }
 };
 
 // Pass in an argument to test std::sort
@@ -68,10 +72,11 @@ int main(int argc, const char ** argv) {
     unsigned v = 0;
     while ( input.good() && v < uCount) {
      input.read( (char *) &(array[v].key), sizeof( array[v].key ) );
-     //Checking for denormalized numbers
+     //Checking for denormalized numbers; float_sort looks too fast on them.
      if(!(float_mem_cast<KEY_TYPE, CAST_TYPE>(array[v].key) & 0x7f800000)) {
        //Make the top exponent bit high
-       CAST_TYPE temp = 0x40000000 | float_mem_cast<KEY_TYPE, CAST_TYPE>(array[v].key);
+       CAST_TYPE temp = 0x40000000 |
+         float_mem_cast<KEY_TYPE, CAST_TYPE>(array[v].key);
        memcpy(&(array[v].key), &temp, sizeof(KEY_TYPE));
      }
      //Testcase doesn't sort NaNs; they just cause confusion
@@ -96,9 +101,11 @@ int main(int argc, const char ** argv) {
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
     if(stdSort)
-      ofile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("standard_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     else
-      ofile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("boost_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     if(ofile.good()) {
       for(unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v].key), sizeof(array[v].key) );

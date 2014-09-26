@@ -1,12 +1,12 @@
 // a sorting example that uses the worst-case distribution for spreadsort.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/sort.hpp>
 #include <time.h>
@@ -26,18 +26,21 @@ using namespace std;
 #define ALR_THRESHOLD 20
 
 const unsigned max_count = ALR_THRESHOLD - 1;
-const unsigned bit_shift = detail::rough_log_2_size(max_count) - detail::LOG_MEAN_BIN_SIZE;
+const unsigned bit_shift = detail::rough_log_2_size(max_count) -
+  detail::LOG_MEAN_BIN_SIZE;
 const unsigned radix_threshold = detail::rough_log_2_size(max_count) + 1;
 
 const DATA_TYPE typed_one = 1;
 
 void
-fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value, unsigned remaining_bits
-            , const vector<unsigned> & indices, int index)
+fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
+            unsigned remaining_bits, const vector<unsigned> & indices,
+            int index)
 {
   if(index < 0) {
     for(unsigned u = 0; u < max_count; ++u)
-      input.push_back((base_value << remaining_bits) + (rand() % (1 << remaining_bits)));
+      input.push_back((base_value << remaining_bits) +
+                      (rand() % (1 << remaining_bits)));
   }
   else {
     unsigned shift = indices[index];
@@ -48,7 +51,7 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value, unsigned rema
   }
 }
 
-//Pass in an argument to test std::sort
+//Tests std::sort vs boost::sort on boost::sort's worst distribution.
 int main(int argc, const char ** argv) {
   vector<DATA_TYPE> input;
   vector<unsigned> offsets;
@@ -59,8 +62,9 @@ int main(int argc, const char ** argv) {
   for(; bit_length >= ++bit_offset; bit_length -= bit_offset)
     offsets.push_back(bit_offset);
   for(int ii = (1 << bit_length) - 1; ii >= 0; --ii)
-    fill_vector(input, ii, total_length - bit_length, offsets, offsets.size() - 1);
-  //Run multiple loops, if requested
+    fill_vector(input, ii, total_length - bit_length,
+                offsets, offsets.size() - 1);
+  //Run both std::sort and boost::sort.
   for(unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
     clock_t start, end;

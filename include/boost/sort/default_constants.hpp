@@ -5,7 +5,7 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 #ifndef BOOST_SPREADSORT_CONSTANTS
 #define BOOST_SPREADSORT_CONSTANTS
 namespace boost {

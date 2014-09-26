@@ -1,12 +1,12 @@
 // spreadsort string sorting example.
 //
-//  Copyright Steven Ross 2009.
+//  Copyright Steven Ross 2009-2014.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/ for updates, documentation, and revision history.
+//  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/sort/string_sort.hpp>
 #include <time.h>
@@ -27,7 +27,9 @@ struct DATA_TYPE {
 
 
 struct bracket {
-  inline unsigned char operator()(const DATA_TYPE &x, size_t offset) const { return x.a[offset]; }
+  inline unsigned char operator()(const DATA_TYPE &x, size_t offset) const {
+    return x.a[offset];
+  }
 };
 
 struct getsize {
@@ -77,9 +79,11 @@ int main(int argc, const char ** argv) {
     elapsed = ((double) (end - start));
     std::ofstream ofile;
     if(stdSort)
-      ofile.open("standard_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("standard_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     else
-      ofile.open("boost_sort_out.txt", std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+      ofile.open("boost_sort_out.txt", std::ios_base::out |
+                 std::ios_base::binary | std::ios_base::trunc);
     if(ofile.good()) {
       for(unsigned u = 0; u < array.size(); ++u)
         ofile << array[u].a << "\n";
@@ -94,5 +98,3 @@ int main(int argc, const char ** argv) {
     printf("spreadsort elapsed time %f\n", total / CLOCKS_PER_SEC);
   return 0;
 }
-
-
