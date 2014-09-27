@@ -46,7 +46,7 @@
 
   <h2><a name="introduction" id="introduction"></a>Introduction</h2>  
   <p>
-        The Sorting Algorithm Library provides a generic implementation of high-speed sorting algorithms 
+        The Boost Sort library provides a generic implementation of high-speed sorting algorithms 
 		that outperform those in the C++ standard in both average and worst case performance.
 		These algorithms only work on random access iterators.  
 		They are hybrids using both radix and comparison-based sorting, 
@@ -58,7 +58,7 @@
 		Unlike many radix-based algorithms,  the underlying Spreadsort algorithm is designed around 
 		worst-case performance.  It performs better on chunky data (where it is not widely distributed), 
 		so that on real data it can perform substantially better than on random data.
-		Conceptually, Spreadsort can sort any data for which an absolute ordering can be determined. 
+		Conceptually, Spreadsort can sort any data for which an absolute ordering can be determined, and string_sort is sufficiently flexible that this should be possible. 
 		Situations where Spreadsort is fastest relative to std::sort:
 </p><p> 1. Large number of elements to sort (N >> 1000)
 </p><p> 2. Slow comparison function (such as floating point numbers on x86 processors or strings)

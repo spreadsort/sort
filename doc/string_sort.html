@@ -65,7 +65,7 @@
 		For this reason, std::sort will be called instead if the character type is of size > 2.
 		string_sort has a special optimization for identical substrings.  
 		This adds some overhead on random data, but identical substrings are common in real strings.
-		reverse_string_sort sorts strings in reverse (decending) order, but is otherwise identical.
+		reverse_string_sort sorts strings in reverse (decending) order, but is otherwise identical.    string_sort is sufficiently flexible that it should sort any data type that std::sort can, assuming the user provides appropriate functors.
 </p><p><a href="../graph/windows_string_sort.htm">Windows/x86 Performance Graph</a>
 </p><p><a href="../graph/osx_string_sort.htm">OSX/G4 Performance Graph</a> </p>
   <h2><a name="functions" id="functions"></a>Functions</h2>
@@ -200,7 +200,7 @@ For the third version of string_sort, the one that takes four arguments:
 returns the integer length in characters of the value type.
 <LI>
 <tt>Get_char</tt> called with the <tt>RandomAccessIterator</tt>'s value type 
-as the first argument and an unsigned integer as the second argument returns the
+as the first argument and a size_t as the second argument returns the
 corresponding unsigned character, such that <tt>Get_char</tt>(a, n) corresponds to a[n].
 Given that the leading n - 1 characters are the same for a and b, 
 <tt>Get_char(a,n)</tt> &lt; <tt>Get_char(b,n)</tt> -&gt; a &lt; b.
@@ -223,7 +223,7 @@ For the fourth version of string_sort, the one that takes five arguments:
 returns the integer length in characters of the value type.
 <LI>
 <tt>Get_char</tt> called with the <tt>RandomAccessIterator</tt>'s value type 
-as the first argument and an unsigned integer as the second argument returns the
+as the first argument and a size_t as the second argument returns the
 corresponding unsigned character, such that <tt>Get_char</tt>(a, n) corresponds to a[n].
 Given that the leading n - 1 characters are the same for a and b, 
 <tt>Get_char(a,n)</tt> &lt; <tt>Get_char(b,n)</tt> -&gt; <tt>Compare</tt>(a, b).
@@ -246,7 +246,7 @@ For the third version of reverse_string_sort, the one that takes five arguments:
 returns the integer length in characters of the value type.
 <LI>
 <tt>Get_char</tt> called with the <tt>RandomAccessIterator</tt>'s value type 
-as the first argument and an unsigned integer as the second argument returns the
+as the first argument and a size_t as the second argument returns the
 corresponding unsigned character, such that <tt>Get_char</tt>(a, n) corresponds to a[n].
 Given that the leading n - 1 characters are the same for a and b, 
 <tt>Get_char(a,n)</tt> &gt; <tt>Get_char(b,n)</tt> -&gt; <tt>Compare</tt>(a, b).

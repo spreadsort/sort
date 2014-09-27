@@ -14,8 +14,8 @@ float_mem_cast fix provided by:
 Scott McMurray
 */
 
-#ifndef BOOST_SORT_H
-#define BOOST_SORT_H
+#ifndef BOOST_SORT_HPP
+#define BOOST_SORT_HPP
 #include <algorithm>
 #include <vector>
 #include <cstring>
@@ -23,7 +23,7 @@ Scott McMurray
 #include <limits>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/sort/constants.hpp>
+#include <boost/sort/detail/constants.hpp>
 #include <boost/sort/integer_sort.hpp>
 #include <boost/sort/float_sort.hpp>
 #include <boost/sort/string_sort.hpp>

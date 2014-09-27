@@ -21,6 +21,10 @@ If you're interested in more accurate speed comparisons, run the same command ei
 
 Documentation is available from the index.html in this same directory, including a description of the algorithm, how to use it, and why it's faster.
 
-Finally, if you have an unusual computing system, you may want to use the -tune option to tune.pl, to tune the constants used by the library for your specific system.  Note that it doesn't tune MAX_SPLITS, the most important parameter, because that should only be tuned with the -large option and it can overfit to the specific amount of data passed in.
+Finally, if you have an unusual computing system, you may want to use the -tune option to tune.pl, to tune the constants used by the library for your specific system.  BEWARE that this will overwrite the default boost/sort/detail/constants.hpp provided by the library.  Making a copy first is a good idea.  Also note that it doesn't tune MAX_SPLITS, the most important parameter, because that should only be tuned with the -large option and it can overfit to the specific amount of data passed in.
 
 Feel free to contact spreadsort@gmail.com with any questions about this library.
+
+Copyright 2014 Steven Ross
+Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+

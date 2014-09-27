@@ -182,7 +182,7 @@ sub PerfTest {
 # Write an updated constants file as part of tuning.
 sub WriteConstants {
     # deleting the file
-    $const_file = 'include/boost/sort/constants.hpp';
+    $const_file = '../../boost/sort/detail/constants.hpp';
     @cannot = grep {not unlink} $const_file;
     print "$0: could not unlink @cannot\n" if @cannot;
 
@@ -197,8 +197,8 @@ sub WriteConstants {
     print CONSTANTS "//    (See accompanying file LICENSE_1_0.txt or copy at\n";
     print CONSTANTS "//          http://www.boost.org/LICENSE_1_0.txt)\n\n";
     print CONSTANTS "//  See http://www.boost.org/libs/sort for library home page.\n";
-    print CONSTANTS "#ifndef BOOST_SORT_CONSTANTS\n";
-    print CONSTANTS "#define BOOST_SORT_CONSTANTS\n";
+    print CONSTANTS "#ifndef BOOST_SORT_DETAIL_CONSTANTS\n";
+    print CONSTANTS "#define BOOST_SORT_DETAIL_CONSTANTS\n";
     print CONSTANTS "namespace boost {\n";
     print CONSTANTS "namespace detail {\n";
     print CONSTANTS "//Tuning constants\n";
@@ -217,7 +217,7 @@ sub WriteConstants {
     $log_min_split_count = $log_min_size - $log_mean_bin_size;
     print CONSTANTS "LOG_MIN_SPLIT_COUNT = $log_min_split_count,\n";
     print CONSTANTS "//This is the minimum split count to use spreadsort when it will finish in one\n";
-    print CONSTANTS "//iteration  Make this larger the faster std::sort is relative to integer_sort.\n";
+    print CONSTANTS "//iteration.  Make this larger the faster std::sort is relative to integer_sort.\n";
     print CONSTANTS "LOG_FINISHING_COUNT = $log_finishing_count,\n";
     print CONSTANTS "//Sets the minimum number of items per bin for floating point.\n";
     print CONSTANTS "FLOAT_LOG_MEAN_BIN_SIZE = $float_log_mean_bin_size,\n";

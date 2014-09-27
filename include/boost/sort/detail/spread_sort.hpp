@@ -14,8 +14,8 @@ float_mem_cast fix provided by:
 Scott McMurray
 */
 
-#ifndef BOOST_SPREAD_SORT_DETAIL_H
-#define BOOST_SPREAD_SORT_DETAIL_H
+#ifndef BOOST_SORT_DETAIL_SPREAD_SORT_HPP
+#define BOOST_SORT_DETAIL_SPREAD_SORT_HPP
 #include <algorithm>
 #include <vector>
 #include <cstring>
@@ -24,7 +24,7 @@ Scott McMurray
 #include <boost/static_assert.hpp>
 #include <boost/serialization/static_warning.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <boost/sort/constants.hpp>
+#include <boost/sort/detail/constants.hpp>
 #include <boost/cstdint.hpp>
 
 namespace boost {

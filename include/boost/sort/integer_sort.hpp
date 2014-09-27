@@ -12,14 +12,14 @@ Some improvements suggested by:
 Phil Endecott and Frank Gennari
 */
 
-#ifndef BOOST_INTEGER_SORT_H
-#define BOOST_INTEGER_SORT_H
+#ifndef BOOST_INTEGER_SORT_HPP
+#define BOOST_INTEGER_SORT_HPP
 #include <algorithm>
 #include <vector>
 #include <cstring>
 #include <limits>
 #include <boost/static_assert.hpp>
-#include <boost/sort/constants.hpp>
+#include <boost/sort/detail/constants.hpp>
 #include <boost/sort/detail/spread_sort.hpp>
 
 namespace boost {

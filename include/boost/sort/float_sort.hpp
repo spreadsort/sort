@@ -14,14 +14,14 @@ float_mem_cast fix provided by:
 Scott McMurray
 */
 
-#ifndef BOOST_FLOAT_SORT_H
-#define BOOST_FLOAT_SORT_H
+#ifndef BOOST_FLOAT_SORT_HPP
+#define BOOST_FLOAT_SORT_HPP
 #include <algorithm>
 #include <vector>
 #include <cstring>
 #include <limits>
 #include <boost/static_assert.hpp>
-#include <boost/sort/constants.hpp>
+#include <boost/sort/detail/constants.hpp>
 #include <boost/sort/detail/spread_sort.hpp>
 
 namespace boost {

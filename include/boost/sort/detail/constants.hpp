@@ -6,8 +6,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/sort for library home page.
-#ifndef BOOST_SPREADSORT_CONSTANTS
-#define BOOST_SPREADSORT_CONSTANTS
+#ifndef BOOST_SORT_DETAIL_CONSTANTS
+#define BOOST_SORT_DETAIL_CONSTANTS
 namespace boost {
 namespace detail {
 //Tuning constants
