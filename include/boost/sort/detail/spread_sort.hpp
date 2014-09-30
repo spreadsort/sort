@@ -173,6 +173,7 @@ namespace boost {
         //Cannot exceed MAX_SPLITS or cache misses slow down bin lookups
         if((log_range - log_divisor) > MAX_SPLITS)
           log_divisor = log_range - MAX_SPLITS;
+        BOOST_STATIC_ASSERT(log_divisor >= 0);
       }
       return log_divisor;
     }
