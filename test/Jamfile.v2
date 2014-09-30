@@ -16,7 +16,10 @@ import testing ;
   [ run float_sort_test.cpp
        : : : : float_sort ]   
   [ run string_sort_test.cpp
-       : : : : string_sort ]   
+       : : : : string_sort ]  
+  [ run sort_detail_test.cpp
+       : : : : sort_detail ] 
+  
   
    ;
 }

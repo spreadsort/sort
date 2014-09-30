@@ -65,7 +65,7 @@
 		For this reason, std::sort will be called instead if the character type is of size > 2.
 		string_sort has a special optimization for identical substrings.  
 		This adds some overhead on random data, but identical substrings are common in real strings.
-		reverse_string_sort sorts strings in reverse (decending) order, but is otherwise identical.    string_sort is sufficiently flexible that it should sort any data type that std::sort can, assuming the user provides appropriate functors.
+		reverse_string_sort sorts strings in reverse (decending) order, but is otherwise identical.    string_sort is sufficiently flexible that it should sort any data type that std::sort can, assuming the user provides appropriate functors that index into a key.
 </p><p><a href="../graph/windows_string_sort.htm">Windows/x86 Performance Graph</a>
 </p><p><a href="../graph/osx_string_sort.htm">OSX/G4 Performance Graph</a> </p>
   <h2><a name="functions" id="functions"></a>Functions</h2>

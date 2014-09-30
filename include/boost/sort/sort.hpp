@@ -36,11 +36,7 @@ namespace boost {
     void >::type
   sort(RandomAccessIter first, RandomAccessIter last) 
   {
-    //Don't sort if it's too small to optimize
-    if(last - first < detail::MIN_SORT_SIZE)
-      std::sort(first, last);
-    else
-      detail::integer_sort(first, last, *first >> 0);
+    integer_sort(first, last);
   }
 
   //Generic spread_sort call to float_sort
