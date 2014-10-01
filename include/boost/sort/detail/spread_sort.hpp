@@ -164,8 +164,8 @@ namespace boost {
       int log_divisor;
       //If we can finish in one iteration without exceeding either
       //(2 to the MAX_FINISHING_SPLITS) or n bins, do so
-      if((log_divisor = log_range - rough_log_2_size(count)) <= 0
-         && log_range <= MAX_FINISHING_SPLITS)
+      if((log_divisor = log_range - rough_log_2_size(count)) <= 0 && 
+         log_range <= MAX_FINISHING_SPLITS)
         log_divisor = 0; 
       else {
         //otherwise divide the data into an optimized number of pieces
@@ -173,7 +173,6 @@ namespace boost {
         //Cannot exceed MAX_SPLITS or cache misses slow down bin lookups
         if((log_range - log_divisor) > MAX_SPLITS)
           log_divisor = log_range - MAX_SPLITS;
-        BOOST_STATIC_ASSERT(log_divisor >= 0);
       }
       return log_divisor;
     }
@@ -293,11 +292,11 @@ namespace boost {
     //Generic bitshift-based 3-way swapping code
     template <class RandomAccessIter, class Div_type, class Right_shift>
     inline void inner_swap_loop(RandomAccessIter * bins,
-      const RandomAccessIter & nextbinstart, unsigned ii, Right_shift &rshift
+      const RandomAccessIter & next_bin_start, unsigned ii, Right_shift &rshift
       , const unsigned log_divisor, const Div_type div_min)
     {
       RandomAccessIter * local_bin = bins + ii;
-      for(RandomAccessIter current = *local_bin; current < nextbinstart;
+      for(RandomAccessIter current = *local_bin; current < next_bin_start;
           ++current) {
         for(RandomAccessIter * target_bin =
             (bins + (rshift(*current, log_divisor) - div_min));
@@ -322,19 +321,19 @@ namespace boost {
           *current = tmp;
         }
       }
-      *local_bin = nextbinstart;
+      *local_bin = next_bin_start;
     }
 
     //Standard swapping wrapper for ascending values
     template <class RandomAccessIter, class Div_type, class Right_shift>
     inline void swap_loop(RandomAccessIter * bins,
-             RandomAccessIter & nextbinstart, unsigned ii, Right_shift &rshift
+             RandomAccessIter & next_bin_start, unsigned ii, Right_shift &rshift
              , const std::vector<size_t> &bin_sizes
              , const unsigned log_divisor, const Div_type div_min)
     {
-      nextbinstart += bin_sizes[ii];
+      next_bin_start += bin_sizes[ii];
       inner_swap_loop<RandomAccessIter, Div_type, Right_shift>(bins,
-                              nextbinstart, ii, rshift, log_divisor, div_min);
+                              next_bin_start, ii, rshift, log_divisor, div_min);
     }
 
     //Functor implementation for recursive sorting
@@ -366,9 +365,9 @@ namespace boost {
         bins[u + 1] = bins[u] + bin_sizes[u];
 
       //Swap into place
-      RandomAccessIter nextbinstart = first;
+      RandomAccessIter next_bin_start = first;
       for(unsigned u = 0; u < bin_count - 1; ++u)
-        swap_loop<RandomAccessIter, Div_type, Right_shift>(bins, nextbinstart,
+        swap_loop<RandomAccessIter, Div_type, Right_shift>(bins, next_bin_start,
                                   u, rshift, bin_sizes, log_divisor, div_min);
       bins[bin_count - 1] = last;
 
@@ -1069,11 +1068,11 @@ namespace boost {
       }
 
       //Swap into place
-      RandomAccessIter nextbinstart = first;
+      RandomAccessIter next_bin_start = first;
       for(unsigned u = 0; u < bin_count; ++u) {
-        nextbinstart = first + bin_sizes[u];
+        next_bin_start = first + bin_sizes[u];
         inner_swap_loop<RandomAccessIter, Div_type, Right_shift>
-          (bins, nextbinstart, u, rshift, log_divisor, div_min);
+          (bins, next_bin_start, u, rshift, log_divisor, div_min);
       }
 
       //Return if we've completed bucketsorting
@@ -1166,11 +1165,11 @@ namespace boost {
       }
 
       //Swap into place
-      RandomAccessIter nextbinstart = first;
+      RandomAccessIter next_bin_start = first;
       for(unsigned u = 0; u < bin_count; ++u) {
-        nextbinstart = first + bin_sizes[u];
+        next_bin_start = first + bin_sizes[u];
         inner_swap_loop<RandomAccessIter, Div_type, Right_shift>
-          (bins, nextbinstart, u, rshift, log_divisor, div_min);
+          (bins, next_bin_start, u, rshift, log_divisor, div_min);
       }
 
       //Return if we've completed bucketsorting
@@ -1398,8 +1397,8 @@ namespace boost {
 
     //This comparison functor assumes strings are identical up to char_offset
     template<class Data_type, class Unsigned_char_type>
-    struct offset_lessthan {
-      offset_lessthan(size_t char_offset) : fchar_offset(char_offset){}
+    struct offset_less_than {
+      offset_less_than(size_t char_offset) : fchar_offset(char_offset){}
       inline bool operator()(const Data_type &x, const Data_type &y) const
       {
         size_t minSize = (std::min)(x.size(), y.size());
@@ -1419,8 +1418,8 @@ namespace boost {
 
     //Compares strings assuming they are identical up to char_offset
     template<class Data_type, class Unsigned_char_type>
-    struct offset_greaterthan {
-      offset_greaterthan(size_t char_offset) : fchar_offset(char_offset){}
+    struct offset_greater_than {
+      offset_greater_than(size_t char_offset) : fchar_offset(char_offset){}
       inline bool operator()(const Data_type &x, const Data_type &y) const
       {
         size_t minSize = (std::min)(x.size(), y.size());
@@ -1440,8 +1439,8 @@ namespace boost {
 
     //This comparison functor assumes strings are identical up to char_offset
     template<class Data_type, class Get_char, class Get_length>
-    struct offset_char_lessthan {
-      offset_char_lessthan(size_t char_offset) : fchar_offset(char_offset){}
+    struct offset_char_less_than {
+      offset_char_less_than(size_t char_offset) : fchar_offset(char_offset){}
       inline bool operator()(const Data_type &x, const Data_type &y) const
       {
         size_t minSize = (std::min)(length(x), length(y));
@@ -1507,13 +1506,13 @@ namespace boost {
           bin_cache[cache_offset + u] + bin_sizes[u];
 
       //Swap into place
-      RandomAccessIter nextbinstart = first;
+      RandomAccessIter next_bin_start = first;
       //handling empty bins
       RandomAccessIter * local_bin = &(bin_cache[cache_offset]);
-      nextbinstart +=  bin_sizes[0];
+      next_bin_start +=  bin_sizes[0];
       RandomAccessIter * target_bin;
       //Iterating over each element in the bin of empties
-      for(RandomAccessIter current = *local_bin; current < nextbinstart;
+      for(RandomAccessIter current = *local_bin; current < next_bin_start;
           ++current) {
         //empties belong in this bin
         while((*current).size() > char_offset) {
@@ -1522,7 +1521,7 @@ namespace boost {
           iter_swap(current, (*target_bin)++);
         }
       }
-      *local_bin = nextbinstart;
+      *local_bin = next_bin_start;
       //iterate backwards to find the last bin with elements in it
       //this saves iterations in multiple loops
       unsigned last_bin = bin_count - 1;
@@ -1530,9 +1529,9 @@ namespace boost {
       //This dominates runtime, mostly in the swap and bin lookups
       for(unsigned u = 0; u < last_bin; ++u) {
         local_bin = bins + u;
-        nextbinstart += bin_sizes[u + 1];
+        next_bin_start += bin_sizes[u + 1];
         //Iterating over each element in this bin
-        for(RandomAccessIter current = *local_bin; current < nextbinstart;
+        for(RandomAccessIter current = *local_bin; current < next_bin_start;
             ++current) {
           //Swapping into place until the correct element has been swapped in
           for(target_bin = bins + static_cast<Unsigned_char_type>
@@ -1540,7 +1539,7 @@ namespace boost {
             target_bin = bins + static_cast<Unsigned_char_type>
               ((*current)[char_offset])) iter_swap(current, (*target_bin)++);
         }
-        *local_bin = nextbinstart;
+        *local_bin = next_bin_start;
       }
       bins[last_bin] = last;
       //Recursing
@@ -1555,7 +1554,7 @@ namespace boost {
         //using std::sort if its worst-case is better
         if(count < max_size)
           std::sort(lastPos, bin_cache[u],
-              offset_lessthan<Data_type, Unsigned_char_type>(char_offset + 1));
+              offset_less_than<Data_type, Unsigned_char_type>(char_offset + 1));
         else
           string_sort_rec<RandomAccessIter, Unsigned_char_type>(lastPos,
               bin_cache[u], char_offset + 1, bin_cache, cache_end, bin_sizes);
@@ -1614,12 +1613,12 @@ namespace boost {
           bin_cache[cache_offset + u] + bin_sizes[u];
 
       //Swap into place
-      RandomAccessIter nextbinstart = last;
+      RandomAccessIter next_bin_start = last;
       //handling empty bins
       RandomAccessIter * local_bin = &(bin_cache[cache_offset + bin_count]);
       RandomAccessIter lastFull = *local_bin;
       //Iterating over each element in the bin of empties
-      for(RandomAccessIter current = *local_bin; current < nextbinstart;
+      for(RandomAccessIter current = *local_bin; current < next_bin_start;
           ++current) {
         //empties belong in this bin
         while((*current).size() > char_offset) {
@@ -1628,8 +1627,8 @@ namespace boost {
           iter_swap(current, (*target_bin)++);
         }
       }
-      *local_bin = nextbinstart;
-      nextbinstart = first;
+      *local_bin = next_bin_start;
+      next_bin_start = first;
       //iterate backwards to find the last non-empty bin
       //this saves iterations in multiple loops
       unsigned last_bin = max_bin;
@@ -1637,9 +1636,9 @@ namespace boost {
       //This dominates runtime, mostly in the swap and bin lookups
       for(unsigned u = 0; u < last_bin; ++u) {
         local_bin = bins + u;
-        nextbinstart += bin_sizes[u];
+        next_bin_start += bin_sizes[u];
         //Iterating over each element in this bin
-        for(RandomAccessIter current = *local_bin; current < nextbinstart;
+        for(RandomAccessIter current = *local_bin; current < next_bin_start;
             ++current) {
           //Swapping into place until the correct element has been swapped in
           for(target_bin =
@@ -1649,7 +1648,7 @@ namespace boost {
             end_bin - static_cast<Unsigned_char_type>((*current)[char_offset]))
               iter_swap(current, (*target_bin)++);
         }
-        *local_bin = nextbinstart;
+        *local_bin = next_bin_start;
       }
       bins[last_bin] = lastFull;
       //Recursing
@@ -1663,7 +1662,7 @@ namespace boost {
           continue;
         //using std::sort if its worst-case is better
         if(count < max_size)
-          std::sort(lastPos, bin_cache[u], offset_greaterthan<Data_type,
+          std::sort(lastPos, bin_cache[u], offset_greater_than<Data_type,
                     Unsigned_char_type>(char_offset + 1));
         else
           reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type>
@@ -1718,13 +1717,13 @@ namespace boost {
           bin_cache[cache_offset + u] + bin_sizes[u];
 
       //Swap into place
-      RandomAccessIter nextbinstart = first;
+      RandomAccessIter next_bin_start = first;
       //handling empty bins
       RandomAccessIter * local_bin = &(bin_cache[cache_offset]);
-      nextbinstart +=  bin_sizes[0];
+      next_bin_start +=  bin_sizes[0];
       RandomAccessIter * target_bin;
       //Iterating over each element in the bin of empties
-      for(RandomAccessIter current = *local_bin; current < nextbinstart;
+      for(RandomAccessIter current = *local_bin; current < next_bin_start;
           ++current) {
         //empties belong in this bin
         while(length(*current) > char_offset) {
@@ -1732,7 +1731,7 @@ namespace boost {
           iter_swap(current, (*target_bin)++);
         }
       }
-      *local_bin = nextbinstart;
+      *local_bin = next_bin_start;
       //iterate backwards to find the last bin with elements in it
       //this saves iterations in multiple loops
       unsigned last_bin = bin_count - 1;
@@ -1740,9 +1739,9 @@ namespace boost {
       //This dominates runtime, mostly in the swap and bin lookups
       for(unsigned ii = 0; ii < last_bin; ++ii) {
         local_bin = bins + ii;
-        nextbinstart += bin_sizes[ii + 1];
+        next_bin_start += bin_sizes[ii + 1];
         //Iterating over each element in this bin
-        for(RandomAccessIter current = *local_bin; current < nextbinstart;
+        for(RandomAccessIter current = *local_bin; current < next_bin_start;
             ++current) {
           //Swapping into place until the correct element has been swapped in
           for(target_bin = bins + getchar((*current), char_offset);
@@ -1750,7 +1749,7 @@ namespace boost {
               target_bin = bins + getchar((*current), char_offset))
             iter_swap(current, (*target_bin)++);
         }
-        *local_bin = nextbinstart;
+        *local_bin = next_bin_start;
       }
       bins[last_bin] = last;
 
@@ -1765,7 +1764,7 @@ namespace boost {
           continue;
         //using std::sort if its worst-case is better
         if(count < max_size)
-          std::sort(lastPos, bin_cache[u], offset_char_lessthan<Data_type,
+          std::sort(lastPos, bin_cache[u], offset_char_less_than<Data_type,
                     Get_char, Get_length>(char_offset + 1));
         else
           string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
@@ -1819,13 +1818,13 @@ namespace boost {
           bin_cache[cache_offset + u] + bin_sizes[u];
 
       //Swap into place
-      RandomAccessIter nextbinstart = first;
+      RandomAccessIter next_bin_start = first;
       //handling empty bins
       RandomAccessIter * local_bin = &(bin_cache[cache_offset]);
-      nextbinstart +=  bin_sizes[0];
+      next_bin_start +=  bin_sizes[0];
       RandomAccessIter * target_bin;
       //Iterating over each element in the bin of empties
-      for(RandomAccessIter current = *local_bin; current < nextbinstart;
+      for(RandomAccessIter current = *local_bin; current < next_bin_start;
           ++current) {
         //empties belong in this bin
         while(length(*current) > char_offset) {
@@ -1833,7 +1832,7 @@ namespace boost {
           iter_swap(current, (*target_bin)++);
         }
       }
-      *local_bin = nextbinstart;
+      *local_bin = next_bin_start;
       //iterate backwards to find the last bin with elements in it
       //this saves iterations in multiple loops
       unsigned last_bin = bin_count - 1;
@@ -1841,9 +1840,9 @@ namespace boost {
       //This dominates runtime, mostly in the swap and bin lookups
       for(unsigned u = 0; u < last_bin; ++u) {
         local_bin = bins + u;
-        nextbinstart += bin_sizes[u + 1];
+        next_bin_start += bin_sizes[u + 1];
         //Iterating over each element in this bin
-        for(RandomAccessIter current = *local_bin; current < nextbinstart;
+        for(RandomAccessIter current = *local_bin; current < next_bin_start;
             ++current) {
           //Swapping into place until the correct element has been swapped in
           for(target_bin = bins + getchar((*current), char_offset);
@@ -1851,7 +1850,7 @@ namespace boost {
               target_bin = bins + getchar((*current), char_offset))
             iter_swap(current, (*target_bin)++);
         }
-        *local_bin = nextbinstart;
+        *local_bin = next_bin_start;
       }
       bins[last_bin] = last;
 
@@ -1924,13 +1923,13 @@ namespace boost {
           bin_cache[cache_offset + u] + bin_sizes[u];
 
       //Swap into place
-      RandomAccessIter nextbinstart = last;
+      RandomAccessIter next_bin_start = last;
       //handling empty bins
       RandomAccessIter * local_bin = &(bin_cache[cache_offset + bin_count]);
       RandomAccessIter lastFull = *local_bin;
       RandomAccessIter * target_bin;
       //Iterating over each element in the bin of empties
-      for(RandomAccessIter current = *local_bin; current < nextbinstart;
+      for(RandomAccessIter current = *local_bin; current < next_bin_start;
           ++current) {
         //empties belong in this bin
         while(length(*current) > char_offset) {
@@ -1938,8 +1937,8 @@ namespace boost {
           iter_swap(current, (*target_bin)++);
         }
       }
-      *local_bin = nextbinstart;
-      nextbinstart = first;
+      *local_bin = next_bin_start;
+      next_bin_start = first;
       //iterate backwards to find the last bin with elements in it
       //this saves iterations in multiple loops
       unsigned last_bin = max_bin;
@@ -1947,9 +1946,9 @@ namespace boost {
       //This dominates runtime, mostly in the swap and bin lookups
       for(unsigned u = 0; u < last_bin; ++u) {
         local_bin = bins + u;
-        nextbinstart += bin_sizes[u];
+        next_bin_start += bin_sizes[u];
         //Iterating over each element in this bin
-        for(RandomAccessIter current = *local_bin; current < nextbinstart;
+        for(RandomAccessIter current = *local_bin; current < next_bin_start;
             ++current) {
           //Swapping into place until the correct element has been swapped in
           for(target_bin = end_bin - getchar((*current), char_offset);
@@ -1957,7 +1956,7 @@ namespace boost {
               target_bin = end_bin - getchar((*current), char_offset))
             iter_swap(current, (*target_bin)++);
         }
-        *local_bin = nextbinstart;
+        *local_bin = next_bin_start;
       }
       bins[last_bin] = lastFull;
       //Recursing

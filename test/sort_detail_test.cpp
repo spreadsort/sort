@@ -24,10 +24,26 @@ using namespace boost::detail;
 
 namespace {
 
-struct rightshift {
-  int operator()(const float &x, const unsigned offset) const { 
+struct int_right_shift {
+  int operator()(const int x, const unsigned offset) const { 
+    return x >> offset; 
+  }
+};
+
+struct float_right_shift {
+  int operator()(const float x, const unsigned offset) const { 
     return float_mem_cast<float, int>(x) >> offset; 
   }
+};
+
+struct bracket {
+  unsigned char operator()(const string &x, size_t offset) const {
+    return x[offset];
+  }
+};
+
+struct getsize {
+  size_t operator()(const string &x) const{ return x.size(); }
 };
 
 const int max_int_bits = sizeof(boost::uintmax_t) * 8;
@@ -157,8 +173,8 @@ void is_sorted_or_find_extremes_test()
                      sorted_float_input.begin());
   int cast_max = detail::cast_float_iter<int, vector<float>::iterator>(
                      sorted_float_input.end() - 1);
-  BOOST_CHECK(cast_min == rightshift()(.1f, 0));
-  BOOST_CHECK(cast_max == rightshift()(4.0f, 0));
+  BOOST_CHECK(cast_min == float_right_shift()(.1f, 0));
+  BOOST_CHECK(cast_max == float_right_shift()(4.0f, 0));
   // Test a sorted input
   int div_max, div_min;
   BOOST_CHECK(detail::is_sorted_or_find_extremes(sorted_float_input.begin(), 
@@ -171,17 +187,18 @@ void is_sorted_or_find_extremes_test()
   BOOST_CHECK(div_min == cast_min);
   BOOST_CHECK(div_max == cast_max);
 
-  // Test with a rightshift functor.
+  // Test with a right_shift functor.
   BOOST_CHECK(detail::is_sorted_or_find_extremes(sorted_float_input.begin(), 
                                                  sorted_float_input.end(), 
                                                  div_max, div_min, 
-                                                 rightshift()));
+                                                 float_right_shift()));
   // Test an unsorted input.
   BOOST_CHECK(!detail::is_sorted_or_find_extremes(float_input.begin(), 
                                                   float_input.end(), div_max, 
-                                                  div_min, rightshift()));
-  BOOST_CHECK(div_min == rightshift()(.1f, 0));
-  BOOST_CHECK(div_max == rightshift()(4.0f, 0));
+                                                  div_min, 
+                                                  float_right_shift()));
+  BOOST_CHECK(div_min == float_right_shift()(.1f, 0));
+  BOOST_CHECK(div_max == float_right_shift()(4.0f, 0));
 }
 
 // Make sure bins are created correctly.
@@ -196,7 +213,7 @@ void size_bins_test() {
   unsigned cache_offset = 1;
   unsigned cache_end;
   const unsigned bin_count = 2;
-  std::vector<int>::iterator * new_cache_start = 
+  std::vector<int>::iterator *new_cache_start = 
     size_bins(bin_sizes, bin_cache, cache_offset, cache_end, bin_count);
   BOOST_CHECK((new_cache_start - &bin_cache[0]) == cache_offset);
   BOOST_CHECK(bin_sizes.size() == bin_count);
@@ -205,6 +222,106 @@ void size_bins_test() {
   BOOST_CHECK(cache_end == 3);
   BOOST_CHECK(bin_cache.size() == cache_end);
   BOOST_CHECK(old_bins[0] == old_bin_value);
+}
+
+// Test the specialized 3-way swap loops.
+void swap_loop_test() {
+  vector<size_t> bin_sizes;
+  bin_sizes.push_back(2);
+  bin_sizes.push_back(2);
+  bin_sizes.push_back(1);
+
+  // test integer swap loop
+  vector<int> ints;
+  const int int_div_min = 3;
+  const int int_log_divisor = 1;
+  const unsigned int_offset = int_div_min << int_log_divisor;
+  ints.push_back(2 + int_offset);
+  ints.push_back(1 + int_offset); // stays in place
+  ints.push_back(4 + int_offset);
+  ints.push_back(3 + int_offset);
+  ints.push_back(0 + int_offset);
+  vector<vector<int>::iterator> int_bin_vector;
+  int_bin_vector.push_back(ints.begin());
+  int_bin_vector.push_back(int_bin_vector[0] + bin_sizes[0]);
+  int_bin_vector.push_back(int_bin_vector[1] + bin_sizes[1]);
+  vector<int>::iterator next_int_bin_start = int_bin_vector[0];
+  vector<int>::iterator *int_bins = &int_bin_vector[0];
+  int_right_shift integer_right_shift;
+  swap_loop(int_bins, next_int_bin_start, 0, integer_right_shift, bin_sizes, 
+            int_log_divisor, int_div_min);
+  for (unsigned i = 0; i < ints.size(); ++i) {
+    BOOST_CHECK(ints[i] == int(int_offset + i));
+  }
+  BOOST_CHECK(next_int_bin_start == ints.begin() + bin_sizes[0]);
+
+  // test float swap loop
+  vector<float> floats;
+  const int float_four_as_int = float_mem_cast<float, int>(4.0f);
+  const int float_log_divisor = 
+    rough_log_2_size(float_mem_cast<float, int>(5.0f) - float_four_as_int);
+  const int float_div_min = float_four_as_int >> float_log_divisor;
+  floats.push_back(6.0f);
+  floats.push_back(5.0f); // stays in place
+  floats.push_back(8.0f);
+  floats.push_back(7.0f);
+  floats.push_back(4.0f);
+  vector<vector<float>::iterator> float_bin_vector;
+  float_bin_vector.push_back(floats.begin());
+  float_bin_vector.push_back(float_bin_vector[0] + bin_sizes[0]);
+  float_bin_vector.push_back(float_bin_vector[1] + bin_sizes[1]);
+  vector<float>::iterator next_float_bin_start = float_bin_vector[0];
+  vector<float>::iterator *float_bins = &float_bin_vector[0];
+  float_swap_loop(float_bins, next_float_bin_start, 0, bin_sizes,
+                  float_log_divisor, float_div_min);
+  for (unsigned i = 0; i < floats.size(); ++i) {
+    BOOST_CHECK(floats[i] == 4.0f + i);
+  }
+  BOOST_CHECK(next_float_bin_start == floats.begin() + bin_sizes[0]);
+}
+
+// Test that update_offset finds the first character with a difference.
+void update_offset_test() {
+  vector<string> input;
+  input.push_back("test1");
+  input.push_back("test2");
+  size_t char_offset = 1;
+  update_offset(input.begin(), input.end(), char_offset);
+  BOOST_CHECK(char_offset == 4);
+
+  // Functor version
+  char_offset = 1;
+  update_offset(input.begin(), input.end(), char_offset, bracket(), getsize());
+  BOOST_CHECK(char_offset == 4);
+}
+
+// Test that offset comparison operators only look after the offset.
+void offset_comparison_test() {
+  string input1 = "ab";
+  string input2 = "ba";
+  string input3 = "aba";
+  offset_less_than<string, unsigned char> less_than(0);
+  offset_greater_than<string, unsigned char> greater_than(0);
+  BOOST_CHECK(less_than(input1, input2));
+  BOOST_CHECK(less_than(input1, input3));
+  BOOST_CHECK(!less_than(input2, input1));
+  BOOST_CHECK(!less_than(input1, input1));
+  BOOST_CHECK(!greater_than(input1, input2));
+  BOOST_CHECK(!greater_than(input1, input3));
+  BOOST_CHECK(greater_than(input2, input1));
+  BOOST_CHECK(!greater_than(input1, input1));
+
+  // Offset comparisons only check after the specified offset.
+  offset_less_than<string, unsigned char> offset_less(1);
+  offset_greater_than<string, unsigned char> offset_greater(1);
+  BOOST_CHECK(!offset_less(input1, input2));
+  BOOST_CHECK(offset_less(input1, input3));
+  BOOST_CHECK(offset_less(input2, input1));
+  BOOST_CHECK(!offset_less(input1, input1));
+  BOOST_CHECK(offset_greater(input1, input2));
+  BOOST_CHECK(!offset_greater(input1, input3));
+  BOOST_CHECK(!offset_greater(input2, input1));
+  BOOST_CHECK(!offset_greater(input1, input1));
 }
 
 } // end anonymous namespace
@@ -220,5 +337,8 @@ int test_main( int, char*[] )
   get_log_divisor_test();
   is_sorted_or_find_extremes_test();
   size_bins_test();
+  swap_loop_test();
+  update_offset_test();
+  offset_comparison_test();
   return 0;
 }
