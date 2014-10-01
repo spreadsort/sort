@@ -26,33 +26,33 @@ int main(int argc, const char ** argv) {
   int mod_shift = 32;
   unsigned count = 1000000;
   //Reading in user arguments
-  if(argc > 2)
+  if (argc > 2)
     count = atoi(argv[2]);
-  if(argc > 1)
+  if (argc > 1)
     mod_shift = atoi(argv[1]) - 1;
   std::ofstream ofile;
   ofile.open("input.txt", std::ios_base::out | std::ios_base::binary |
              std::ios_base::trunc);
-  if(ofile.bad()) {
+  if (ofile.bad()) {
     printf("could not open input.txt for writing!\n");
     return 1;
   }
   int min_int = (numeric_limits<int>::min)();
   int max_int = (numeric_limits<int>::max)();
-  if(mod_shift < 31 && mod_shift >= 0) {
+  if (mod_shift < 31 && mod_shift >= 0) {
     max_int %= 1 << mod_shift;
-    if(-max_int > min_int)
+    if (-max_int > min_int)
       min_int = -max_int;
   }
   std::vector<int> result;
   result.resize(count);
   mt19937 rng;
-  if(argc > 3 && (string(argv[3]) == "-normal")) {
+  if (argc > 3 && (string(argv[3]) == "-normal")) {
     normal_distribution<> everything(0, max_int/4);      
     variate_generator<mt19937&,normal_distribution<> > gen(rng, everything);
     generate(result.begin(), result.end(), gen);
   }
-  else if(argc > 3 && (string(argv[3]) == "-lognormal")) {
+  else if (argc > 3 && (string(argv[3]) == "-lognormal")) {
     lognormal_distribution<> everything(max_int/2, max_int/4);      
     variate_generator<mt19937&,lognormal_distribution<> > gen(rng, everything);
     generate(result.begin(), result.end(), gen);

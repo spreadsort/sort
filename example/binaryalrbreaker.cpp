@@ -37,8 +37,8 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
             unsigned remaining_bits, const vector<unsigned> & indices,
             int index)
 {
-  if(index < 0) {
-    for(unsigned u = 0; u < max_count; ++u)
+  if (index < 0) {
+    for (unsigned u = 0; u < max_count; ++u)
       input.push_back((base_value << remaining_bits) +
                       (rand() % (1 << remaining_bits)));
   }
@@ -59,24 +59,24 @@ int main(int argc, const char ** argv) {
   unsigned bit_length = total_length;
   unsigned bit_offset = bit_shift;
   bit_length -= radix_threshold;
-  for(; bit_length >= ++bit_offset; bit_length -= bit_offset)
+  for (; bit_length >= ++bit_offset; bit_length -= bit_offset)
     offsets.push_back(bit_offset);
-  for(int ii = (1 << bit_length) - 1; ii >= 0; --ii)
+  for (int ii = (1 << bit_length) - 1; ii >= 0; --ii)
     fill_vector(input, ii, total_length - bit_length,
                 offsets, offsets.size() - 1);
   //Run both std::sort and boost::sort.
-  for(unsigned u = 0; u < 2; ++u) {
+  for (unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
     clock_t start, end;
     double elapsed;
     start = clock();
-    if(u)
+    if (u)
       std::sort(array.begin(), array.end());
     else
       boost::sort(array.begin(), array.end());
     end = clock();
     elapsed = ((double) (end - start));
-    if(u)
+    if (u)
       printf("std::sort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);
     else
       printf("spreadsort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);

@@ -29,7 +29,7 @@ namespace boost {
                           Unsigned_char_type unused) 
   {
     //Don't sort if it's too small to optimize
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last);
     else
       detail::string_sort(first, last, unused);
@@ -49,7 +49,7 @@ namespace boost {
                 RandomAccessIter last, Compare comp, Unsigned_char_type unused) 
   {
     //Don't sort if it's too small to optimize
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last, comp);
     else
       detail::reverse_string_sort(first, last, unused);
@@ -69,13 +69,13 @@ namespace boost {
                           Get_char getchar, Get_length length) 
   {
     //Don't sort if it's too small to optimize
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last);
     else {
       //skipping past empties, which allows us to get the character type 
       //.empty() is not used so as not to require a user declaration of it
-      while(!length(*first)) {
-        if(++first == last)
+      while (!length(*first)) {
+        if (++first == last)
           return;
       }
       detail::string_sort(first, last, getchar, length, getchar((*first), 0));
@@ -88,13 +88,13 @@ namespace boost {
                           Get_char getchar, Get_length length, Compare comp) 
   {
     //Don't sort if it's too small to optimize
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last, comp);
     else {
       //skipping past empties, which allows us to get the character type 
       //.empty() is not used so as not to require a user declaration of it
-      while(!length(*first)) {
-        if(++first == last)
+      while (!length(*first)) {
+        if (++first == last)
           return;
       }
       detail::string_sort(first, last, getchar, length, comp, 
@@ -108,14 +108,14 @@ namespace boost {
     RandomAccessIter last, Get_char getchar, Get_length length, Compare comp) 
   {
     //Don't sort if it's too small to optimize
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last, comp);
     else {
       //skipping past empties, which allows us to get the character type 
       //.empty() is not used so as not to require a user declaration of it
-      while(!length(*(--last))) {
+      while (!length(*(--last))) {
         //If there is just one non-empty at the beginning, this is sorted
-        if(first == last)
+        if (first == last)
           return;
       }
       //making last just after the end of the non-empty part of the array

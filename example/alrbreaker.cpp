@@ -38,13 +38,13 @@ void
 fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
             unsigned remaining_bits)
 {
-  if(remaining_bits >= radix_threshold) {
+  if (remaining_bits >= radix_threshold) {
     input.push_back((base_value << remaining_bits) +
                     ((typed_one << remaining_bits) - 1));
     fill_vector(input, base_value << bit_shift, remaining_bits - bit_shift);
   }
   else {
-    for(unsigned u = 0; u < max_count; ++u)
+    for (unsigned u = 0; u < max_count; ++u)
       input.push_back((base_value << remaining_bits) +
                       (rand() % (1 << remaining_bits)));
   }
@@ -53,21 +53,21 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
 //Tests boost::sort on the worst-case distribution for standard MSD radix sorts.
 int main(int argc, const char ** argv) {
   vector<DATA_TYPE> input;
-  for(int ii = (1 << top_splits) - 1; ii >= 0; --ii)
+  for (int ii = (1 << top_splits) - 1; ii >= 0; --ii)
     fill_vector(input, ii, (sizeof(DATA_TYPE) * 8) - top_splits);
   //Run both std::sort and boost::sort
-  for(unsigned u = 0; u < 2; ++u) {
+  for (unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
     clock_t start, end;
     double elapsed;
     start = clock();
-    if(u)
+    if (u)
       std::sort(array.begin(), array.end());
     else
       boost::sort(array.begin(), array.end());
     end = clock();
     elapsed = ((double) (end - start));
-    if(u)
+    if (u)
       printf("std::sort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);
     else
       printf("spreadsort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);

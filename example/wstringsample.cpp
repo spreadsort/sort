@@ -28,8 +28,8 @@ int main(int argc, const char ** argv) {
   std::ofstream outfile;
   bool stdSort = false;
   unsigned loopCount = 1;
-  for(int u = 1; u < argc; ++u) {
-    if(std::string(argv[u]) == "-std")
+  for (int u = 1; u < argc; ++u) {
+    if (std::string(argv[u]) == "-std")
       stdSort = true;
     else
       loopCount = atoi(argv[u]);
@@ -37,25 +37,25 @@ int main(int argc, const char ** argv) {
   double total = 0.0;
   //Run multiple loops, if requested
   std::vector<DATA_TYPE> array;
-  for(unsigned u = 0; u < loopCount; ++u) {
+  for (unsigned u = 0; u < loopCount; ++u) {
     indata.open("input.txt", std::ios_base::in | std::ios_base::binary);  
-    if(indata.bad()) {
+    if (indata.bad()) {
       printf("input.txt could not be opened\n");
       return 1;
     }
     unsigned short inval;
     DATA_TYPE current;
-    while ( indata.good()) {
+    while (indata.good()) {
       indata.read( (char *) &inval, sizeof(inval));
       current.push_back(inval);
       //32 characters is a moderately long string
-      if((int)current.size() > inval || current.size() >= 32) {
+      if ((int)current.size() > inval || current.size() >= 32) {
         array.push_back(current);
         current.clear();
       }
     }
     //adding the last string
-    if(!current.empty())
+    if (!current.empty())
       array.push_back(current);
       
     indata.close();
@@ -63,7 +63,7 @@ int main(int argc, const char ** argv) {
     double elapsed;
     start = clock();
     wchar_t cast_type = 0;
-    if(stdSort)
+    if (stdSort)
       //std::sort(&(array[0]), &(array[0]) + uCount);
       std::sort(array.begin(), array.end());
     else
@@ -71,15 +71,15 @@ int main(int argc, const char ** argv) {
       string_sort(array.begin(), array.end(), cast_type);
     end = clock();
     elapsed = ((double) (end - start));
-    if(stdSort)
+    if (stdSort)
       outfile.open("standard_sort_out.txt", std::ios_base::out |
                    std::ios_base::binary | std::ios_base::trunc);
     else
       outfile.open("boost_sort_out.txt", std::ios_base::out |
                    std::ios_base::binary | std::ios_base::trunc);
-    if(outfile.good()) {
-      for(unsigned u = 0; u < array.size(); ++u){
-        for(unsigned v = 0; v < array[u].size(); ++v)
+    if (outfile.good()) {
+      for (unsigned u = 0; u < array.size(); ++u){
+        for (unsigned v = 0; v < array[u].size(); ++v)
           outfile << array[u][v];
         outfile << "\n";
       }
@@ -88,7 +88,7 @@ int main(int argc, const char ** argv) {
     total += elapsed;
     array.clear();
   }
-  if(stdSort)
+  if (stdSort)
     printf("std::sort elapsed time %f\n", total / CLOCKS_PER_SEC);
   else
     printf("spreadsort elapsed time %f\n", total / CLOCKS_PER_SEC);

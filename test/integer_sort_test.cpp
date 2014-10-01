@@ -43,10 +43,10 @@ struct negrightshift_max {
 boost::int32_t 
 rand_32(bool sign = true) {
    boost::int32_t result = rand() | (rand()<< 16);
-   if(rand() % 2)
+   if (rand() % 2)
      result |= 1 << 15;
    //Adding the sign bit
-   if(sign && (rand() % 2))
+   if (sign && (rand() % 2))
      result *= -1;
    return result;
 }
@@ -58,7 +58,7 @@ void int_test()
   unsigned count = 100000;
   srand(1);
   //Generating semirandom numbers
-  for(unsigned u = 0; u < count; ++u)
+  for (unsigned u = 0; u < count; ++u)
     base_vec.push_back(rand_32());
   vector<int> sorted_vec = base_vec;
   vector<int> test_vec = base_vec;
@@ -86,7 +86,7 @@ void int_test()
 
   //Making sure we're correctly sorting boost::intmax_ts; should use std::sort
   vector<boost::intmax_t> long_base_vec;
-  for(unsigned u = 0; u < base_vec.size(); ++u)
+  for (unsigned u = 0; u < base_vec.size(); ++u)
     long_base_vec.push_back((((boost::intmax_t)rand_32()) <<
                              ((8 * sizeof(int)) -1)) + rand_32(false));
   vector<boost::intmax_t> long_sorted_vec = long_base_vec;

@@ -42,14 +42,14 @@ int main(int argc, const char ** argv) {
   size_t uSize=sizeof(int);
   bool stdSort = false;
   unsigned loopCount = 1;
-  for(int u = 1; u < argc; ++u) {
-    if(std::string(argv[u]) == "-std")
+  for (int u = 1; u < argc; ++u) {
+    if (std::string(argv[u]) == "-std")
       stdSort = true;
     else
       loopCount = atoi(argv[u]);
   }
   std::ifstream input("input.txt", std::ios_base::in | std::ios_base::binary);
-  if(input.fail()) {
+  if (input.fail()) {
     printf("input.txt could not be opened\n");
     return 1;
   }
@@ -60,10 +60,10 @@ int main(int argc, const char ** argv) {
   array.reserve(length/uSize);
   unsigned uCount = length/uSize;
   //Run multiple loops, if requested
-  for(unsigned u = 0; u < loopCount; ++u) {
+  for (unsigned u = 0; u < loopCount; ++u) {
     input.seekg (0, std::ios_base::beg);
     unsigned v = 0;
-    while ( input.good() && v++ < uCount) { // EOF or failure stops the reading
+    while (input.good() && v++ < uCount) { // EOF or failure stops the reading
      DATA_TYPE element;
      input.read( (char *) &(element.key), sizeof( element.key ) );
      std::stringstream intstr;
@@ -74,21 +74,21 @@ int main(int argc, const char ** argv) {
     clock_t start, end;
     double elapsed;
     start = clock();
-    if(stdSort)
+    if (stdSort)
       std::sort(array.begin(), array.end(), lessthan());
     else
       integer_sort(array.begin(), array.end(), rightshift(), lessthan());
     end = clock();
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
-    if(stdSort)
+    if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
                  std::ios_base::binary | std::ios_base::trunc);
     else
       ofile.open("boost_sort_out.txt", std::ios_base::out |
                  std::ios_base::binary | std::ios_base::trunc);
-    if(ofile.good()) {
-      for(unsigned v = 0; v < array.size(); ++v) {
+    if (ofile.good()) {
+      for (unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v].key), sizeof(array[v].key) );
         ofile << array[v].data;
       }
@@ -98,7 +98,7 @@ int main(int argc, const char ** argv) {
     array.clear();
   }
   input.close();
-  if(stdSort)
+  if (stdSort)
     printf("std::sort elapsed time %f\n", total / CLOCKS_PER_SEC);
   else
     printf("spreadsort elapsed time %f\n", total / CLOCKS_PER_SEC);

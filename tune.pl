@@ -94,8 +94,8 @@ system("$makename randomgen $log");
 # option set
 $changed = 1;
 my $ii = 0;
-if($tune) {
-    for($ii = 0; $changed and $ii < $iter_count; $ii++) {
+if ($tune) {
+    for ($ii = 0; $changed and $ii < $iter_count; $ii++) {
         $changed = 0;
         # Tuning max_splits is not recommended.
         #print STDOUT "Tuning max_splits\n";
@@ -247,25 +247,25 @@ sub CheckTime {
         print STDERR "Could not open file: $time_file: $!\n";
         exit;
     }
-    while($line = <CODE>) {
+    while ($line = <CODE>) {
         @parts = split("time", $line);
-        if(@parts > 1) {
+        if (@parts > 1) {
             $sort_time = $parts[1];
             last;
         }              
     }
     close(CODE);
     # verifying correctness
-    if(not $std and $verifycorrect) {
+    if (not $std and $verifycorrect) {
         system("$exename $loopCount -std > $time_file");
         unless(open(CODE, $time_file)) {
             print STDERR "Could not open file: $time_file: $!\n";
             exit;
         }
         die "Difference in results\n" unless (compare("boost_sort_out.txt","standard_sort_out.txt") == 0) ;
-        while($line = <CODE>) {
+        while ($line = <CODE>) {
             @parts = split("time", $line);
-            if(@parts > 1) {
+            if (@parts > 1) {
                 $stdsingle = $parts[1];
                 last;
             }               
@@ -283,12 +283,12 @@ sub SumTimes {
     $stdsingle = 0.0;
     my $ii = 1;
     # if we're only using real times, don't bother with the corner-cases
-    if($realtimes) {
+    if ($realtimes) {
         $ii = 8;
     }
     for (; $ii <= 16; $ii++) {
         system("randomgen $ii $ii $fileSize");
-        if($realtimes) {
+        if ($realtimes) {
             $time += CheckTime();
             $baseTime += $stdsingle;
         } else {
@@ -297,7 +297,7 @@ sub SumTimes {
             print STDOUT "trying $ii $ii\n" if $debug;
             $time += 2 * $ii * CheckTime();
             $baseTime += 2 * $ii * $stdsingle;
-            if($ii > 1) {
+            if ($ii > 1) {
                 print STDOUT "trying 1 $ii\n" if $debug;
                 system("randomgen 1 $ii $fileSize");
                 $time += $ii * CheckTime();
@@ -309,7 +309,7 @@ sub SumTimes {
             }
         }
     }
-    if($time == 0.0) {
+    if ($time == 0.0) {
         $time = 0.01;
     }
     return $time;
@@ -326,7 +326,7 @@ sub TuneVariable {
         $sumtime = SumTimes();
         # If this value is better, use it.  If this is the start value
         # and it's just as good, use the startval
-        if(not $besttime or ($sumtime < $besttime) or (($besttime == $sumtime) and ($$tunevar == $startval))) {
+        if (not $besttime or ($sumtime < $besttime) or (($besttime == $sumtime) and ($$tunevar == $startval))) {
             $besttime = $sumtime;
             $best_val = $$tunevar;
         }
@@ -334,7 +334,7 @@ sub TuneVariable {
     }
     $$tunevar = $best_val;
     print STDOUT "Best Value: $best_val\n";
-    if($best_val != $startval) {
+    if ($best_val != $startval) {
         $changed = 1;
     }
 }
@@ -350,6 +350,6 @@ sub TuneMinSize {
         $std = "-std";
         $stdtime = SumTimes();
         print STDOUT "Size: $min_sort_size boost::sort Time: $sumtime std::sort Time: $stdtime\n";
-        last if($stdtime > $sumtime);
+        last if ($stdtime > $sumtime);
     }
 }

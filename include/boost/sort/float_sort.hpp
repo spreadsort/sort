@@ -43,7 +43,7 @@ namespace boost {
   template <class RandomAccessIter>
   inline void float_sort(RandomAccessIter first, RandomAccessIter last) 
   {
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last);
     else
       detail::float_sort(first, last);
@@ -54,7 +54,7 @@ namespace boost {
   inline void float_sort(RandomAccessIter first, RandomAccessIter last,
                          Right_shift rshift) 
   {
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last);
     else
       detail::float_sort(first, last, rshift(*first, 0), rshift);
@@ -64,7 +64,7 @@ namespace boost {
   inline void float_sort(RandomAccessIter first, RandomAccessIter last,
                          Right_shift rshift, Compare comp) 
   {
-    if(last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::MIN_SORT_SIZE)
       std::sort(first, last, comp);
     else
       detail::float_sort(first, last, rshift(*first, 0), rshift, comp);

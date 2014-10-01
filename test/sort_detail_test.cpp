@@ -96,8 +96,10 @@ void get_min_count_test()
       } else {
         base_iterations = iterations;
       }
-      //sum of n to n + x = ((x + 1) * (n + (n + x)))/2 + log_mean_bin_size
-      covered_log_range += (base_iterations * (log_min_split_count * 2 + base_iterations - 1))/2 + log_mean_bin_size;
+      // sum of n to n + x = ((x + 1) * (n + (n + x)))/2 + log_mean_bin_size
+      covered_log_range +=
+        (base_iterations * (log_min_split_count * 2 + base_iterations - 1))/2 +
+        log_mean_bin_size;
       BOOST_CHECK(covered_log_range >= log_range);
       BOOST_CHECK(covered_log_range - MAX_SPLITS < log_range);
     }
@@ -115,7 +117,7 @@ void get_log_divisor_test()
       size_t count = (one << log_count) - 1;
       BOOST_CHECK(rough_log_2_size(count) == (unsigned)log_count);
       int log_divisor = get_log_divisor<LOG_MEAN_BIN_SIZE>(count, log_range);
-      // We will only process counts >= LOG_FINISHING_COUNT in this function.
+      // Only process counts >= LOG_FINISHING_COUNT in this function.
       if (count >= absolute_min_count)
         BOOST_CHECK(log_divisor <= log_range);
       // More pieces should be used the larger count is.

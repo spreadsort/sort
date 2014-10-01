@@ -38,10 +38,10 @@ void string_test()
   const unsigned max_length = 32;
   srand(1);
   //Generating semirandom numbers
-  for(unsigned u = 0; u < input_count; ++u) {
+  for (unsigned u = 0; u < input_count; ++u) {
     unsigned length = rand() % max_length;
     string result;
-    for(unsigned u = 0; u < length; ++u)
+    for (unsigned u = 0; u < length; ++u)
       result.push_back(rand() % 256);
     base_vec.push_back(result);
   }

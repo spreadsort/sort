@@ -34,10 +34,10 @@ struct rightshift_64 {
 boost::int32_t 
 rand_32(bool sign = true) {
    boost::int32_t result = rand() | (rand()<< 16);
-   if(rand() % 2)
+   if (rand() % 2)
      result |= 1 << 15;
    //Adding the sign bit
-   if(sign && (rand() % 2))
+   if (sign && (rand() % 2))
      result *= -1;
    return result;
 }
@@ -50,11 +50,11 @@ void float_test()
   vector<float> base_vec;
 
   //Generating semirandom numbers that will work for basic testing
-  for(unsigned u = 0; u < input_count; ++u) {
+  for (unsigned u = 0; u < input_count; ++u) {
     float val = float(rand_32());
     //As std::sort gives arbitrary results for NaNs and 0.0 vs. -0.0, treat all
     //those as just 0.0 for testing
-    if(!(val < 0.0) && !(0.0 < val))
+    if (!(val < 0.0) && !(0.0 < val))
       base_vec.push_back(0.0);
     else
       base_vec.push_back(val);
@@ -78,12 +78,12 @@ void float_test()
 
 void double_test() {
   vector<double> long_base_vec;
-  for(unsigned u = 0; u < input_count; ++u) {
+  for (unsigned u = 0; u < input_count; ++u) {
     double val = double
     ((((boost::int64_t)rand_32()) << ((8 * sizeof(int)) -1)) + rand_32(false));
     //As std::sort gives arbitrary results for NaNs and 0.0 vs. -0.0, 
     //treat all those as just 0.0 for testing
-    if(!(val < 0.0) && !(0.0 < val))
+    if (!(val < 0.0) && !(0.0 < val))
       long_base_vec.push_back(0.0);
     else
       long_base_vec.push_back(val);

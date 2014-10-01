@@ -43,8 +43,8 @@ int main(int argc, const char ** argv) {
   std::ifstream indata;
   bool stdSort = false;
   unsigned loopCount = 1;
-  for(int u = 1; u < argc; ++u) {
-    if(std::string(argv[u]) == "-std")
+  for (int u = 1; u < argc; ++u) {
+    if (std::string(argv[u]) == "-std")
       stdSort = true;
     else
       loopCount = atoi(argv[u]);
@@ -52,15 +52,15 @@ int main(int argc, const char ** argv) {
   double total = 0.0;
   //Run multiple loops, if requested
   std::vector<DATA_TYPE> array;
-  for(unsigned u = 0; u < loopCount; ++u) {
+  for (unsigned u = 0; u < loopCount; ++u) {
     indata.open("input.txt", std::ios_base::in | std::ios_base::binary);  
-    if(indata.bad()) {
+    if (indata.bad()) {
       printf("input.txt could not be opened\n");
       return 1;
     }
     DATA_TYPE inval;
     indata >> inval.a;
-    while ( !indata.eof() ) {
+    while (!indata.eof() ) {
       array.push_back(inval);
       indata >> inval.a;
     }
@@ -69,7 +69,7 @@ int main(int argc, const char ** argv) {
     clock_t start, end;
     double elapsed;
     start = clock();
-    if(stdSort)
+    if (stdSort)
       //std::sort(&(array[0]), &(array[0]) + uCount);
       std::sort(array.begin(), array.end());
     else
@@ -78,21 +78,21 @@ int main(int argc, const char ** argv) {
     end = clock();
     elapsed = ((double) (end - start));
     std::ofstream ofile;
-    if(stdSort)
+    if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
                  std::ios_base::binary | std::ios_base::trunc);
     else
       ofile.open("boost_sort_out.txt", std::ios_base::out |
                  std::ios_base::binary | std::ios_base::trunc);
-    if(ofile.good()) {
-      for(unsigned u = 0; u < array.size(); ++u)
+    if (ofile.good()) {
+      for (unsigned u = 0; u < array.size(); ++u)
         ofile << array[u].a << "\n";
       ofile.close();
     }
     total += elapsed;
     array.clear();
   }
-  if(stdSort)
+  if (stdSort)
     printf("std::sort elapsed time %f\n", total / CLOCKS_PER_SEC);
   else
     printf("spreadsort elapsed time %f\n", total / CLOCKS_PER_SEC);

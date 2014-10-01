@@ -28,8 +28,8 @@ int main(int argc, const char ** argv) {
   size_t uCount,uSize=sizeof(DATA_TYPE);
   bool stdSort = false;
   unsigned loopCount = 1;
-  for(int u = 1; u < argc; ++u) {
-    if(std::string(argv[u]) == "-std")
+  for (int u = 1; u < argc; ++u) {
+    if (std::string(argv[u]) == "-std")
       stdSort = true;
     else
       loopCount = atoi(argv[u]);
@@ -37,7 +37,7 @@ int main(int argc, const char ** argv) {
   //Sorts the data once, then times sorting of already-sorted data
   loopCount += 1;
   std::ifstream input("input.txt", std::ios_base::in | std::ios_base::binary);
-  if(input.fail()) {
+  if (input.fail()) {
     printf("input.txt could not be opened\n");
     return 1;
   }
@@ -50,14 +50,14 @@ int main(int argc, const char ** argv) {
   //Conversion to a vector
   array.resize(uCount);
   unsigned v = 0;
-  while(input.good() && v < uCount) // EOF or failure stops the reading
+  while (input.good() && v < uCount) // EOF or failure stops the reading
      input.read( (char *) &(array[v++]), uSize );
   //Run multiple loops, if requested
-  for(unsigned u = 0; u < loopCount; ++u) {
+  for (unsigned u = 0; u < loopCount; ++u) {
     clock_t start, end;
     double elapsed;
     start = clock();
-    if(stdSort)
+    if (stdSort)
       //std::sort(&(array[0]), &(array[0]) + uCount);
       std::sort(array.begin(), array.end());
     else {
@@ -68,22 +68,22 @@ int main(int argc, const char ** argv) {
     end = clock();
     elapsed = ((double) (end - start)) ;
     std::ofstream ofile;
-    if(stdSort)
+    if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
                  std::ios_base::binary | std::ios_base::trunc);
     else
       ofile.open("boost_sort_out.txt", std::ios_base::out |
                  std::ios_base::binary | std::ios_base::trunc);
-    if(ofile.good()) {
-      for(unsigned v = 0; v < array.size(); ++v) {
+    if (ofile.good()) {
+      for (unsigned v = 0; v < array.size(); ++v) {
         ofile.write( (char *) &(array[v]), sizeof(array[v]) );
       }
       ofile.close();
     }
-    if(u)
+    if (u)
       total += elapsed;
   }
-  if(stdSort)
+  if (stdSort)
     printf("std::sort elapsed time %f\n", total / CLOCKS_PER_SEC);
   else
     printf("spreadsort elapsed time %f\n", total / CLOCKS_PER_SEC);
