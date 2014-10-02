@@ -29,7 +29,7 @@ namespace boost {
                           Unsigned_char_type unused) 
   {
     //Don't sort if it's too small to optimize
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last);
     else
       detail::string_sort(first, last, unused);
@@ -49,7 +49,7 @@ namespace boost {
                 RandomAccessIter last, Compare comp, Unsigned_char_type unused) 
   {
     //Don't sort if it's too small to optimize
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last, comp);
     else
       detail::reverse_string_sort(first, last, unused);
@@ -69,7 +69,7 @@ namespace boost {
                           Get_char getchar, Get_length length) 
   {
     //Don't sort if it's too small to optimize
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last);
     else {
       //skipping past empties, which allows us to get the character type 
@@ -88,7 +88,7 @@ namespace boost {
                           Get_char getchar, Get_length length, Compare comp) 
   {
     //Don't sort if it's too small to optimize
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last, comp);
     else {
       //skipping past empties, which allows us to get the character type 
@@ -108,7 +108,7 @@ namespace boost {
     RandomAccessIter last, Get_char getchar, Get_length length, Compare comp) 
   {
     //Don't sort if it's too small to optimize
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last, comp);
     else {
       //skipping past empties, which allows us to get the character type 

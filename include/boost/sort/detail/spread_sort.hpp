@@ -57,28 +57,28 @@ namespace boost {
       const size_t typed_one = 1;
       const unsigned min_size = log_mean_bin_size + log_min_split_count;
       //Assuring that constants have valid settings
-      BOOST_STATIC_ASSERT(log_min_split_count <= MAX_SPLITS &&
+      BOOST_STATIC_ASSERT(log_min_split_count <= max_splits &&
                           log_min_split_count > 0);
-      BOOST_STATIC_ASSERT(MAX_SPLITS > 1 &&
-                          MAX_SPLITS < (8 * sizeof(unsigned)));
-      BOOST_STATIC_ASSERT(MAX_FINISHING_SPLITS >= MAX_SPLITS &&
-                          MAX_FINISHING_SPLITS < (8 * sizeof(unsigned)));
+      BOOST_STATIC_ASSERT(max_splits > 1 &&
+                          max_splits < (8 * sizeof(unsigned)));
+      BOOST_STATIC_ASSERT(max_finishing_splits >= max_splits &&
+                          max_finishing_splits < (8 * sizeof(unsigned)));
       BOOST_STATIC_ASSERT(log_mean_bin_size >= 0);
       BOOST_STATIC_ASSERT(log_finishing_count >= 0);
       //if we can complete in one iteration, do so
       //This first check allows the compiler to optimize never-executed code out
       if (log_finishing_count < min_size) {
-        if (log_range <= min_size && log_range <= MAX_SPLITS) {
+        if (log_range <= min_size && log_range <= max_splits) {
           //Return no smaller than a certain minimum limit
           if (log_range <= log_finishing_count)
             return typed_one << log_finishing_count;
           return typed_one << log_range;
         }
       }
-      const unsigned base_iterations = MAX_SPLITS - log_min_split_count;
+      const unsigned base_iterations = max_splits - log_min_split_count;
       //sum of n to n + x = ((x + 1) * (n + (n + x)))/2 + log_mean_bin_size
       const unsigned base_range =
-          ((base_iterations + 1) * (MAX_SPLITS + log_min_split_count))/2
+          ((base_iterations + 1) * (max_splits + log_min_split_count))/2
           + log_mean_bin_size;
       //Calculating the required number of iterations, and returning
       //1 << (iteration_count + min_size)
@@ -93,13 +93,13 @@ namespace boost {
       }
       //A quick division can calculate the worst-case runtime for larger ranges
       unsigned remainder = log_range - base_range;
-      //the MAX_SPLITS - 1 is used to calculate the ceiling of the division
-      unsigned bit_length = ((((MAX_SPLITS - 1) + remainder)/MAX_SPLITS)
+      //the max_splits - 1 is used to calculate the ceiling of the division
+      unsigned bit_length = ((((max_splits - 1) + remainder)/max_splits)
         + base_iterations + min_size);
       //Preventing overflow; this situation shouldn't occur
       if (bit_length >= (8 * sizeof(size_t)))
         return typed_one << ((8 * sizeof(size_t)) - 1);
-      //n(log_range)/MAX_SPLITS + C, optimizing worst-case performance
+      //n(log_range)/max_splits + C, optimizing worst-case performance
       return typed_one << bit_length;
     }
 
@@ -163,16 +163,16 @@ namespace boost {
     {
       int log_divisor;
       //If we can finish in one iteration without exceeding either
-      //(2 to the MAX_FINISHING_SPLITS) or n bins, do so
+      //(2 to the max_finishing_splits) or n bins, do so
       if ((log_divisor = log_range - rough_log_2_size(count)) <= 0 && 
-         log_range <= MAX_FINISHING_SPLITS)
+         log_range <= max_finishing_splits)
         log_divisor = 0; 
       else {
         //otherwise divide the data into an optimized number of pieces
         log_divisor += log_mean_bin_size;
-        //Cannot exceed MAX_SPLITS or cache misses slow down bin lookups
-        if ((log_range - log_divisor) > MAX_SPLITS)
-          log_divisor = log_range - MAX_SPLITS;
+        //Cannot exceed max_splits or cache misses slow down bin lookups
+        if ((log_range - log_divisor) > max_splits)
+          log_divisor = log_range - max_splits;
       }
       return log_divisor;
     }
@@ -209,7 +209,7 @@ namespace boost {
       if (is_sorted_or_find_extremes(first, last, max, min))
         return;
       RandomAccessIter * target_bin;
-      unsigned log_divisor = get_log_divisor<LOG_MEAN_BIN_SIZE>(last - first,
+      unsigned log_divisor = get_log_divisor<int_log_mean_bin_size>(last - first,
                         rough_log_2_size(Size_type((*max >> 0) - (*min >> 0))));
       Div_type div_min = *min >> log_divisor;
       Div_type div_max = *max >> log_divisor;
@@ -266,8 +266,8 @@ namespace boost {
         return;
       //log_divisor is the remaining range; calculating the comparison threshold
       size_t max_count =
-        get_min_count<LOG_MEAN_BIN_SIZE, LOG_MIN_SPLIT_COUNT,
-                      LOG_FINISHING_COUNT>(log_divisor);
+        get_min_count<int_log_mean_bin_size, int_log_min_split_count,
+                      int_log_finishing_count>(log_divisor);
 
       //Recursing
       RandomAccessIter lastPos = first;
@@ -500,7 +500,7 @@ namespace boost {
         std::vector<size_t> bin_sizes;
         std::vector<RandomAccessIter> bin_cache;
         spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
-          size_t, LOG_MEAN_BIN_SIZE, LOG_MIN_SPLIT_COUNT, LOG_FINISHING_COUNT>
+          size_t, int_log_mean_bin_size, int_log_min_split_count, int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift, comp);
     }
 
@@ -515,8 +515,8 @@ namespace boost {
         std::vector<size_t> bin_sizes;
         std::vector<RandomAccessIter> bin_cache;
         spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
-                        boost::uintmax_t, LOG_MEAN_BIN_SIZE,
-                        LOG_MIN_SPLIT_COUNT, LOG_FINISHING_COUNT>
+                        boost::uintmax_t, int_log_mean_bin_size,
+                        int_log_min_split_count, int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift, comp);
     }
 
@@ -545,7 +545,7 @@ namespace boost {
         std::vector<size_t> bin_sizes;
         std::vector<RandomAccessIter> bin_cache;
         spread_sort_rec<RandomAccessIter, Div_type, Right_shift, size_t,
-          LOG_MEAN_BIN_SIZE, LOG_MIN_SPLIT_COUNT, LOG_FINISHING_COUNT>
+          int_log_mean_bin_size, int_log_min_split_count, int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift);
     }
 
@@ -559,8 +559,8 @@ namespace boost {
         std::vector<size_t> bin_sizes;
         std::vector<RandomAccessIter> bin_cache;
         spread_sort_rec<RandomAccessIter, Div_type, Right_shift,
-                        boost::uintmax_t, LOG_MEAN_BIN_SIZE,
-                        LOG_MIN_SPLIT_COUNT, LOG_FINISHING_COUNT>
+                        boost::uintmax_t, int_log_mean_bin_size,
+                        int_log_min_split_count, int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift);
     }
 
@@ -694,7 +694,7 @@ namespace boost {
       if (is_sorted_or_find_extremes<RandomAccessIter, Div_type>(first, last, 
                                                                 max, min))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -724,9 +724,9 @@ namespace boost {
         return;
 
       //Recursing
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (unsigned u = cache_offset; u < cache_end; lastPos = bin_cache[u],
           ++u) {
@@ -753,7 +753,7 @@ namespace boost {
       if (is_sorted_or_find_extremes<RandomAccessIter, Div_type>(first, last, 
                                                                 max, min))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -784,9 +784,9 @@ namespace boost {
         return;
 
       //Recursing
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (int ii = cache_end - 1; ii >= (int)cache_offset;
           lastPos = bin_cache[ii], --ii) {
@@ -813,7 +813,7 @@ namespace boost {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -843,9 +843,9 @@ namespace boost {
         return;
 
       //Recursing
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (int ii = cache_end - 1; ii >= (int)cache_offset;
           lastPos = bin_cache[ii], --ii) {
@@ -871,7 +871,7 @@ namespace boost {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -901,9 +901,9 @@ namespace boost {
         return;
 
       //Recursing
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (int ii = cache_end - 1; ii >= (int)cache_offset;
           lastPos = bin_cache[ii], --ii) {
@@ -931,7 +931,7 @@ namespace boost {
       if (is_sorted_or_find_extremes<RandomAccessIter, Div_type>(first, last, 
                                                                 max, min))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -985,9 +985,9 @@ namespace boost {
         return;
 
       //Handling negative values first
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (int ii = cache_offset + first_positive - 1; ii >= (int)cache_offset;
           lastPos = bin_cache[ii--]) {
@@ -1027,7 +1027,7 @@ namespace boost {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -1080,9 +1080,9 @@ namespace boost {
         return;
 
       //Handling negative values first
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (int ii = cache_offset + first_positive - 1; ii >= (int)cache_offset;
           lastPos = bin_cache[ii--]) {
@@ -1108,8 +1108,8 @@ namespace boost {
         //sort positive values using normal spread_sort
         else
           spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Size_type,
-                          FLOAT_LOG_MEAN_BIN_SIZE, FLOAT_LOG_MIN_SPLIT_COUNT,
-                          FLOAT_LOG_FINISHING_COUNT>
+                          float_log_mean_bin_size, float_log_min_split_count,
+                          float_log_finishing_count>
             (lastPos, bin_cache[u], bin_cache, cache_end, bin_sizes, rshift);
       }
     }
@@ -1124,7 +1124,7 @@ namespace boost {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
         return;
-      unsigned log_divisor = get_log_divisor<FLOAT_LOG_MEAN_BIN_SIZE>(
+      unsigned log_divisor = get_log_divisor<float_log_mean_bin_size>(
           last - first, rough_log_2_size(Size_type(max - min)));
       Div_type div_min = min >> log_divisor;
       Div_type div_max = max >> log_divisor;
@@ -1177,9 +1177,9 @@ namespace boost {
         return;
 
       //Handling negative values first
-      size_t max_count = get_min_count<FLOAT_LOG_MEAN_BIN_SIZE,
-                                       FLOAT_LOG_MIN_SPLIT_COUNT,
-                                       FLOAT_LOG_FINISHING_COUNT>(log_divisor);
+      size_t max_count = get_min_count<float_log_mean_bin_size,
+                                       float_log_min_split_count,
+                                       float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
       for (int ii = cache_offset + first_positive - 1; ii >= (int)cache_offset;
           lastPos = bin_cache[ii--]) {
@@ -1206,8 +1206,8 @@ namespace boost {
         //sort positive values using normal spread_sort
         else
           spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
-                          Size_type, FLOAT_LOG_MEAN_BIN_SIZE,
-                          FLOAT_LOG_MIN_SPLIT_COUNT, FLOAT_LOG_FINISHING_COUNT>
+                          Size_type, float_log_mean_bin_size,
+                          float_log_min_split_count, float_log_finishing_count>
       (lastPos, bin_cache[u], bin_cache, cache_end, bin_sizes, rshift, comp);
       }
     }

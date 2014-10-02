@@ -27,7 +27,7 @@ using namespace std;
 
 const unsigned max_count = ALR_THRESHOLD - 1;
 const unsigned bit_shift = detail::rough_log_2_size(max_count) -
-  detail::LOG_MEAN_BIN_SIZE;
+  detail::int_log_mean_bin_size;
 const unsigned radix_threshold = detail::rough_log_2_size(max_count) + 1;
 
 const DATA_TYPE typed_one = 1;

@@ -11,7 +11,7 @@
 $usage = "usage: tune.pl [-tune] [-real] [-tune_verify] [-verbose] [-multiple_iterations] [-large] [-small] [-windows] [fileSize]\n";
 # testing sorting on 40 million elements by default
 # don't test on below 2^22 (4 million) elements as that is the minimum
-# for MAX_SPLITS of 11 to be efficient
+# for max_splits of 11 to be efficient
 use File::Compare;
 $defFileSize = 5000000;
 $loopCount = 1;
@@ -206,30 +206,30 @@ sub WriteConstants {
     print CONSTANTS "//if you go too large you get cache misses on bins\n";
     print CONSTANTS "//The smaller this number, the less worst-case memory usage.\n";  
     print CONSTANTS "//If too small, too many recursions slow down spreadsort\n";
-    print CONSTANTS "enum { MAX_SPLITS = $max_splits,\n";
+    print CONSTANTS "enum { max_splits = $max_splits,\n";
     print CONSTANTS "//It's better to have a few cache misses and finish sorting\n";
     print CONSTANTS "//than to run another iteration\n";
-    print CONSTANTS "MAX_FINISHING_SPLITS = MAX_SPLITS + 1,\n";
+    print CONSTANTS "max_finishing_splits = max_splits + 1,\n";
     print CONSTANTS "//Sets the minimum number of items per bin.\n";
-    print CONSTANTS "LOG_MEAN_BIN_SIZE = $log_mean_bin_size,\n";
+    print CONSTANTS "int_log_mean_bin_size = $log_mean_bin_size,\n";
     print CONSTANTS "//Used to force a comparison-based sorting for small bins, if it's faster.\n";
     print CONSTANTS "//Minimum value 1\n";
     $log_min_split_count = $log_min_size - $log_mean_bin_size;
-    print CONSTANTS "LOG_MIN_SPLIT_COUNT = $log_min_split_count,\n";
+    print CONSTANTS "int_log_min_split_count = $log_min_split_count,\n";
     print CONSTANTS "//This is the minimum split count to use spreadsort when it will finish in one\n";
     print CONSTANTS "//iteration.  Make this larger the faster std::sort is relative to integer_sort.\n";
-    print CONSTANTS "LOG_FINISHING_COUNT = $log_finishing_count,\n";
+    print CONSTANTS "int_log_finishing_count = $log_finishing_count,\n";
     print CONSTANTS "//Sets the minimum number of items per bin for floating point.\n";
-    print CONSTANTS "FLOAT_LOG_MEAN_BIN_SIZE = $float_log_mean_bin_size,\n";
+    print CONSTANTS "float_log_mean_bin_size = $float_log_mean_bin_size,\n";
     print CONSTANTS "//Used to force a comparison-based sorting for small bins, if it's faster.\n";
     print CONSTANTS "//Minimum value 1\n";
     $float_log_min_split_count = $float_log_min_size - $float_log_mean_bin_size;
-    print CONSTANTS "FLOAT_LOG_MIN_SPLIT_COUNT = $float_log_min_split_count,\n";
+    print CONSTANTS "float_log_min_split_count = $float_log_min_split_count,\n";
     print CONSTANTS "//This is the minimum split count to use spreadsort when it will finish in one\n";
     print CONSTANTS "//iteration.  Make this larger the faster std::sort is relative to float_sort.\n";
-    print CONSTANTS "FLOAT_LOG_FINISHING_COUNT = $float_log_finishing_count,\n";
+    print CONSTANTS "float_log_finishing_count = $float_log_finishing_count,\n";
     print CONSTANTS "//There is a minimum size below which it is not worth using spreadsort\n";
-    print CONSTANTS "MIN_SORT_SIZE = $min_sort_size };\n";
+    print CONSTANTS "min_sort_size = $min_sort_size };\n";
     print CONSTANTS "}\n}\n#endif\n";
     close CONSTANTS;
     system("$makename $exename $log");

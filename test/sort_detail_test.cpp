@@ -52,11 +52,11 @@ const boost::uintmax_t one = 1;
 
 // spreadsort won't recurse for inputs smaller than min_count.
 const int int_min_log_count = 
-  (std::min)((int)LOG_FINISHING_COUNT, 
-             (int)LOG_MEAN_BIN_SIZE + LOG_MIN_SPLIT_COUNT);
+  (std::min)((int)int_log_finishing_count, 
+             (int)int_log_mean_bin_size + int_log_min_split_count);
 const int float_min_log_count = 
-  (std::min)((int)FLOAT_LOG_FINISHING_COUNT,
-             (int)FLOAT_LOG_MEAN_BIN_SIZE + FLOAT_LOG_MIN_SPLIT_COUNT);
+  (std::min)((int)float_log_finishing_count,
+             (int)float_log_mean_bin_size + float_log_min_split_count);
 const unsigned absolute_min_count = (std::min)(1 << int_min_log_count, 
                                                1 << float_min_log_count);
 
@@ -89,10 +89,10 @@ void get_min_count_test()
       BOOST_CHECK(min_count >= (1 << min_log_size));
       int iterations = rough_log_2_size(min_count) - min_log_size;
       BOOST_CHECK(iterations >= 1);
-      int base_iterations = MAX_SPLITS - log_min_split_count;
+      int base_iterations = max_splits - log_min_split_count;
       int covered_log_range = 0;
       if (iterations > base_iterations) {
-        covered_log_range += MAX_SPLITS * (iterations - base_iterations);
+        covered_log_range += max_splits * (iterations - base_iterations);
       } else {
         base_iterations = iterations;
       }
@@ -101,7 +101,7 @@ void get_min_count_test()
         (base_iterations * (log_min_split_count * 2 + base_iterations - 1))/2 +
         log_mean_bin_size;
       BOOST_CHECK(covered_log_range >= log_range);
-      BOOST_CHECK(covered_log_range - MAX_SPLITS < log_range);
+      BOOST_CHECK(covered_log_range - max_splits < log_range);
     }
   }
 }
@@ -112,12 +112,12 @@ void get_log_divisor_test()
 {
   for (int log_range = 0; log_range <= max_int_bits; ++log_range) {
     int prev_log_divisor = max_int_bits +
-      (std::max)((int)LOG_MEAN_BIN_SIZE, (int)FLOAT_LOG_MEAN_BIN_SIZE);
+      (std::max)((int)int_log_mean_bin_size, (int)float_log_mean_bin_size);
     for (int log_count = 0; log_count < max_size_bits; ++log_count) {
       size_t count = (one << log_count) - 1;
       BOOST_CHECK(rough_log_2_size(count) == (unsigned)log_count);
-      int log_divisor = get_log_divisor<LOG_MEAN_BIN_SIZE>(count, log_range);
-      // Only process counts >= LOG_FINISHING_COUNT in this function.
+      int log_divisor = get_log_divisor<int_log_mean_bin_size>(count, log_range);
+      // Only process counts >= int_log_finishing_count in this function.
       if (count >= absolute_min_count)
         BOOST_CHECK(log_divisor <= log_range);
       // More pieces should be used the larger count is.
@@ -125,8 +125,8 @@ void get_log_divisor_test()
       prev_log_divisor = log_divisor;
       BOOST_CHECK(log_divisor >= 0);
       if (log_range > log_count) {
-        BOOST_CHECK(log_range - log_divisor <= MAX_SPLITS);
-      } else if (log_range <= MAX_FINISHING_SPLITS) {
+        BOOST_CHECK(log_range - log_divisor <= max_splits);
+      } else if (log_range <= max_finishing_splits) {
         BOOST_CHECK(log_divisor == 0);
       }
     }
@@ -332,10 +332,10 @@ void offset_comparison_test() {
 int test_main( int, char*[] )
 {
   roughlog2_test();
-  get_min_count_test<LOG_MEAN_BIN_SIZE, LOG_MIN_SPLIT_COUNT,
-                    LOG_FINISHING_COUNT>();
-  get_min_count_test<FLOAT_LOG_MEAN_BIN_SIZE, FLOAT_LOG_MIN_SPLIT_COUNT,
-                    FLOAT_LOG_FINISHING_COUNT>();
+  get_min_count_test<int_log_mean_bin_size, int_log_min_split_count,
+                    int_log_finishing_count>();
+  get_min_count_test<float_log_mean_bin_size, float_log_min_split_count,
+                    float_log_finishing_count>();
   get_log_divisor_test();
   is_sorted_or_find_extremes_test();
   size_bins_test();

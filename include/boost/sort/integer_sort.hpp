@@ -28,7 +28,7 @@ namespace boost {
   inline void integer_sort(RandomAccessIter first, RandomAccessIter last) 
   {
     //Don't sort if it's too small to optimize
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last);
     else
       detail::integer_sort(first, last, *first >> 0);
@@ -38,7 +38,7 @@ namespace boost {
   template <class RandomAccessIter, class Right_shift, class Compare>
   inline void integer_sort(RandomAccessIter first, RandomAccessIter last,
                            Right_shift shift, Compare comp) {
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last, comp);
     else
       detail::integer_sort(first, last, shift(*first, 0), shift, comp);
@@ -48,7 +48,7 @@ namespace boost {
   template <class RandomAccessIter, class Right_shift>
   inline void integer_sort(RandomAccessIter first, RandomAccessIter last,
                            Right_shift shift) {
-    if (last - first < detail::MIN_SORT_SIZE)
+    if (last - first < detail::min_sort_size)
       std::sort(first, last);
     else
       detail::integer_sort(first, last, shift(*first, 0), shift);

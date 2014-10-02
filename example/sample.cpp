@@ -28,12 +28,12 @@ int main(int argc, const char ** argv) {
   size_t uCount,uSize=sizeof(DATA_TYPE);
   //worst-case handling code check
   /*for (unsigned u = 0; u <= 64; ++u)
-    printf("%d %d\n", u, detail::get_max_count<detail::LOG_MEAN_BIN_SIZE, 
-    detail::LOG_MIN_SPLIT_COUNT, detail::LOG_FINISHING_COUNT>(u));
+    printf("%d %d\n", u, detail::get_max_count<detail::int_log_mean_bin_size, 
+    detail::int_log_min_split_count, detail::int_log_finishing_count>(u));
   printf("float_sort\n");
   for (unsigned u = 0; u <= 64; ++u)
-    printf("%d %d\n", u, detail::get_max_count<detail::FLOAT_LOG_MEAN_BIN_SIZE, 
-    detail::FLOAT_LOG_MIN_SPLIT_COUNT, detail::FLOAT_LOG_FINISHING_COUNT>(u));*/
+    printf("%d %d\n", u, detail::get_max_count<detail::float_log_mean_bin_size, 
+    detail::float_log_min_split_count, detail::float_log_finishing_count>(u));*/
   bool stdSort = false;
   unsigned loopCount = 1;
   for (int u = 1; u < argc; ++u) {
