@@ -21,9 +21,7 @@ Scott McMurray
 #include <cstring>
 #include <string>
 #include <limits>
-#include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/sort/detail/constants.hpp>
 #include <boost/sort/integer_sort.hpp>
 #include <boost/sort/float_sort.hpp>
 #include <boost/sort/string_sort.hpp>

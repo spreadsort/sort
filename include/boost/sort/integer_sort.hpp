@@ -20,7 +20,7 @@ Phil Endecott and Frank Gennari
 #include <limits>
 #include <boost/static_assert.hpp>
 #include <boost/sort/detail/constants.hpp>
-#include <boost/sort/detail/spread_sort.hpp>
+#include <boost/sort/detail/integer_sort.hpp>
 
 namespace boost {
   //Top-level sorting call for integers

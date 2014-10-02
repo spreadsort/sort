@@ -7,6 +7,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
+#include <boost/sort/detail/string_sort.hpp>
 #include <boost/sort/string_sort.hpp>
 #include <boost/sort/sort.hpp>
 // Include unit test framework
@@ -18,6 +19,9 @@
 
 using namespace std;
 using namespace boost;
+using boost::detail::offset_less_than;
+using boost::detail::offset_greater_than;
+using boost::detail::update_offset;
 
 struct bracket {
   unsigned char operator()(const string &x, size_t offset) const {
@@ -25,11 +29,55 @@ struct bracket {
   }
 };
 
-struct getsize {
+struct get_size {
   size_t operator()(const string &x) const{ return x.size(); }
 };
 
 static const unsigned input_count = 32;
+
+// Test that update_offset finds the first character with a difference.
+void update_offset_test() {
+  vector<string> input;
+  input.push_back("test1");
+  input.push_back("test2");
+  size_t char_offset = 1;
+  update_offset(input.begin(), input.end(), char_offset);
+  BOOST_CHECK(char_offset == 4);
+
+  // Functor version
+  char_offset = 1;
+  update_offset(input.begin(), input.end(), char_offset, bracket(), get_size());
+  BOOST_CHECK(char_offset == 4);
+}
+
+// Test that offset comparison operators only look after the offset.
+void offset_comparison_test() {
+  string input1 = "ab";
+  string input2 = "ba";
+  string input3 = "aba";
+  offset_less_than<string, unsigned char> less_than(0);
+  offset_greater_than<string, unsigned char> greater_than(0);
+  BOOST_CHECK(less_than(input1, input2));
+  BOOST_CHECK(less_than(input1, input3));
+  BOOST_CHECK(!less_than(input2, input1));
+  BOOST_CHECK(!less_than(input1, input1));
+  BOOST_CHECK(!greater_than(input1, input2));
+  BOOST_CHECK(!greater_than(input1, input3));
+  BOOST_CHECK(greater_than(input2, input1));
+  BOOST_CHECK(!greater_than(input1, input1));
+
+  // Offset comparisons only check after the specified offset.
+  offset_less_than<string, unsigned char> offset_less(1);
+  offset_greater_than<string, unsigned char> offset_greater(1);
+  BOOST_CHECK(!offset_less(input1, input2));
+  BOOST_CHECK(offset_less(input1, input3));
+  BOOST_CHECK(offset_less(input2, input1));
+  BOOST_CHECK(!offset_less(input1, input1));
+  BOOST_CHECK(offset_greater(input1, input2));
+  BOOST_CHECK(!offset_greater(input1, input3));
+  BOOST_CHECK(!offset_greater(input2, input1));
+  BOOST_CHECK(!offset_greater(input1, input1));
+}
 
 void string_test()
 {
@@ -56,11 +104,11 @@ void string_test()
   BOOST_CHECK(test_vec == sorted_vec);
   //Character functors
   test_vec = base_vec;
-  string_sort(test_vec.begin(), test_vec.end(), bracket(), getsize());
+  string_sort(test_vec.begin(), test_vec.end(), bracket(), get_size());
   BOOST_CHECK(test_vec == sorted_vec);
   //All functors
   test_vec = base_vec;
-  string_sort(test_vec.begin(), test_vec.end(), bracket(), getsize(),
+  string_sort(test_vec.begin(), test_vec.end(), bracket(), get_size(),
               less<string>());
   BOOST_CHECK(test_vec == sorted_vec);
   //reverse order
@@ -69,7 +117,7 @@ void string_test()
   BOOST_CHECK(test_vec == sorted_vec);
   //reverse order with functors
   test_vec = base_vec;
-  reverse_string_sort(test_vec.begin(), test_vec.end(), bracket(), getsize(),
+  reverse_string_sort(test_vec.begin(), test_vec.end(), bracket(), get_size(),
                       greater<string>());
   BOOST_CHECK(test_vec == sorted_vec);  
 }
@@ -92,6 +140,8 @@ void corner_test() {
 // test main 
 int test_main( int, char*[] )
 {
+  update_offset_test();
+  offset_comparison_test();
   string_test();
   corner_test();
   return 0;

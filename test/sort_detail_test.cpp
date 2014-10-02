@@ -1,4 +1,4 @@
-//  Boost Sort library sort_detail_test.cpp file  ----------------------------//
+//  Boost Sort library tests for integer_sort and float_sort details.
 
 //  Copyright Steven Ross 2014. Use, modification and
 //  distribution is subject to the Boost Software License, Version
@@ -8,7 +8,10 @@
 //  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/cstdint.hpp>
-#include <boost/sort/detail/spread_sort.hpp>
+#include <boost/sort/detail/spread_sort_common.hpp>
+#include <boost/sort/detail/integer_sort.hpp>
+#include <boost/sort/detail/float_sort.hpp>
+#include <boost/sort/detail/string_sort.hpp>
 #include <boost/sort/float_sort.hpp>
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -34,16 +37,6 @@ struct float_right_shift {
   int operator()(const float x, const unsigned offset) const { 
     return float_mem_cast<float, int>(x) >> offset; 
   }
-};
-
-struct bracket {
-  unsigned char operator()(const string &x, size_t offset) const {
-    return x[offset];
-  }
-};
-
-struct getsize {
-  size_t operator()(const string &x) const{ return x.size(); }
 };
 
 const int max_int_bits = sizeof(boost::uintmax_t) * 8;
@@ -116,7 +109,8 @@ void get_log_divisor_test()
     for (int log_count = 0; log_count < max_size_bits; ++log_count) {
       size_t count = (one << log_count) - 1;
       BOOST_CHECK(rough_log_2_size(count) == (unsigned)log_count);
-      int log_divisor = get_log_divisor<int_log_mean_bin_size>(count, log_range);
+      int log_divisor =
+        get_log_divisor<int_log_mean_bin_size>(count, log_range);
       // Only process counts >= int_log_finishing_count in this function.
       if (count >= absolute_min_count)
         BOOST_CHECK(log_divisor <= log_range);
@@ -282,50 +276,6 @@ void swap_loop_test() {
   BOOST_CHECK(next_float_bin_start == floats.begin() + bin_sizes[0]);
 }
 
-// Test that update_offset finds the first character with a difference.
-void update_offset_test() {
-  vector<string> input;
-  input.push_back("test1");
-  input.push_back("test2");
-  size_t char_offset = 1;
-  update_offset(input.begin(), input.end(), char_offset);
-  BOOST_CHECK(char_offset == 4);
-
-  // Functor version
-  char_offset = 1;
-  update_offset(input.begin(), input.end(), char_offset, bracket(), getsize());
-  BOOST_CHECK(char_offset == 4);
-}
-
-// Test that offset comparison operators only look after the offset.
-void offset_comparison_test() {
-  string input1 = "ab";
-  string input2 = "ba";
-  string input3 = "aba";
-  offset_less_than<string, unsigned char> less_than(0);
-  offset_greater_than<string, unsigned char> greater_than(0);
-  BOOST_CHECK(less_than(input1, input2));
-  BOOST_CHECK(less_than(input1, input3));
-  BOOST_CHECK(!less_than(input2, input1));
-  BOOST_CHECK(!less_than(input1, input1));
-  BOOST_CHECK(!greater_than(input1, input2));
-  BOOST_CHECK(!greater_than(input1, input3));
-  BOOST_CHECK(greater_than(input2, input1));
-  BOOST_CHECK(!greater_than(input1, input1));
-
-  // Offset comparisons only check after the specified offset.
-  offset_less_than<string, unsigned char> offset_less(1);
-  offset_greater_than<string, unsigned char> offset_greater(1);
-  BOOST_CHECK(!offset_less(input1, input2));
-  BOOST_CHECK(offset_less(input1, input3));
-  BOOST_CHECK(offset_less(input2, input1));
-  BOOST_CHECK(!offset_less(input1, input1));
-  BOOST_CHECK(offset_greater(input1, input2));
-  BOOST_CHECK(!offset_greater(input1, input3));
-  BOOST_CHECK(!offset_greater(input2, input1));
-  BOOST_CHECK(!offset_greater(input1, input1));
-}
-
 } // end anonymous namespace
 
 // test main 
@@ -340,7 +290,5 @@ int test_main( int, char*[] )
   is_sorted_or_find_extremes_test();
   size_bins_test();
   swap_loop_test();
-  update_offset_test();
-  offset_comparison_test();
   return 0;
 }

@@ -22,7 +22,7 @@ Scott McMurray
 #include <limits>
 #include <boost/static_assert.hpp>
 #include <boost/sort/detail/constants.hpp>
-#include <boost/sort/detail/spread_sort.hpp>
+#include <boost/sort/detail/float_sort.hpp>
 
 namespace boost {
   //Casts a float to the specified integer type

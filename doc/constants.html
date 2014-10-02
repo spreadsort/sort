@@ -42,15 +42,15 @@
     <dt><a href="#constants">Constant Values</a></dt>
     <dd>
       <dl class="page-index">
-         <dt><a href="#MAX_SPLITS">MAX_SPLITS</a></dt>
-         <dt><a href="#MAX_FINISHING_SPLITS">MAX_FINISHING_SPLITS</a></dt>
-         <dt><a href="#MIN_SORT_SIZE">MIN_SORT_SIZE</a></dt>
-         <dt><a href="#LOG_MEAN_BIN_SIZE">LOG_MEAN_BIN_SIZE</a></dt>
-         <dt><a href="#LOG_MIN_SPLIT_COUNT">LOG_MIN_SPLIT_COUNT</a></dt>
-         <dt><a href="#LOG_FINISHING_COUNT">LOG_FINISHING_COUNT</a></dt>
-         <dt><a href="#FLOAT_LOG_MEAN_BIN_SIZE">FLOAT_LOG_MEAN_BIN_SIZE</a></dt>
-         <dt><a href="#FLOAT_LOG_MIN_SPLIT_COUNT">FLOAT_LOG_MIN_SPLIT_COUNT</a></dt>
-         <dt><a href="#FLOAT_LOG_FINISHING_COUNT">FLOAT_LOG_FINISHING_COUNT</a></dt>
+         <dt><a href="#max_splits">max_splits</a></dt>
+         <dt><a href="#max_finishing_splits">max_finishing_splits</a></dt>
+         <dt><a href="#min_sort_size">min_sort_size</a></dt>
+         <dt><a href="#int_log_mean_bin_size">int_log_mean_bin_size</a></dt>
+         <dt><a href="#int_log_min_split_count">int_log_min_split_count</a></dt>
+         <dt><a href="#int_log_finishing_count">int_log_finishing_count</a></dt>
+         <dt><a href="#float_log_mean_bin_size">float_log_mean_bin_size</a></dt>
+         <dt><a href="#float_log_min_split_count">float_log_min_split_count</a></dt>
+         <dt><a href="#float_log_finishing_count">float_log_finishing_count</a></dt>
       </dl>
     </dd>
   </dl>
@@ -63,66 +63,66 @@
      to improve performance.  Default settings should be good enough for most systems;
      modification without a thorough understanding of what they do is not recommended.</p>
   <h2><a name="constants" id="constants"></a>Constant Values</h2>
-         <dt><a href="#MAX_SPLITS">MAX_SPLITS</a></dt>
-         <dt><a href="#MAX_FINISHING_SPLITS">MAX_FINISHING_SPLITS</a></dt>
-         <dt><a href="#MIN_SORT_SIZE">MIN_SORT_SIZE</a></dt>
-         <dt><a href="#LOG_MEAN_BIN_SIZE">LOG_MEAN_BIN_SIZE</a></dt>
-         <dt><a href="#LOG_MIN_SPLIT_COUNT">LOG_MIN_SPLIT_COUNT</a></dt>
-         <dt><a href="#LOG_FINISHING_COUNT">LOG_FINISHING_COUNT</a></dt>
-         <dt><a href="#FLOAT_LOG_MEAN_BIN_SIZE">FLOAT_LOG_MEAN_BIN_SIZE</a></dt>
-         <dt><a href="#FLOAT_LOG_MIN_SPLIT_COUNT">FLOAT_LOG_MIN_SPLIT_COUNT</a></dt>
-         <dt><a href="#FLOAT_LOG_FINISHING_COUNT">FLOAT_LOG_FINISHING_COUNT</a></dt>
-  <dl><a name="MAX_SPLITS" id="MAX_SPLITS"><b>MAX_SPLITS</b>:</a>
-  <dt>enum { MAX_SPLITS = 11 };</dt>
+         <dt><a href="#max_splits">max_splits</a></dt>
+         <dt><a href="#max_finishing_splits">max_finishing_splits</a></dt>
+         <dt><a href="#min_sort_size">min_sort_size</a></dt>
+         <dt><a href="#int_log_mean_bin_size">int_log_mean_bin_size</a></dt>
+         <dt><a href="#int_log_min_split_count">int_log_min_split_count</a></dt>
+         <dt><a href="#int_log_finishing_count">int_log_finishing_count</a></dt>
+         <dt><a href="#float_log_mean_bin_size">float_log_mean_bin_size</a></dt>
+         <dt><a href="#float_log_min_split_count">float_log_min_split_count</a></dt>
+         <dt><a href="#float_log_finishing_count">float_log_finishing_count</a></dt>
+  <dl><a name="max_splits" id="max_splits"><b>max_splits</b>:</a>
+  <dt>enum { max_splits = 11 };</dt>
   <dt><b>Description:</b> log base 2 of the maximum number of pieces the data is split into per iteration.
         Usually best between 10 and 13.  
         This number is used for both floats and integers, 
         and should correspond to the minimum L1 cache size this software will run on.</dt></dl>
-  <dl><a name="MAX_FINISHING_SPLITS" id="MAX_FINISHING_SPLITS"><b>MAX_FINISHING_SPLITS:</b></a>
-  <dt>enum { MAX_FINISHING_SPLITS = MAX_SPLITS + 1 };</dt>
+  <dl><a name="max_finishing_splits" id="max_finishing_splits"><b>max_finishing_splits:</b></a>
+  <dt>enum { max_finishing_splits = max_splits + 1 };</dt>
   <dt><b>Description:</b> log of the maximum number of pieces the data is split into if it can
         complete sorting in one iteration, once radix sorting has already been decided upon.  
-        This is a special optimization, and is usually best as MAX_SPLITS + 1.
+        This is a special optimization, and is usually best as max_splits + 1.
         This is used because the occasional cache miss to finish sorting is less expensive
         in runtime than running another iteration.</dt></dl>
-  <dl><a name="MIN_SORT_SIZE" id="MIN_SORT_SIZE"><b>MIN_SORT_SIZE:</b></a>
-  <dt>enum { MIN_SORT_SIZE = 3000 };</dt>
+  <dl><a name="min_sort_size" id="min_sort_size"><b>min_sort_size:</b></a>
+  <dt>enum { min_sort_size = 3000 };</dt>
   <dt><b>Description:</b> std::sort is automatically used on input vectors smaller than this size for all algorithms described here,
         skipping radix sorting entirely.  Due to overhead, radix sorting shouldn't be used on small
         vectors.  This should be the point at which
         hybrid sorting becomes faster than comparison-based sorting.  
         3000 is a good value.</dt></dl>
-  <dl><a name="LOG_MEAN_BIN_SIZE" id="LOG_MEAN_BIN_SIZE"><b>LOG_MEAN_BIN_SIZE:</b></a>
-  <dt>enum { LOG_MEAN_BIN_SIZE = 2 };</dt>
+  <dl><a name="int_log_mean_bin_size" id="int_log_mean_bin_size"><b>int_log_mean_bin_size:</b></a>
+  <dt>enum { int_log_mean_bin_size = 2 };</dt>
   <dt><b>Description:</b> The log of the minimum mean number of items per bin in <a href="integer_sort.html">integer_sort</a>.  
   2-4 are good values.</dt></dl>
-  <dl><a name="LOG_MIN_SPLIT_COUNT" id="LOG_MIN_SPLIT_COUNT"><b>LOG_MIN_SPLIT_COUNT:</b></a>
-  <dt>enum { LOG_MIN_SPLIT_COUNT = 9 };</dt>
-  <dt><b>Description:</b> This plus the LOG_MEAN_BIN_SIZE plus the maximum number of remaining
+  <dl><a name="int_log_min_split_count" id="int_log_min_split_count"><b>int_log_min_split_count:</b></a>
+  <dt>enum { int_log_min_split_count = 9 };</dt>
+  <dt><b>Description:</b> This plus the int_log_mean_bin_size plus the maximum number of remaining
         radix iterations is the log of the minimum number of elements to recurse with <a href="integer_sort.html">integer_sort</a>.  
         Otherwise std::sort is used.
         The faster std::sort is with small vectors relative to <a href="integer_sort.html">integer_sort</a>, the larger this number
-        should be.  6 to MAX_SPLITS are good values.  
-        This value cannot exceed MAX_SPLITS.</dt></dl>
-  <dl><a name="LOG_FINISHING_COUNT" id="LOG_FINISHING_COUNT"><b>LOG_FINISHING_COUNT:</b></a>
-  <dt>enum { LOG_FINISHING_COUNT = 31 };</dt>
+        should be.  6 to max_splits are good values.  
+        This value cannot exceed max_splits.</dt></dl>
+  <dl><a name="int_log_finishing_count" id="int_log_finishing_count"><b>int_log_finishing_count:</b></a>
+  <dt>enum { int_log_finishing_count = 31 };</dt>
   <dt><b>Description:</b> The log of the threshold minimum data size to force radix sorting, 
         if sorting will complete in one iteration.  
         Defaults to 31, which means that this special-case is not applied.</dt></dl>
-  <dl><a name="FLOAT_LOG_MEAN_BIN_SIZE" id="FLOAT_LOG_MEAN_BIN_SIZE"><b>FLOAT_LOG_MEAN_BIN_SIZE:</b></a>
-  <dt>enum { LOG_MEAN_BIN_SIZE = 2 };</dt>
+  <dl><a name="float_log_mean_bin_size" id="float_log_mean_bin_size"><b>float_log_mean_bin_size:</b></a>
+  <dt>enum { int_log_mean_bin_size = 2 };</dt>
   <dt><b>Description:</b> The log of the minimum mean number of items per bin in <a href="float_sort.html">float_sort</a>.  
   2 is a good value.</dt></dl>
-  <dl><a name="FLOAT_LOG_MIN_SPLIT_COUNT" id="FLOAT_LOG_MIN_SPLIT_COUNT"><b>FLOAT_LOG_MIN_SPLIT_COUNT:</b></a>
-  <dt>enum { LOG_MIN_SPLIT_COUNT = 8 };</dt>
-  <dt><b>Description:</b> This plus the FLOAT_LOG_MEAN_BIN_SIZE plus the maximum number of remaining
+  <dl><a name="float_log_min_split_count" id="float_log_min_split_count"><b>float_log_min_split_count:</b></a>
+  <dt>enum { int_log_min_split_count = 8 };</dt>
+  <dt><b>Description:</b> This plus the float_log_mean_bin_size plus the maximum number of remaining
         radix iterations is the log of the minimum number of elements to recurse with <a href="float_sort.html">float_sort</a>.  
         Otherwise std::sort is used.
         The faster std::sort is with small vectors relative to <a href="float_sort.html">float_sort</a>, the larger this number
-        should be.  4 to MAX_SPLITS are good values.  
-        This value cannot exceed MAX_SPLITS.</dt></dl>
-  <dl><a name="FLOAT_LOG_FINISHING_COUNT" id="FLOAT_LOG_FINISHING_COUNT"><b>FLOAT_LOG_FINISHING_COUNT:</b></a>
-  <dt>enum { LOG_FINISHING_COUNT = 4 };</dt>
+        should be.  4 to max_splits are good values.  
+        This value cannot exceed max_splits.</dt></dl>
+  <dl><a name="float_log_finishing_count" id="float_log_finishing_count"><b>float_log_finishing_count:</b></a>
+  <dt>enum { int_log_finishing_count = 4 };</dt>
   <dt><b>Description:</b> The log of the threshold minimum data size to force radix sorting, 
         if sorting will complete in one iteration. 4 is a good value.</dt></dl>
   <hr/>

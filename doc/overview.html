@@ -144,7 +144,7 @@
 </p><p> To maintain a minimum value for S (<img src="equation/s_min.png" alt="S_min" />), 
         comparison-based sorting has to be used
         to sort when <img src="equation/min_n_orig.png" alt="n <= log(meanbinsize)" />, 
-        where <a href="constants.html#LOG_MEAN_BIN_SIZE">log(meanbinsize)</a> (lbs) is a small
+        where <a href="constants.html#int_log_mean_bin_size">log(meanbinsize)</a> (lbs) is a small
         constant, usually between 0 and 4, used to minimize bin overhead per element. 
         There is a small corner-case where if <img src="equation/lt_smin.png" alt="K < S_min" /> and 
         <img src="equation/gte_2k.png" alt="n >= 2^K" />, 
@@ -248,20 +248,20 @@
 		The ideal <a href="constants.html">constant values</a> for 
 		<a href="integer_sort.html">integer_sort</a> and <a href="float_sort.html">float_sort</a> 
 		vary depending on the platform, compiler, and data being sorted.  
-		By far the most important constant is <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a>, 
+		By far the most important constant is <a href="constants.html#max_splits">max_splits</a>, 
 		which defines how many pieces the radix-sorting portion splits the data into per iteration.  
-</p><p> The ideal value of <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> depends upon the size of the L1 processor cache, 
+</p><p> The ideal value of <a href="constants.html#max_splits">max_splits</a> depends upon the size of the L1 processor cache, 
 		and is between 10 and 13 on many systems.  A default value of 11 is used.
         For mostly-sorted data, a much larger value is better, as swaps (and thus cache misses) are
         rare, but this hurts runtime severely for unsorted data, so is not recommended.
 </p><p> On some x86 systems when the total number of elements being sorted is small (
         less than 1 million or so), the ideal 
-        <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> can be substantially larger, such as 17.  
+        <a href="constants.html#max_splits">max_splits</a> can be substantially larger, such as 17.  
         This is suspected to be because all the data fits into the L2 cache, 
         and misses from L1 cache to L2 cache do not impact performance as severely as misses to 
         main memory.
         Modifying <a href="constants.html">tuning constants</a> other than 
-        <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> is not recommended, as the performance 
+        <a href="constants.html#max_splits">max_splits</a> is not recommended, as the performance 
         improvement for changing other constants is usually minor.
 </p><p> 
         If you can afford to let it run for a day, and have at least 1GB of free memory, 
@@ -278,11 +278,11 @@
 		Otherwise, just use the options it comes with, they're decent.
 		With default settings "./tune.pl -tune" (UNIX) "perl tune.pl -tune -windows" (Windows),
 		the script will take hours to run (less than a day), 
-		but may not pick the correct <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> if it is over 10.
+		but may not pick the correct <a href="constants.html#max_splits">max_splits</a> if it is over 10.
 		Alternatively, you can add the -small option to make it take just a few minutes,
 		tuning for smaller vector sizes (one hundred thousand elements), 
 		but the resulting constants may not be good for large files 
-		(see above note about <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> on Windows).
+		(see above note about <a href="constants.html#max_splits">max_splits</a> on Windows).
 </p><p> The tuning script can also be used just to verify that sorting works correctly on your system, 
         and see how much of a speedup it gets, by omiting the "-tune" option.  
         This runs at the end of tuning runs.

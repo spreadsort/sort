@@ -114,16 +114,16 @@
 		Also worth noting is that on most modern computers, 
 		log(available RAM)/log(L1 cache size) is around 3,
 		where a cache miss takes more than 3 times as long as an in-cache random-access, 
-		and the size of <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> is tuned to the size of the cache.
+		and the size of <a href="constants.html#max_splits">max_splits</a> is tuned to the size of the cache.
 		On a computer where cache misses aren't this expensive, 
-		<a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> could be increased to a large value, or eliminated entirely,
+		<a href="constants.html#max_splits">max_splits</a> could be increased to a large value, or eliminated entirely,
 		and <a href="integer_sort.html">integer_sort</a>/<a href="float_sort.html">float_sort</a> would have the same O(N) performance on even distributions.
 </p><p> <a href="bibliography.html#alr">Adaptive Left Radix</a> (ALR) is similar to flash_sort, but more cache-friendly.  
         It still uses insertion_sort.  Because ALR uses O(N*N) insertion_sort, it isn't efficient to
         use the comparison-based fallback sort on large lists, and if the data is clustered in small chunks
         just over the fallback size with a few outliers, radix-based sorting iterates many times doing little sorting
         with high overhead.  Asymptotically, ALR is still <img src="equation/worst.png" alt="O(N*log(K/S + S))" />, but with a very small s
-        (about 2 in the worst case), which compares unfavorably with the 11 default value of <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a>
+        (about 2 in the worst case), which compares unfavorably with the 11 default value of <a href="constants.html#max_splits">max_splits</a>
         for Spreadsort.  
 </p><p> <a href="bibliography.html#alr">ALR</a> also does not have the <img src="equation/introsort.png" alt="O(N*log(N))" /> fallback, so for small lists 
         that are not evenly distributed it is extremely inefficient.  
@@ -172,10 +172,10 @@
 		but for simplicity this has been left out for now.</p>
 
   <h2><a name="x86" id="x86"></a>Unused x86 optimization</h2>
-<p>Though the ideal <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> for n < 1 million (or so) on x86 seems to be substantially larger,
+<p>Though the ideal <a href="constants.html#max_splits">max_splits</a> for n < 1 million (or so) on x86 seems to be substantially larger,
 enabling a roughly 15% speedup for such tests, this optimization isn't general, 
 and doesn't apply for n > 1 million.  
-        A too large <a href="constants.html#MAX_SPLITS">MAX_SPLITS</a> can cause sort to take more than twice as long,
+        A too large <a href="constants.html#max_splits">max_splits</a> can cause sort to take more than twice as long,
         so it should be set on the low end of the reasonable range, where it is right now.
   <h2><a name="lookup" id="lookup"></a>Lookup table</h2>
   <p>The ideal way to optimize the constants would be to have a carefully tuned lookup table instead

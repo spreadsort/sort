@@ -58,7 +58,7 @@
 		which in testing tends to be roughly 50% to 2X faster than std::sort for large tests (>=100kB).  
 		Worst-case performance is O(N * (lg(range)/s + s)), so integer_sort is asymptotically 
 		faster than pure comparison-based algorithms.  
-		s is MAX_SPLITS, which defaults to 11, so its worst-case with default settings for 32-bit integers is 
+		s is max_splits, which defaults to 11, so its worst-case with default settings for 32-bit integers is 
 		O(N * ((32/11) slow radix-based iterations + 11 fast comparison-based iterations).
 		Some performance plots of runtime vs. n and lg(range) are provided below:
 </p><p><a href="../graph/windows_integer_sort.htm">Windows/x86 Performance Graphs</a>
@@ -145,7 +145,7 @@ For the third version, the one that takes three arguments:
 The lesser of <img src="equation/introsort.png" alt="O(N*log(N))" /> comparisons and <img src="equation/worst.png" alt="O(N*log(K/S + S))" /> operations</tt> worst-case, 
 where <tt>N</tt> is <tt>last - first</tt>, <tt>K</tt> is the log of the range in bits 
 (32 for 32-bit integers using their full range), and <tt>S</tt> is a constant called 
-<a href="constants.html#MAX_SPLITS">MAX_SPLITS</a>, defaulting to 11.
+<a href="constants.html#max_splits">max_splits</a>, defaulting to 11.
 </dt>
 
     <dt><b>Rationale:</b> This provides a general-case integer sorting algorithm with better
