@@ -1,7 +1,7 @@
 algorithm_sorting
 =================
 
-proposed boost/sort library using a hybrid radix sort that is faster than O(n*log(n))
+proposed Boost Sort library using a hybrid radix sort that is faster than O(n*log(n))
 
 Replace "/" with "\" in paths below if you're using Windows.
 To install, download boost, run bootstrap, and copy this library into <your boost root>/libs/sort.  
