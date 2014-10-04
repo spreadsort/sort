@@ -96,7 +96,7 @@
 </p>
 
   <h2><a name="sort" id="spread_sort"></a>why spread_sort?</h2>
-  <p>The Spreadsort algorithm used in this library is designed to provide best possible worst-case performance, 
+  <p>The <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> algorithm used in this library is designed to provide best possible worst-case performance, 
 		while still being cache-friendly.  
 		It provides the better of <img src="equation/worst.png" alt="O(N*log(K/S + S))" /> and <img src="equation/introsort.png" alt="O(N*log(N))" /> worst-case time,
 		where K is the log of the range.
@@ -124,7 +124,7 @@
         just over the fallback size with a few outliers, radix-based sorting iterates many times doing little sorting
         with high overhead.  Asymptotically, ALR is still <img src="equation/worst.png" alt="O(N*log(K/S + S))" />, but with a very small s
         (about 2 in the worst case), which compares unfavorably with the 11 default value of <a href="constants.html#max_splits">max_splits</a>
-        for Spreadsort.  
+        for <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a>.  
 </p><p> <a href="bibliography.html#alr">ALR</a> also does not have the <img src="equation/introsort.png" alt="O(N*log(N))" /> fallback, so for small lists 
         that are not evenly distributed it is extremely inefficient.  
         See the <a href="../example/alrbreaker.cpp">alrbreaker</a> and <a href="../example/binaryalrbreaker.cpp">binaryalrbreaker</a> testcases for examples; 
@@ -134,7 +134,7 @@
         These small tests take 4-10 times as long with ALR as std::sort in the author's testing,
         depending on the test system, 
         because they are trying to sort a highly uneven distribution.  
-        Normal Spreadsort does much better with them, because get_max_count is designed around minimizing
+        Normal <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> does much better with them, because get_max_count is designed around minimizing
         worst-case runtime.
 </p><p> <b>burst_sort</b> is an efficient hybrid algorithm for strings that uses substantial additional memory.  
 		<a href="string_sort.html">string_sort</a> uses minimal additional memory by comparison.  

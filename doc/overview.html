@@ -49,21 +49,21 @@
         The Boost Sort library provides a generic implementation of high-speed sorting algorithms 
 		that outperform those in the C++ standard in both average and worst case performance.
 		These algorithms only work on random access iterators.  
-		They are hybrids using both radix and comparison-based sorting, 
+		They are hybrids using both <a href="http://en.wikipedia.org/wiki/Radix_sort">radix</a> and <a href="http://en.wikipedia.org/wiki/Comparison_sort">comparison-based</a> sorting, 
 		specialized to sorting common data types, such as integers, floats, and strings.
 		These algorithms are encoded in a generic fashion and accept functors, 
 		enabling them to sort any object that can be processed like these basic data types.
 		Sample usages are available in the samples directory.
 </p><p>
-		Unlike many radix-based algorithms,  the underlying Spreadsort algorithm is designed around 
+		Unlike many radix-based algorithms,  the underlying <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> algorithm is designed around 
 		worst-case performance.  It performs better on chunky data (where it is not widely distributed), 
 		so that on real data it can perform substantially better than on random data.
-		Conceptually, Spreadsort can sort any data for which an absolute ordering can be determined, and string_sort is sufficiently flexible that this should be possible. 
-		Situations where Spreadsort is fastest relative to std::sort:
+		Conceptually, <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> can sort any data for which an absolute ordering can be determined, and string_sort is sufficiently flexible that this should be possible. 
+		Situations where <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> is fastest relative to std::sort:
 </p><p> 1. Large number of elements to sort (N >> 1000)
 </p><p> 2. Slow comparison function (such as floating point numbers on x86 processors or strings)
 </p><p> 3. Large data elements (such as key + data sorted on a key) 
-</p><p> Situations where Spreadsort is slowest relative to std::sort:
+</p><p> Situations where <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> is slowest relative to std::sort:
 </p><p> 1. Integers and mostly-sorted data on x86 processors
 </p><p>    
         These functions are defined in namespace <code class="computeroutput">boost</code>.
@@ -94,12 +94,12 @@
 
   <h2><a name="performance" id="performance"></a>Performance</h2>
   <p>
-        The Spreadsort algorithm is a hybrid algorithm; when the number of elements being sorted is
+        The <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> algorithm is a hybrid algorithm; when the number of elements being sorted is
         below a certain number, comparison-based sorting is used.  Above it, radix sorting
         is used.  The radix-based algorithm will thus cut up the problem into small pieces,
         and either completely sort the data based upon its radix if the data is clustered,
         or finish sorting the cut-down pieces with comparison-based sorting.
-</p><p> The Spreadsort algorithm dynamically chooses either comparison-based or radix-based sorting
+</p><p> The <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> algorithm dynamically chooses either comparison-based or radix-based sorting
         when recursing, whichever provides better worst-case performance.
         This way worst-case performance is guaranteed to be the better of <img src="equation/introsort.png" alt="O(N*log(N))" /> comparisons and 
         <img src="equation/worst.png" alt="O(N*log(K/S + S))" /> operations where N is the number of elements being sorted, 
@@ -117,7 +117,7 @@
         Histogramming with a fixed maximum number of splits is used because it reduces the 
         number of cache misses, thus improving performance relative to the approach described in 
         detail in the 
-        <a href="original_spreadsort06_2002.pdf">Original Spreadsort Algorithm</a>.
+        <a href="original_spreadsort06_2002.pdf">Original <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> Algorithm</a>.
         The importance of cache-friendly histogramming is described in the paper on 
         <a href="bibliography.html#alr">Adaptive Left Radix</a>, 
         though without the worst-case handling described below.
@@ -224,7 +224,7 @@
         For simplicity, because lbs is a small constant (0 can be used, and performs reasonably), 
         it is ignored when summarizing the performance in further discussions.
         By checking whether comparison-based sorting is better, 
-        Spreadsort is also <img src="equation/introsort.png" alt="O(N*log(N))" />,
+        <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> is also <img src="equation/introsort.png" alt="O(N*log(N))" />,
         whichever is better, and unlike LSD <a href=bibliography.html#radix>Radix Sort</a>, 
         can perform much better than the worst-case
         if the data is either evenly distributed or highly clustered.
