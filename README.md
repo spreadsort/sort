@@ -1,5 +1,5 @@
-algorithm_sorting
-=================
+sort
+====
 
 proposed Boost Sort library using a hybrid radix sort that is faster than O(n*log(n))
 
