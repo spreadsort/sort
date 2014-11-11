@@ -105,9 +105,7 @@ namespace boost {
     size_bins(size_t *bin_sizes, std::vector<RandomAccessIter>
   &bin_cache, unsigned cache_offset, unsigned &cache_end, unsigned bin_count)
     {
-      //Assure space for the size of each bin, followed by initializing sizes
-      //if (bin_count > bin_sizes.size())
-      //  bin_sizes.resize(bin_count);
+      // Clear the bin sizes
       for (size_t u = 0; u < bin_count; u++)
         bin_sizes[u] = 0;
       //Make sure there is space for the bins
