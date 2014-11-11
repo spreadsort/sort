@@ -199,8 +199,9 @@ void is_sorted_or_find_extremes_test()
 
 // Make sure bins are created correctly.
 void size_bins_test() {
-  std::vector<size_t> bin_sizes;
-  bin_sizes.push_back(1);
+  size_t bin_sizes[1 << detail::max_finishing_splits];
+  bin_sizes[0] = 1;
+  bin_sizes[2] = 7;
   const int old_bin_value = 7;
   std::vector<int> old_bins;
   old_bins.push_back(old_bin_value);
@@ -212,9 +213,9 @@ void size_bins_test() {
   std::vector<int>::iterator *new_cache_start = 
     size_bins(bin_sizes, bin_cache, cache_offset, cache_end, bin_count);
   BOOST_CHECK((new_cache_start - &bin_cache[0]) == cache_offset);
-  BOOST_CHECK(bin_sizes.size() == bin_count);
   BOOST_CHECK(bin_sizes[0] == 0);
   BOOST_CHECK(bin_sizes[1] == 0);
+  BOOST_CHECK(bin_sizes[2] == 7);  // shouldn't modify past bin_count
   BOOST_CHECK(cache_end == 3);
   BOOST_CHECK(bin_cache.size() == cache_end);
   BOOST_CHECK(old_bins[0] == old_bin_value);
@@ -222,10 +223,9 @@ void size_bins_test() {
 
 // Test the specialized 3-way swap loops.
 void swap_loop_test() {
-  vector<size_t> bin_sizes;
-  bin_sizes.push_back(2);
-  bin_sizes.push_back(2);
-  bin_sizes.push_back(1);
+  size_t bin_sizes[1 << detail::max_finishing_splits];
+  bin_sizes[0] = bin_sizes[1] = 2;
+  bin_sizes[2] = 1;
 
   // test integer swap loop
   vector<int> ints;

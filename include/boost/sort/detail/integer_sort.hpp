@@ -106,7 +106,7 @@ namespace boost {
     inline void
     spread_sort_rec(RandomAccessIter first, RandomAccessIter last,
               std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-              , std::vector<size_t> &bin_sizes)
+              , size_t *bin_sizes)
     {
       //This step is roughly 10% of runtime, but it helps avoid worst-case
       //behavior and improve behavior with real data
@@ -235,7 +235,7 @@ namespace boost {
     template <class RandomAccessIter, class Div_type, class Right_shift>
     inline void swap_loop(RandomAccessIter * bins,
              RandomAccessIter & next_bin_start, unsigned ii, Right_shift &rshift
-             , const std::vector<size_t> &bin_sizes
+             , const size_t *bin_sizes
              , const unsigned log_divisor, const Div_type div_min)
     {
       next_bin_start += bin_sizes[ii];
@@ -250,7 +250,7 @@ namespace boost {
     inline void
     spread_sort_rec(RandomAccessIter first, RandomAccessIter last,
           std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-          , std::vector<size_t> &bin_sizes, Right_shift rshift, Compare comp)
+          , size_t *bin_sizes, Right_shift rshift, Compare comp)
     {
       RandomAccessIter max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, comp))
@@ -307,7 +307,7 @@ namespace boost {
     inline void
     spread_sort_rec(RandomAccessIter first, RandomAccessIter last,
               std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-              , std::vector<size_t> &bin_sizes, Right_shift rshift)
+              , size_t *bin_sizes, Right_shift rshift)
     {
       RandomAccessIter max, min;
       if (is_sorted_or_find_extremes(first, last, max, min))
@@ -364,9 +364,9 @@ namespace boost {
                                                             void >::type
     integer_sort(RandomAccessIter first, RandomAccessIter last, Div_type)
     {
-        std::vector<size_t> bin_sizes;
-        std::vector<RandomAccessIter> bin_cache;
-        spread_sort_rec<RandomAccessIter, Div_type, size_t>(first, last,
+      size_t bin_sizes[1 << max_finishing_splits];
+      std::vector<RandomAccessIter> bin_cache;
+      spread_sort_rec<RandomAccessIter, Div_type, size_t>(first, last,
           bin_cache, 0, bin_sizes);
     }
 
@@ -377,9 +377,9 @@ namespace boost {
       && sizeof(Div_type) <= sizeof(boost::uintmax_t), void >::type
     integer_sort(RandomAccessIter first, RandomAccessIter last, Div_type)
     {
-        std::vector<size_t> bin_sizes;
-        std::vector<RandomAccessIter> bin_cache;
-        spread_sort_rec<RandomAccessIter, Div_type, boost::uintmax_t>(first,
+      size_t bin_sizes[1 << max_finishing_splits];
+      std::vector<RandomAccessIter> bin_cache;
+      spread_sort_rec<RandomAccessIter, Div_type, boost::uintmax_t>(first,
           last, bin_cache, 0, bin_sizes);
     }
 
@@ -404,9 +404,9 @@ namespace boost {
     integer_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                 Right_shift shift, Compare comp)
     {
-        std::vector<size_t> bin_sizes;
-        std::vector<RandomAccessIter> bin_cache;
-        spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
+      size_t bin_sizes[1 << max_finishing_splits];
+      std::vector<RandomAccessIter> bin_cache;
+      spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
           size_t, int_log_mean_bin_size, int_log_min_split_count, 
                         int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift, comp);
@@ -420,9 +420,9 @@ namespace boost {
     integer_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                 Right_shift shift, Compare comp)
     {
-        std::vector<size_t> bin_sizes;
-        std::vector<RandomAccessIter> bin_cache;
-        spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
+      size_t bin_sizes[1 << max_finishing_splits];
+      std::vector<RandomAccessIter> bin_cache;
+      spread_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
                         boost::uintmax_t, int_log_mean_bin_size,
                         int_log_min_split_count, int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift, comp);
@@ -450,9 +450,9 @@ namespace boost {
     integer_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                 Right_shift shift)
     {
-        std::vector<size_t> bin_sizes;
-        std::vector<RandomAccessIter> bin_cache;
-        spread_sort_rec<RandomAccessIter, Div_type, Right_shift, size_t,
+      size_t bin_sizes[1 << max_finishing_splits];
+      std::vector<RandomAccessIter> bin_cache;
+      spread_sort_rec<RandomAccessIter, Div_type, Right_shift, size_t,
           int_log_mean_bin_size, int_log_min_split_count, 
                         int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift);
@@ -465,9 +465,9 @@ namespace boost {
     integer_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                 Right_shift shift)
     {
-        std::vector<size_t> bin_sizes;
-        std::vector<RandomAccessIter> bin_cache;
-        spread_sort_rec<RandomAccessIter, Div_type, Right_shift,
+      size_t bin_sizes[1 << max_finishing_splits];
+      std::vector<RandomAccessIter> bin_cache;
+      spread_sort_rec<RandomAccessIter, Div_type, Right_shift,
                         boost::uintmax_t, int_log_mean_bin_size,
                         int_log_min_split_count, int_log_finishing_count>
           (first, last, bin_cache, 0, bin_sizes, shift);

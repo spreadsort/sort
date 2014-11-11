@@ -104,7 +104,7 @@ namespace boost {
     template <class RandomAccessIter, class Div_type>
     inline void float_swap_loop(RandomAccessIter * bins,
                           RandomAccessIter & nextbinstart, unsigned ii,
-                          const std::vector<size_t> &bin_sizes,
+                          const size_t *bin_sizes,
                           const unsigned log_divisor, const Div_type div_min)
     {
       nextbinstart += bin_sizes[ii];
@@ -139,7 +139,7 @@ namespace boost {
     inline void
     positive_float_sort_rec(RandomAccessIter first, RandomAccessIter last,
               std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-              , std::vector<size_t> &bin_sizes)
+              , size_t *bin_sizes)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes<RandomAccessIter, Div_type>(first, last, 
@@ -198,7 +198,7 @@ namespace boost {
     inline void
     negative_float_sort_rec(RandomAccessIter first, RandomAccessIter last,
                         std::vector<RandomAccessIter> &bin_cache,
-                        unsigned cache_offset, std::vector<size_t> &bin_sizes)
+                        unsigned cache_offset, size_t *bin_sizes)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes<RandomAccessIter, Div_type>(first, last, 
@@ -259,7 +259,7 @@ namespace boost {
     inline void
     negative_float_sort_rec(RandomAccessIter first, RandomAccessIter last,
               std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-              , std::vector<size_t> &bin_sizes, Right_shift rshift)
+              , size_t *bin_sizes, Right_shift rshift)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
@@ -317,7 +317,7 @@ namespace boost {
     inline void
     negative_float_sort_rec(RandomAccessIter first, RandomAccessIter last,
             std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset,
-            std::vector<size_t> &bin_sizes, Right_shift rshift, Compare comp)
+            size_t *bin_sizes, Right_shift rshift, Compare comp)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
@@ -376,7 +376,7 @@ namespace boost {
     inline void
     float_sort_rec(RandomAccessIter first, RandomAccessIter last,
                 std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-                , std::vector<size_t> &bin_sizes)
+                , size_t *bin_sizes)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes<RandomAccessIter, Div_type>(first, last, 
@@ -473,7 +473,7 @@ namespace boost {
     inline void
     float_sort_rec(RandomAccessIter first, RandomAccessIter last,
               std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset
-              , std::vector<size_t> &bin_sizes, Right_shift rshift)
+              , size_t *bin_sizes, Right_shift rshift)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
@@ -570,7 +570,7 @@ namespace boost {
     inline void
     float_sort_rec(RandomAccessIter first, RandomAccessIter last,
             std::vector<RandomAccessIter> &bin_cache, unsigned cache_offset,
-            std::vector<size_t> &bin_sizes, Right_shift rshift, Compare comp)
+            size_t *bin_sizes, Right_shift rshift, Compare comp)
     {
       Div_type max, min;
       if (is_sorted_or_find_extremes(first, last, max, min, rshift))
@@ -672,7 +672,7 @@ namespace boost {
       void >::type
     float_sort(RandomAccessIter first, RandomAccessIter last)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       float_sort_rec<RandomAccessIter, boost::int32_t, boost::uint32_t>
         (first, last, bin_cache, 0, bin_sizes);
@@ -687,7 +687,7 @@ namespace boost {
       void >::type
     float_sort(RandomAccessIter first, RandomAccessIter last)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       float_sort_rec<RandomAccessIter, boost::int64_t, boost::uint64_t>
         (first, last, bin_cache, 0, bin_sizes);
@@ -720,7 +720,7 @@ namespace boost {
     float_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                Right_shift rshift)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       float_sort_rec<RandomAccessIter, Div_type, Right_shift, size_t>
         (first, last, bin_cache, 0, bin_sizes, rshift);
@@ -733,7 +733,7 @@ namespace boost {
     float_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                Right_shift rshift)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       float_sort_rec<RandomAccessIter, Div_type, Right_shift, boost::uintmax_t>
         (first, last, bin_cache, 0, bin_sizes, rshift);
@@ -758,7 +758,7 @@ namespace boost {
     float_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                Right_shift rshift, Compare comp)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       float_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
         size_t>
@@ -773,7 +773,7 @@ namespace boost {
     float_sort(RandomAccessIter first, RandomAccessIter last, Div_type,
                Right_shift rshift, Compare comp)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       float_sort_rec<RandomAccessIter, Div_type, Right_shift, Compare,
         boost::uintmax_t>

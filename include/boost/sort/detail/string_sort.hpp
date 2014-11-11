@@ -148,7 +148,7 @@ namespace boost {
     string_sort_rec(RandomAccessIter first, RandomAccessIter last,
                     size_t char_offset,
                     std::vector<RandomAccessIter> &bin_cache,
-                    unsigned cache_offset, std::vector<size_t> &bin_sizes)
+                    unsigned cache_offset, size_t *bin_sizes)
     {
       typedef typename std::iterator_traits<RandomAccessIter>::value_type
         Data_type;
@@ -253,7 +253,7 @@ namespace boost {
                             size_t char_offset,
                             std::vector<RandomAccessIter> &bin_cache,
                             unsigned cache_offset,
-                            std::vector<size_t> &bin_sizes)
+                            size_t *bin_sizes)
     {
       typedef typename std::iterator_traits<RandomAccessIter>::value_type
         Data_type;
@@ -361,7 +361,7 @@ namespace boost {
     inline void
     string_sort_rec(RandomAccessIter first, RandomAccessIter last,
               size_t char_offset, std::vector<RandomAccessIter> &bin_cache,
-              unsigned cache_offset, std::vector<size_t> &bin_sizes,
+              unsigned cache_offset, size_t *bin_sizes,
               Get_char getchar, Get_length length)
     {
       typedef typename std::iterator_traits<RandomAccessIter>::value_type
@@ -464,7 +464,7 @@ namespace boost {
     inline void
     string_sort_rec(RandomAccessIter first, RandomAccessIter last,
               size_t char_offset, std::vector<RandomAccessIter> &bin_cache,
-              unsigned cache_offset, std::vector<size_t> &bin_sizes,
+              unsigned cache_offset, size_t *bin_sizes,
               Get_char getchar, Get_length length, Compare comp)
     {
       //This section makes handling of long identical substrings much faster
@@ -565,7 +565,7 @@ namespace boost {
     inline void
     reverse_string_sort_rec(RandomAccessIter first, RandomAccessIter last,
               size_t char_offset, std::vector<RandomAccessIter> &bin_cache,
-              unsigned cache_offset, std::vector<size_t> &bin_sizes,
+              unsigned cache_offset, size_t *bin_sizes,
               Get_char getchar, Get_length length, Compare comp)
     {
       //This section makes handling of long identical substrings much faster
@@ -671,7 +671,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
                 Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type>
         (first, last, 0, bin_cache, 0, bin_sizes);
@@ -695,7 +695,7 @@ namespace boost {
     reverse_string_sort(RandomAccessIter first, RandomAccessIter last,
                         Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type>
         (first, last, 0, bin_cache, 0, bin_sizes);
@@ -722,7 +722,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
                 Get_char getchar, Get_length length, Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
         Get_length>(first, last, 0, bin_cache, 0, bin_sizes, getchar, length);
@@ -748,7 +748,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
         Get_char getchar, Get_length length, Compare comp, Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char
         , Get_length, Compare>
@@ -776,7 +776,7 @@ namespace boost {
     reverse_string_sort(RandomAccessIter first, RandomAccessIter last,
         Get_char getchar, Get_length length, Compare comp, Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[1 << max_splits];
       std::vector<RandomAccessIter> bin_cache;
       reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
                               Get_length, Compare>
