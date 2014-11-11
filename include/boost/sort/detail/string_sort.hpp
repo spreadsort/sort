@@ -671,7 +671,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
                 Unsigned_char_type)
     {
-      size_t bin_sizes[1 << max_splits];
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type>
         (first, last, 0, bin_cache, 0, bin_sizes);
@@ -695,7 +695,7 @@ namespace boost {
     reverse_string_sort(RandomAccessIter first, RandomAccessIter last,
                         Unsigned_char_type)
     {
-      size_t bin_sizes[1 << max_splits];
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type>
         (first, last, 0, bin_cache, 0, bin_sizes);
@@ -722,7 +722,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
                 Get_char getchar, Get_length length, Unsigned_char_type)
     {
-      size_t bin_sizes[1 << max_splits];
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
         Get_length>(first, last, 0, bin_cache, 0, bin_sizes, getchar, length);
@@ -748,7 +748,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
         Get_char getchar, Get_length length, Compare comp, Unsigned_char_type)
     {
-      size_t bin_sizes[1 << max_splits];
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char
         , Get_length, Compare>
@@ -776,7 +776,7 @@ namespace boost {
     reverse_string_sort(RandomAccessIter first, RandomAccessIter last,
         Get_char getchar, Get_length length, Compare comp, Unsigned_char_type)
     {
-      size_t bin_sizes[1 << max_splits];
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
                               Get_length, Compare>
