@@ -34,3 +34,7 @@ exe randomgen : randomgen.cpp ;
 exe boostrandomgen : boostrandomgen.cpp ;
 exe alrbreaker : alrbreaker.cpp ;
 exe binaryalrbreaker : binaryalrbreaker.cpp ;
+
+# need to be built with linkflags="-lboost_system -lboost_thread"
+exe parallelint : parallelint.cpp ;
+exe parallelstring : parallelstring.cpp ;
