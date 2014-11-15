@@ -36,7 +36,7 @@ float_log_min_split_count = 8,
 //iteration.  Make this larger the faster std::sort is relative to float_sort.
 float_log_finishing_count = 4,
 //There is a minimum size below which it is not worth using spreadsort
-min_sort_size = 3000 };
+min_sort_size = 1000 };
 }
 }
 #endif
