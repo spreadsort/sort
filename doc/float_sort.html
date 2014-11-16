@@ -159,6 +159,12 @@ where <tt>N</tt> is <tt>last - first</tt>, <tt>K</tt> is the log of the range in
 <a href="constants.html#max_splits">max_splits</a>, defaulting to 11.
 </dt>
 
+    <dt><b>Exceptions:</b>
+Throws if any of the element comparisons, the element
+swaps (or moves), the right shift, subtraction of right-shifted
+elements, or the operations on iterators throws.  Throwing an 
+exception may cause data loss.  Note that invalid arguments cause undefined behavior.
+</dt>
     <dt><b>Rationale:</b><p>This provides a general-case floating-point sorting algorithm with better
     worst-case and average-case <a href="overview.html#performance">performance</a> than std::sort.
     Additionally, as float_sort casts floats to integers for the sorting process,

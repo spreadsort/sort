@@ -259,6 +259,12 @@ O(N * mean_string_length) character comparisons worst-case performance,
 where <tt>N</tt> is <tt>last - first</tt>.
 </dt>
 
+    <dt><b>Exceptions:</b>
+Throws if any of the element comparisons, the element
+swaps (or moves), one of the functors, subtraction of the characters obtained through get_char, 
+or the operations on iterators throws.  Throwing an 
+exception may cause data loss.  Note that invalid arguments cause undefined behavior.
+</dt>
     <dt><b>Rationale:</b><p>This provides a general-case string-sorting algorithm that
     takes asymptotically less time than is possible for a pure comparison-based algorithm.</p>
     <p><b>Why use recursion for string_sort instead of a stack, 
