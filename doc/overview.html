@@ -47,12 +47,12 @@
   <h2><a name="introduction" id="introduction"></a>Introduction</h2>  
   <p>
         The Boost Sort library provides a generic implementation of high-speed sorting algorithms 
-		that outperform those in the C++ standard in both average and worst case performance.
+		that outperform those in the C++ standard in both average and worst case performance when there are over 1000 elements in the list to sort.  They fall back to std::sort on small data sets.
 		These algorithms only work on random access iterators.  
 		They are hybrids using both <a href="http://en.wikipedia.org/wiki/Radix_sort">radix</a> and <a href="http://en.wikipedia.org/wiki/Comparison_sort">comparison-based</a> sorting, 
 		specialized to sorting common data types, such as integers, floats, and strings.
 		These algorithms are encoded in a generic fashion and accept functors, 
-		enabling them to sort any object that can be processed like these basic data types.
+		enabling them to sort any object that can be processed like these basic data types.  In the case of string_sort, this includes anything with a defined strict weak ordering that std::sort can sort, but writing efficient functors for some complex key types may not be worth the additional effort relative to just using std::sort, depending on how important speed is to your application.
 		Sample usages are available in the samples directory.
 </p><p>
 		Unlike many radix-based algorithms,  the underlying <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> algorithm is designed around 
