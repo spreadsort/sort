@@ -1,4 +1,4 @@
-// spreadsort string functor sorting example
+// string_sort case-insensitive sorting example.
 //
 //  Copyright Steven Ross 2009-2014.
 //
