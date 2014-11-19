@@ -55,7 +55,7 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
 int main(int argc, const char ** argv) {
   vector<DATA_TYPE> input;
   vector<unsigned> offsets;
-  unsigned total_length = sizeof(uint64_t) * 8;
+  unsigned total_length = sizeof(DATA_TYPE) * 8;
   unsigned bit_length = total_length;
   unsigned bit_offset = bit_shift;
   bit_length -= radix_threshold;
