@@ -26,14 +26,6 @@ using namespace boost;
 //Pass in an argument to test std::sort
 int main(int argc, const char ** argv) {
   size_t uCount,uSize=sizeof(DATA_TYPE);
-  //worst-case handling code check
-  /*for (unsigned u = 0; u <= 64; ++u)
-    printf("%d %d\n", u, detail::get_max_count<detail::int_log_mean_bin_size, 
-    detail::int_log_min_split_count, detail::int_log_finishing_count>(u));
-  printf("float_sort\n");
-  for (unsigned u = 0; u <= 64; ++u)
-    printf("%d %d\n", u, detail::get_max_count<detail::float_log_mean_bin_size, 
-    detail::float_log_min_split_count, detail::float_log_finishing_count>(u));*/
   bool stdSort = false;
   unsigned loopCount = 1;
   for (int u = 1; u < argc; ++u) {
@@ -59,20 +51,18 @@ int main(int argc, const char ** argv) {
     array.resize(uCount);
     unsigned v = 0;
     while (input.good() && v < uCount)
-     input.read( (char *) &(array[v++]), uSize );
+      input.read(reinterpret_cast<char *>(&(array[v++])), uSize );
     if (v < uCount)
       array.resize(v);
     clock_t start, end;
     double elapsed;
     start = clock();
     if (stdSort)
-      //std::sort(&(array[0]), &(array[0]) + uCount);
       std::sort(array.begin(), array.end());
     else
-      //boost::sort(&(array[0]), &(array[0]) + uCount);
       boost::sort(array.begin(), array.end());
     end = clock();
-    elapsed = ((double) (end - start)) ;
+    elapsed = static_cast<double>(end - start);
     std::ofstream ofile;
     if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
@@ -82,7 +72,7 @@ int main(int argc, const char ** argv) {
                  std::ios_base::binary | std::ios_base::trunc);
     if (ofile.good()) {
       for (unsigned v = 0; v < array.size(); ++v) {
-        ofile.write( (char *) &(array[v]), sizeof(array[v]) );
+        ofile.write(reinterpret_cast<char *>(&(array[v])), sizeof(array[v]) );
       }
       ofile.close();
     }

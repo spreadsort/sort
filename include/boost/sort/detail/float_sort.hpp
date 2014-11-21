@@ -239,7 +239,7 @@ namespace boost {
                                        float_log_min_split_count,
                                        float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
-      for (int ii = cache_end - 1; ii >= (int)cache_offset;
+      for (int ii = cache_end - 1; ii >= static_cast<int>(cache_offset);
           lastPos = bin_cache[ii], --ii) {
         size_t count = bin_cache[ii] - lastPos;
         if (count < 2)
@@ -298,7 +298,7 @@ namespace boost {
                                        float_log_min_split_count,
                                        float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
-      for (int ii = cache_end - 1; ii >= (int)cache_offset;
+      for (int ii = cache_end - 1; ii >= static_cast<int>(cache_offset);
           lastPos = bin_cache[ii], --ii) {
         size_t count = bin_cache[ii] - lastPos;
         if (count < 2)
@@ -356,7 +356,7 @@ namespace boost {
                                        float_log_min_split_count,
                                        float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
-      for (int ii = cache_end - 1; ii >= (int)cache_offset;
+      for (int ii = cache_end - 1; ii >= static_cast<int>(cache_offset);
           lastPos = bin_cache[ii], --ii) {
         size_t count = bin_cache[ii] - lastPos;
         if (count < 2)
@@ -440,8 +440,9 @@ namespace boost {
                                        float_log_min_split_count,
                                        float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
-      for (int ii = cache_offset + first_positive - 1; ii >= (int)cache_offset;
-          lastPos = bin_cache[ii--]) {
+      for (int ii = cache_offset + first_positive - 1; 
+           ii >= static_cast<int>(cache_offset);
+           lastPos = bin_cache[ii--]) {
         size_t count = bin_cache[ii] - lastPos;
         if (count < 2)
           continue;
@@ -506,7 +507,7 @@ namespace boost {
           bin_sizes[ii] += bin_sizes[ii + 1];
         }
         //Handling positives following negatives
-        if ((unsigned)first_positive < bin_count) {
+        if (static_cast<unsigned>(first_positive) < bin_count) {
           bins[first_positive] = first + bin_sizes[0];
           bin_sizes[first_positive] += bin_sizes[0];
         }
@@ -535,8 +536,9 @@ namespace boost {
                                        float_log_min_split_count,
                                        float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
-      for (int ii = cache_offset + first_positive - 1; ii >= (int)cache_offset;
-          lastPos = bin_cache[ii--]) {
+      for (int ii = cache_offset + first_positive - 1; 
+           ii >= static_cast<int>(cache_offset);
+           lastPos = bin_cache[ii--]) {
         size_t count = bin_cache[ii] - lastPos;
         if (count < 2)
           continue;
@@ -588,7 +590,8 @@ namespace boost {
       for (RandomAccessIter current = first; current != last;)
         bin_sizes[unsigned(rshift(*(current++), log_divisor) - div_min)]++;
       //The index of the first positive bin
-      unsigned first_positive = (div_min < 0) ? unsigned(-div_min) : 0;
+      unsigned first_positive = 
+        (div_min < 0) ? static_cast<unsigned>(-div_min) : 0;
       //Resetting if all bins are negative
       if (cache_offset + first_positive > cache_end)
         first_positive = cache_end - cache_offset;
@@ -603,7 +606,7 @@ namespace boost {
           bin_sizes[ii] += bin_sizes[ii + 1];
         }
         //Handling positives following negatives
-        if ((unsigned)first_positive < bin_count) {
+        if (static_cast<unsigned>(first_positive) < bin_count) {
           bins[first_positive] = first + bin_sizes[0];
           bin_sizes[first_positive] += bin_sizes[0];
         }
@@ -632,8 +635,9 @@ namespace boost {
                                        float_log_min_split_count,
                                        float_log_finishing_count>(log_divisor);
       RandomAccessIter lastPos = first;
-      for (int ii = cache_offset + first_positive - 1; ii >= (int)cache_offset;
-          lastPos = bin_cache[ii--]) {
+      for (int ii = cache_offset + first_positive - 1; 
+           ii >= static_cast<int>(cache_offset);
+           lastPos = bin_cache[ii--]) {
         size_t count = bin_cache[ii] - lastPos;
         if (count < 2)
           continue;

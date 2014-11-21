@@ -101,7 +101,7 @@ int main(int argc, const char ** argv) {
     }
   }
   end = clock();
-  elapsed = ((double) (end - start)) ;
+  elapsed = static_cast<double>(end - start) ;
   
   printf("for %lu strings\n", base_array.size());
   if (stdSort)

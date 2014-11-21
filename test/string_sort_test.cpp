@@ -33,7 +33,7 @@ struct get_size {
   size_t operator()(const string &x) const{ return x.size(); }
 };
 
-static const unsigned input_count = 32;
+static const unsigned input_count = 100000;
 
 // Test that update_offset finds the first character with a difference.
 void update_offset_test() {

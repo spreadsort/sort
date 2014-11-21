@@ -60,7 +60,7 @@ int main(int argc, const char ** argv) {
       //string_sort(&(array[0]), &(array[0]) + uCount);
       string_sort(array.begin(), array.end());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (stdSort)
       outfile.open("standard_sort_out.txt", std::ios_base::out |
                    std::ios_base::binary | std::ios_base::trunc);

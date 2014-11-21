@@ -23,7 +23,7 @@ using namespace std;
 
 #define DATA_TYPE boost::uint64_t
 
-#define ALR_THRESHOLD 20
+#define ALR_THRESHOLD 3
 
 const unsigned max_count = ALR_THRESHOLD - 1;
 const unsigned bit_shift = detail::rough_log_2_size(max_count) -
@@ -51,7 +51,7 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
 }
 
 //Tests boost::sort on the worst-case distribution for standard MSD radix sorts.
-int main(int argc, const char ** argv) {
+int main(int, const char **) {
   vector<DATA_TYPE> input;
   for (int ii = (1 << top_splits) - 1; ii >= 0; --ii)
     fill_vector(input, ii, (sizeof(DATA_TYPE) * 8) - top_splits);
@@ -66,7 +66,7 @@ int main(int argc, const char ** argv) {
     else
       boost::sort(array.begin(), array.end());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (u)
       printf("std::sort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);
     else

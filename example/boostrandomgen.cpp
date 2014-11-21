@@ -62,7 +62,8 @@ int main(int argc, const char ** argv) {
     variate_generator<mt19937&,uniform_int<> > gen(rng, everything);
     generate(result.begin(), result.end(), gen);
   }
-  ofile.write((char *)&(result[0]), result.size() * sizeof(int));
+  ofile.write(reinterpret_cast<char *>(&(result[0])), result.size() * 
+              sizeof(int));
   ofile.close();
   return 0;
 }

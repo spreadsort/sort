@@ -83,7 +83,7 @@ int main(int argc, const char ** argv) {
   base_array.resize(uCount);
   unsigned v = 0;
   while (input.good() && v < uCount)
-    input.read( (char *) &(base_array[v++]), uSize );
+    input.read(reinterpret_cast<char *>(&(base_array[v++])), uSize );
   input.close();
   if (v < uCount)
     base_array.resize(v);
@@ -105,7 +105,7 @@ int main(int argc, const char ** argv) {
     }
   }
   end = clock();
-  elapsed = ((double) (end - start)) ;
+  elapsed = static_cast<double>(end - start) ;
   
   if (stdSort)
     printf("std::sort clock time %lf\n", elapsed/CLOCKS_PER_SEC/threadCount);

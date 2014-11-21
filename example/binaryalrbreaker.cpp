@@ -23,7 +23,7 @@ using namespace std;
 
 #define DATA_TYPE boost::uint64_t
 
-#define ALR_THRESHOLD 20
+#define ALR_THRESHOLD 3
 
 const unsigned max_count = ALR_THRESHOLD - 1;
 const unsigned bit_shift = detail::rough_log_2_size(max_count) -
@@ -51,8 +51,18 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
   }
 }
 
+//Generates a random index from 0 up to but not including count.
+unsigned
+get_index(unsigned count)
+{
+  unsigned result = unsigned((rand() % (1 << 16))*uint64_t(count)/(1 << 16));
+  if (result >= count)
+    return count - 1;
+  return result;
+}
+
 //Tests std::sort vs boost::sort on boost::sort's worst distribution.
-int main(int argc, const char ** argv) {
+int main(int, const char **) {
   vector<DATA_TYPE> input;
   vector<unsigned> offsets;
   unsigned total_length = sizeof(DATA_TYPE) * 8;
@@ -64,6 +74,13 @@ int main(int argc, const char ** argv) {
   for (int ii = (1 << bit_length) - 1; ii >= 0; --ii)
     fill_vector(input, ii, total_length - bit_length,
                 offsets, offsets.size() - 1);
+  printf("size: %lu\n", input.size());
+
+  //Randomize the inputs slightly so they aren't in reverse-sorted order, for
+  //which std::sort is very fast.
+  for (unsigned u = 0; u < input.size() / 10; ++u)
+    std::swap(input[get_index(input.size())], input[get_index(input.size())]);
+
   //Run both std::sort and boost::sort.
   for (unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
@@ -75,7 +92,7 @@ int main(int argc, const char ** argv) {
     else
       boost::sort(array.begin(), array.end());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (u)
       printf("std::sort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);
     else

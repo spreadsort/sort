@@ -43,7 +43,7 @@ int main(int argc, const char ** argv) {
   //Skipping buffering for small files
   if (count < uDivideFactor * 100)
     uDivideFactor = count;
-  int * pNumbers = (int *) malloc(uDivideFactor * sizeof(int));
+  int * pNumbers = static_cast<int *>(malloc(uDivideFactor * sizeof(int)));
   //Generating semirandom numbers
   for (unsigned u = 0; u < count/uDivideFactor; ++u) {
     unsigned i = 0;
@@ -57,7 +57,7 @@ int main(int argc, const char ** argv) {
       if (16 == high_shift && rand() % 2)
         pNumbers[i] *= -1;
     }
-    ofile.write( (char *) pNumbers, uDivideFactor * 4 );
+    ofile.write(reinterpret_cast<char *>(pNumbers), uDivideFactor * 4 );
   }
   ofile.close();
   return 0;

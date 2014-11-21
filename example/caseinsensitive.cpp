@@ -1,4 +1,4 @@
-// string_sort case-insensitive sorting example.
+// string_sort functor sorting example
 //
 //  Copyright Steven Ross 2009-2014.
 //
@@ -78,7 +78,7 @@ int main(int argc, const char ** argv) {
     else
       string_sort(array.begin(), array.end(), bracket(), getsize(), lessthan());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (stdSort)
       outfile.open("standard_sort_out.txt", std::ios_base::out |
                    std::ios_base::binary | std::ios_base::trunc);

@@ -52,7 +52,7 @@ int main(int argc, const char ** argv) {
     array.resize(uCount);
     unsigned v = 0;
     while (input.good() && v < uCount) {
-     input.read( (char *) &(array[v]), uSize );
+      input.read(reinterpret_cast<char *>(&(array[v])), uSize );
      //Checking for denormalized numbers
      if (!(float_mem_cast<float, int>(array[v]) & 0x7f800000)) {
        //Make the top exponent bit high
@@ -74,7 +74,7 @@ int main(int argc, const char ** argv) {
       //boost::sort(&(array[0]), &(array[0]) + uCount);
       boost::sort(array.begin(), array.end());
     end = clock();
-    elapsed = ((double) (end - start)) ;
+    elapsed = static_cast<double>(end - start) ;
     std::ofstream ofile;
     if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
@@ -84,7 +84,7 @@ int main(int argc, const char ** argv) {
                  std::ios_base::binary | std::ios_base::trunc);
     if (ofile.good()) {
       for (unsigned v = 0; v < array.size(); ++v) {
-        ofile.write( (char *) &(array[v]), sizeof(array[v]) );
+        ofile.write(reinterpret_cast<char *>(&(array[v])), sizeof(array[v]) );
       }
       ofile.close();
     }

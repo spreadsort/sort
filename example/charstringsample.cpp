@@ -76,7 +76,7 @@ int main(int argc, const char ** argv) {
       //string_sort(&(array[0]), &(array[0]) + uCount);
       string_sort(array.begin(), array.end(), bracket(), getsize());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     std::ofstream ofile;
     if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |

@@ -56,7 +56,7 @@ int main(int argc, const char ** argv) {
     array.resize(uCount);
     unsigned v = 0;
     while (input.good() && v < uCount)
-     input.read( (char *) &(array[v++]), uSize );
+      input.read(reinterpret_cast<char *>(&(array[v++])), uSize );
     if (v < uCount)
       array.resize(v);
     clock_t start, end;
@@ -68,7 +68,7 @@ int main(int argc, const char ** argv) {
       integer_sort(array.begin(), array.end(), negrightshift(),
                    std::greater<DATA_TYPE>());
     end = clock();
-    elapsed = ((double) (end - start)) ;
+    elapsed = static_cast<double>(end - start) ;
     std::ofstream ofile;
     if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
@@ -78,7 +78,7 @@ int main(int argc, const char ** argv) {
                  std::ios_base::binary | std::ios_base::trunc);
     if (ofile.good()) {
       for (unsigned v = 0; v < array.size(); ++v) {
-        ofile.write( (char *) &(array[v]), sizeof(array[v]) );
+        ofile.write(reinterpret_cast<char *>(&(array[v])), sizeof(array[v]));
       }
       ofile.close();
     }

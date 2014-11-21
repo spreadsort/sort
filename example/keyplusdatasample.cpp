@@ -39,7 +39,7 @@ struct rightshift {
 
 //Pass in an argument to test std::sort
 int main(int argc, const char ** argv) {
-  size_t uSize=sizeof(int);
+  size_t uSize = sizeof(int);
   bool stdSort = false;
   unsigned loopCount = 1;
   for (int u = 1; u < argc; ++u) {
@@ -65,7 +65,7 @@ int main(int argc, const char ** argv) {
     unsigned v = 0;
     while (input.good() && v++ < uCount) { // EOF or failure stops the reading
      DATA_TYPE element;
-     input.read( (char *) &(element.key), sizeof( element.key ) );
+     input.read(reinterpret_cast<char *>(&(element.key)), sizeof(element.key));
      std::stringstream intstr;
          intstr << element.key;
          element.data = intstr.str();
@@ -79,7 +79,7 @@ int main(int argc, const char ** argv) {
     else
       integer_sort(array.begin(), array.end(), rightshift(), lessthan());
     end = clock();
-    elapsed = ((double) (end - start)) ;
+    elapsed = static_cast<double>(end - start) ;
     std::ofstream ofile;
     if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
@@ -89,7 +89,8 @@ int main(int argc, const char ** argv) {
                  std::ios_base::binary | std::ios_base::trunc);
     if (ofile.good()) {
       for (unsigned v = 0; v < array.size(); ++v) {
-        ofile.write( (char *) &(array[v].key), sizeof(array[v].key) );
+        ofile.write(reinterpret_cast<char *>(&(array[v].key)), 
+                    sizeof(array[v].key));
         ofile << array[v].data;
       }
       ofile.close();
