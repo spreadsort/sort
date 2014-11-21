@@ -55,8 +55,8 @@
      <p>string_sort is a hybrid radix-based/comparison-based algorithm that sorts strings of characters in ascending order.
 		The simplest version (no functors) sorts strings of items that can cast to an unsigned data type 
 		(such as an unsigned char), have a &lt; operator, and have a size function, such as a std::string.
-		The functor version can sort any string of discrete elements, via templating, but requires 
-		definitions of a get_char (acts like x[offset] on a string), 
+		The functor version can sort any data type that has a strict weak ordering, via templating, but requires 
+		definitions of a get_char (acts like x[offset] on a string or a byte array), 
 		get_length (returns length of the string being sorted), and a comparison functor.  
 		Individual characters returned by get_char must support the != operator and have an unsigned 
 		value that defines their lexicographical order.  
