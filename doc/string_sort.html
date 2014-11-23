@@ -52,7 +52,7 @@
   <hr>
 
   <h2><a name="introduction" id="introduction"></a>Introduction</h2>
-     <p>string_sort is a hybrid radix-based/comparison-based algorithm that sorts strings of characters in ascending order.
+     <p>string_sort is a hybrid radix-based/comparison-based algorithm that sorts strings of characters (or arrays of binary data) in ascending order.
 		The simplest version (no functors) sorts strings of items that can cast to an unsigned data type 
 		(such as an unsigned char), have a &lt; operator, and have a size function, such as a std::string.
 		The functor version can sort any data type that has a strict weak ordering, via templating, but requires 
