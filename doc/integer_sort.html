@@ -152,7 +152,7 @@ where <tt>N</tt> is <tt>last - first</tt>, <tt>K</tt> is the log of the range in
 Throws if any of the element comparisons, the element
 swaps (or moves), the right shift, subtraction of right-shifted
 elements, or the operations on iterators throws.  Throwing an 
-exception may cause data loss.  Note that invalid arguments cause undefined behavior.
+exception may cause data loss.  This will also throw if a small vector (a few kilobytes) resize throws, in which case there will be no data loss.  Note that invalid arguments cause undefined behavior.
 </dt>
     <dt><b>Rationale:</b> This provides a general-case integer sorting algorithm with better
     worst-case and average-case <a href="overview.html#performance">performance</a> than std::sort.</dt>

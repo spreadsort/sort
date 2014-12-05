@@ -54,7 +54,7 @@
   <h2><a name="introduction" id="introduction"></a>Introduction</h2>
      <p>string_sort is a hybrid radix-based/comparison-based algorithm that sorts strings of characters (or arrays of binary data) in ascending order.
 		The simplest version (no functors) sorts strings of items that can cast to an unsigned data type 
-		(such as an unsigned char), have a &lt; operator, and have a size function, such as a std::string.
+		(such as an unsigned char), have a &lt; operator, have a size function, and have a data() function that returns a pointer to an array of characters, such as a std::string.
 		The functor version can sort any data type that has a strict weak ordering, via templating, but requires 
 		definitions of a get_char (acts like x[offset] on a string or a byte array), 
 		get_length (returns length of the string being sorted), and a comparison functor.  
@@ -263,7 +263,7 @@ where <tt>N</tt> is <tt>last - first</tt>.
 Throws if any of the element comparisons, the element
 swaps (or moves), one of the functors, subtraction of the characters obtained through get_char, 
 or the operations on iterators throws.  Throwing an 
-exception may cause data loss.  Note that invalid arguments cause undefined behavior.
+exception may cause data loss.  This will also throw if a small vector (worst case size proportional to the square root of the number of input bytes) resize throws, in which case there will be no data loss.  Note that invalid arguments cause undefined behavior.
 </dt>
     <dt><b>Rationale:</b><p>This provides a general-case string-sorting algorithm that
     takes asymptotically less time than is possible for a pure comparison-based algorithm.</p>

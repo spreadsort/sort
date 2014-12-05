@@ -55,6 +55,7 @@ int main(int, const char **) {
   vector<DATA_TYPE> input;
   for (int ii = (1 << top_splits) - 1; ii >= 0; --ii)
     fill_vector(input, ii, (sizeof(DATA_TYPE) * 8) - top_splits);
+
   //Run both std::sort and boost::sort
   for (unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
