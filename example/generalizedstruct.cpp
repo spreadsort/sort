@@ -49,23 +49,33 @@ struct lessthan {
 
 struct bracket {
   inline unsigned char operator()(const DATA_TYPE &x, size_t offset) const {
-    // Sort date as an unsigned int, returning the appropriate byte.
+    // Sort date as a signed int, returning the appropriate byte.
     if (offset < birth_size) {
       const int bit_shift = 8 * (birth_size - offset - 1);
-      return (x.birth & (base_mask << bit_shift)) >> bit_shift;
+      unsigned char result = (x.birth & (base_mask << bit_shift)) >> bit_shift;
+      // Handling the sign bit.  Unnecessary if the data is always positive.
+      if (offset == 0) {
+        return result ^ 128;
+      }
+
+      return result;
     }
 
-    // Sort a signed float.  This requires reversing the order of negatives.
+    // Sort a signed float.  This requires reversing the order of negatives
+    // because of the way floats are represented in bits.
     if (offset < first_name_offset) {
       const int bit_shift = 8 * (first_name_offset - offset - 1);
       unsigned key = float_mem_cast<float, unsigned>(x.net_worth);
       unsigned char result = (key & (base_mask << bit_shift)) >> bit_shift;
+      // Handling the sign.
       if (x.net_worth < 0) {
         return 255 - result;
       }
+      // Increasing positives so they are higher than negatives.
       if (offset == birth_size) {
         return 128 + result;
       }
+
       return result;
     }
 
@@ -130,10 +140,6 @@ int main(int argc, const char ** argv) {
       indata >> inval.first_name;
       indata >> inval.last_name;
       indata.read(reinterpret_cast<char *>(&(inval.birth)), birth_size);
-      // Negative times make no sense.
-      if (inval.birth < 0) {
-        inval.birth = -inval.birth;
-      }
       indata.read(reinterpret_cast<char *>(&(inval.net_worth)), sizeof(float));
       // Handling nan.
       if (inval.net_worth != inval.net_worth) {
