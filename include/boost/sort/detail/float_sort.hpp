@@ -24,6 +24,7 @@ Scott McMurray
 #include <boost/serialization/static_warning.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/sort/detail/constants.hpp>
+#include <boost/sort/detail/integer_sort.hpp>
 #include <boost/sort/detail/spread_sort_common.hpp>
 #include <boost/cstdint.hpp>
 

@@ -41,7 +41,9 @@ void update_offset_test() {
   input.push_back("test1");
   input.push_back("test2");
   size_t char_offset = 1;
-  update_offset(input.begin(), input.end(), char_offset);
+  update_offset<vector<string>::iterator, unsigned char>(input.begin(),
+                                                         input.end(),
+                                                         char_offset);
   BOOST_CHECK(char_offset == 4);
 
   // Functor version
