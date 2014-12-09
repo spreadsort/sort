@@ -148,6 +148,8 @@ PerfTest("Verifying string_sort with all functors", "stringfunctorsort");
 PerfTest("Verifying reverse_string_sort", "reversestringsort");
 PerfTest("Verifying reverse_string_sort with functors",
          "reversestringfunctorsort");
+PerfTest("Verifying generalized string_sort with multiple keys of different types",
+         "generalizedstruct");
 PerfTest("Verifying boost::sort on its custom-built worst-case distribution",
          "binaryalrbreaker");
 # clean up once we finish
