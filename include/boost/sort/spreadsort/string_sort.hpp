@@ -19,10 +19,11 @@ Phil Endecott and Frank Gennari
 #include <cstring>
 #include <limits>
 #include <boost/static_assert.hpp>
-#include <boost/sort/detail/constants.hpp>
-#include <boost/sort/detail/string_sort.hpp>
+#include <boost/sort/spreadsort/detail/constants.hpp>
+#include <boost/sort/spreadsort/detail/string_sort.hpp>
 
 namespace boost {
+namespace sort {
   //Allows character-type overloads
   template <class RandomAccessIter, class Unsigned_char_type>
   inline void string_sort(RandomAccessIter first, RandomAccessIter last,
@@ -123,6 +124,7 @@ namespace boost {
                                   getchar((*last), 0));
     }
   }
+}
 }
 
 #endif

@@ -1,4 +1,4 @@
-// spreadsort string functor sorting example
+// string_sort functor sorting example
 //
 //  Copyright Steven Ross 2009-2014.
 //
@@ -8,6 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
+#include <boost/algorithm/string.hpp>
 #include <boost/sort/spreadsort/string_sort.hpp>
 #include <time.h>
 #include <stdio.h>
@@ -26,13 +27,13 @@ struct DATA_TYPE {
 
 struct lessthan {
   inline bool operator()(const DATA_TYPE &x, const DATA_TYPE &y) const { 
-    return x.a < y.a;
+    return boost::algorithm::ilexicographical_compare(x.a, y.a);
   }
 };
 
 struct bracket {
-  inline unsigned char operator()(const DATA_TYPE &x, size_t offset) const { 
-    return x.a[offset];
+  inline unsigned char operator()(const DATA_TYPE &x, size_t offset) const {
+    return toupper(x.a[offset]);
   }
 };
 
@@ -65,17 +66,6 @@ int main(int argc, const char ** argv) {
     indata >> inval.a;
     while (!indata.eof() ) {
       array.push_back(inval);
-      //Inserting embedded nulls and empty strings
-      if (!(array.size() % 100)) {
-        if (inval.a.empty() || !(array.size() % 1000)) {
-          inval.a = "";
-          array.push_back(inval);
-        }
-        else {
-          inval.a[0] = '\0';
-          array.push_back(inval);
-        }
-      }
       indata >> inval.a;
     }
       

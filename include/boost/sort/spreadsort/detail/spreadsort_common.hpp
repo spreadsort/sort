@@ -13,8 +13,8 @@ Some improvements suggested by:
 Phil Endecott and Frank Gennari
 */
 
-#ifndef BOOST_SORT_DETAIL_SPREAD_SORT_COMMON_HPP
-#define BOOST_SORT_DETAIL_SPREAD_SORT_COMMON_HPP
+#ifndef BOOST_SORT_SPREADSORT_DETAIL_SPREAD_SORT_COMMON_HPP
+#define BOOST_SORT_SPREADSORT_DETAIL_SPREAD_SORT_COMMON_HPP
 #include <algorithm>
 #include <vector>
 #include <cstring>
@@ -22,11 +22,12 @@ Phil Endecott and Frank Gennari
 #include <functional>
 #include <boost/static_assert.hpp>
 #include <boost/serialization/static_warning.hpp>
-#include <boost/sort/detail/constants.hpp>
+#include <boost/sort/spreadsort/detail/constants.hpp>
 #include <boost/cstdint.hpp>
 
 namespace boost {
-  namespace detail {
+namespace sort {
+ namespace detail {
     //This only works on unsigned data types
     template <typename T>
     inline unsigned
@@ -102,12 +103,10 @@ namespace boost {
     // This generates the memory overhead to use in radix sorting.
     template <class RandomAccessIter>
     inline RandomAccessIter *
-    size_bins(std::vector<size_t> &bin_sizes, std::vector<RandomAccessIter>
+    size_bins(size_t *bin_sizes, std::vector<RandomAccessIter>
   &bin_cache, unsigned cache_offset, unsigned &cache_end, unsigned bin_count)
     {
-      //Assure space for the size of each bin, followed by initializing sizes
-      if (bin_count > bin_sizes.size())
-        bin_sizes.resize(bin_count);
+      // Clear the bin sizes
       for (size_t u = 0; u < bin_count; u++)
         bin_sizes[u] = 0;
       //Make sure there is space for the bins
@@ -117,6 +116,7 @@ namespace boost {
       return &(bin_cache[cache_offset]);
     }
   }
+}
 }
 
 #endif

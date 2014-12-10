@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/string_sort.hpp>
+#include <boost/sort/spreadsort/string_sort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include <fstream>
 #include <string>
 using std::wstring;
-using namespace boost;
+using namespace boost::sort;
 
 #define DATA_TYPE wstring
 
@@ -46,10 +46,10 @@ int main(int argc, const char ** argv) {
     unsigned short inval;
     DATA_TYPE current;
     while (indata.good()) {
-      indata.read( (char *) &inval, sizeof(inval));
+      indata.read(reinterpret_cast<char *>(&inval), sizeof(inval));
       current.push_back(inval);
       //32 characters is a moderately long string
-      if ((int)current.size() > inval || current.size() >= 32) {
+      if (static_cast<int>(current.size()) > inval || current.size() >= 32) {
         array.push_back(current);
         current.clear();
       }
@@ -70,7 +70,7 @@ int main(int argc, const char ** argv) {
       //string_sort(&(array[0]), &(array[0]) + uCount, cast_type);
       string_sort(array.begin(), array.end(), cast_type);
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (stdSort)
       outfile.open("standard_sort_out.txt", std::ios_base::out |
                    std::ios_base::binary | std::ios_base::trunc);

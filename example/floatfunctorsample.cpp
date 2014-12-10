@@ -7,7 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/sort for library home page.
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include <sstream>
 #include <iostream>
 
-using namespace boost;
+using namespace boost::sort;
 
 #define CAST_TYPE int
 #define KEY_TYPE float
@@ -71,7 +71,8 @@ int main(int argc, const char ** argv) {
     array.resize(uCount);
     unsigned v = 0;
     while (input.good() && v < uCount) {
-     input.read( (char *) &(array[v].key), sizeof( array[v].key ) );
+      input.read(reinterpret_cast<char *>(&(array[v].key)), 
+                 sizeof(array[v].key));
      //Checking for denormalized numbers; float_sort looks too fast on them.
      if (!(float_mem_cast<KEY_TYPE, CAST_TYPE>(array[v].key) & 0x7f800000)) {
        //Make the top exponent bit high
@@ -92,13 +93,11 @@ int main(int argc, const char ** argv) {
     double elapsed;
     start = clock();
     if (stdSort)
-      //std::sort(&(array[0]), &(array[0]) + uCount, lessthan());
       std::sort(array.begin(), array.end(), lessthan());
     else
-      //float_sort(&(array[0]), &(array[0]) + uCount, rightshift(), lessthan());
       float_sort(array.begin(), array.end(), rightshift(), lessthan());
     end = clock();
-    elapsed = ((double) (end - start)) ;
+    elapsed = static_cast<double>(end - start) ;
     std::ofstream ofile;
     if (stdSort)
       ofile.open("standard_sort_out.txt", std::ios_base::out |
@@ -108,7 +107,8 @@ int main(int argc, const char ** argv) {
                  std::ios_base::binary | std::ios_base::trunc);
     if (ofile.good()) {
       for (unsigned v = 0; v < array.size(); ++v) {
-        ofile.write( (char *) &(array[v].key), sizeof(array[v].key) );
+        ofile.write(reinterpret_cast<char *>(&(array[v].key)), 
+                    sizeof(array[v].key));
         ofile << array[v].data;
       }
       ofile.close();

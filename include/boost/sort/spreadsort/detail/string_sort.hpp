@@ -12,8 +12,8 @@ Some improvements suggested by:
 Phil Endecott and Frank Gennari
 */
 
-#ifndef BOOST_SORT_DETAIL_SPREAD_SORT_HPP
-#define BOOST_SORT_DETAIL_SPREAD_SORT_HPP
+#ifndef BOOST_SORT_SPREADSORT_DETAIL_SPREAD_SORT_HPP
+#define BOOST_SORT_SPREADSORT_DETAIL_SPREAD_SORT_HPP
 #include <algorithm>
 #include <vector>
 #include <cstring>
@@ -22,36 +22,55 @@ Phil Endecott and Frank Gennari
 #include <boost/static_assert.hpp>
 #include <boost/serialization/static_warning.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <boost/sort/detail/constants.hpp>
-#include <boost/sort/detail/spread_sort_common.hpp>
+#include <boost/sort/spreadsort/detail/constants.hpp>
+#include <boost/sort/spreadsort/detail/spreadsort_common.hpp>
 #include <boost/cstdint.hpp>
 
 namespace boost {
+namespace sort {
   namespace detail {
-    //Offsetting on identical characters.  This function works a character
-    //at a time for optimal worst-case performance.
-    template<class RandomAccessIter>
+    static const int max_step_size = 64;
+
+    //Offsetting on identical characters.  This function works a chunk of
+    //characters at a time for cache efficiency and optimal worst-case
+    //performance.
+    template<class RandomAccessIter, class Unsigned_char_type>
     inline void
     update_offset(RandomAccessIter first, RandomAccessIter finish,
                   size_t &char_offset)
     {
+      const int char_size = sizeof(Unsigned_char_type);
       size_t nextOffset = char_offset;
-      bool done = false;
-      while (!done) {
+      int step_size = max_step_size;
+      while (true) {
         RandomAccessIter curr = first;
         do {
-          //ignore empties, but if the nextOffset would exceed the length or
+          //Ignore empties, but if the nextOffset would exceed the length or
           //not match, exit; we've found the last matching character
-          if ((*curr).size() > char_offset && ((*curr).size() <=
-           (nextOffset + 1) || (*curr)[nextOffset] != (*first)[nextOffset])) {
-            done = true;
-            break;
+          //This will reduce the step_size if the current step doesn't match.
+          if ((*curr).size() > char_offset) {
+            if((*curr).size() <= (nextOffset + step_size)) {
+              step_size = (*curr).size() - nextOffset - 1;
+              if (step_size < 1) {
+                char_offset = nextOffset;
+                return;
+              }
+            }
+            const int step_byte_size = step_size * char_size;
+            if (memcmp(curr->data() + nextOffset, first->data() + nextOffset, 
+                       step_byte_size) != 0) {
+              if (step_size == 1) {
+                char_offset = nextOffset;
+                return;
+              }
+              step_size = (step_size > 4) ? 4 : 1;
+              continue;
+            }
           }
-        } while (++curr != finish);
-        if (!done)
-          ++nextOffset;
+          ++curr;
+        } while (curr != finish);
+        nextOffset += step_size;
       }
-      char_offset = nextOffset;
     }
 
     //Offsetting on identical characters.  This function works a character
@@ -62,22 +81,19 @@ namespace boost {
                   size_t &char_offset, Get_char getchar, Get_length length)
     {
       size_t nextOffset = char_offset;
-      bool done = false;
-      while (!done) {
+      while (true) {
         RandomAccessIter curr = first;
         do {
           //ignore empties, but if the nextOffset would exceed the length or
           //not match, exit; we've found the last matching character
           if (length(*curr) > char_offset && (length(*curr) <= (nextOffset + 1)
-          || getchar((*curr), nextOffset) != getchar((*first), nextOffset))) {
-            done = true;
-            break;
+            || getchar((*curr), nextOffset) != getchar((*first), nextOffset))) {
+            char_offset = nextOffset;
+            return;
           }
         } while (++curr != finish);
-        if (!done)
-          ++nextOffset;
+        ++nextOffset;
       }
-      char_offset = nextOffset;
     }
 
     //This comparison functor assumes strings are identical up to char_offset
@@ -89,12 +105,11 @@ namespace boost {
         size_t minSize = (std::min)(x.size(), y.size());
         for (size_t u = fchar_offset; u < minSize; ++u) {
           BOOST_STATIC_ASSERT(sizeof(x[u]) == sizeof(Unsigned_char_type));
-          if (static_cast<Unsigned_char_type>(x[u]) <
-             static_cast<Unsigned_char_type>(y[u]))
-            return true;
-          else if (static_cast<Unsigned_char_type>(y[u]) <
-                  static_cast<Unsigned_char_type>(x[u]))
-            return false;
+          if (static_cast<Unsigned_char_type>(x[u]) !=
+              static_cast<Unsigned_char_type>(y[u])) {
+            return static_cast<Unsigned_char_type>(x[u]) < 
+              static_cast<Unsigned_char_type>(y[u]);
+          }
         }
         return x.size() < y.size();
       }
@@ -110,12 +125,11 @@ namespace boost {
         size_t minSize = (std::min)(x.size(), y.size());
         for (size_t u = fchar_offset; u < minSize; ++u) {
           BOOST_STATIC_ASSERT(sizeof(x[u]) == sizeof(Unsigned_char_type));
-          if (static_cast<Unsigned_char_type>(x[u]) >
-             static_cast<Unsigned_char_type>(y[u]))
-            return true;
-          else if (static_cast<Unsigned_char_type>(y[u]) >
-                  static_cast<Unsigned_char_type>(x[u]))
-            return false;
+          if (static_cast<Unsigned_char_type>(x[u]) !=
+              static_cast<Unsigned_char_type>(y[u])) {
+            return static_cast<Unsigned_char_type>(x[u]) > 
+              static_cast<Unsigned_char_type>(y[u]);
+          }
         }
         return x.size() > y.size();
       }
@@ -130,10 +144,9 @@ namespace boost {
       {
         size_t minSize = (std::min)(length(x), length(y));
         for (size_t u = fchar_offset; u < minSize; ++u) {
-          if (getchar(x, u) < getchar(y, u))
-            return true;
-          else if (getchar(y, u) < getchar(x, u))
-            return false;
+          if (getchar(x, u) != getchar(y, u)) {
+            return getchar(x, u) < getchar(y, u);
+          }
         }
         return length(x) < length(y);
       }
@@ -148,7 +161,7 @@ namespace boost {
     string_sort_rec(RandomAccessIter first, RandomAccessIter last,
                     size_t char_offset,
                     std::vector<RandomAccessIter> &bin_cache,
-                    unsigned cache_offset, std::vector<size_t> &bin_sizes)
+                    unsigned cache_offset, size_t *bin_sizes)
     {
       typedef typename std::iterator_traits<RandomAccessIter>::value_type
         Data_type;
@@ -164,9 +177,10 @@ namespace boost {
       for (;(*finish).size() <= char_offset; --finish);
       ++finish;
       //Offsetting on identical characters.  This section works
-      //a character at a time for optimal worst-case performance.
-      update_offset(first, finish, char_offset);
-
+      //a few characters at a time for optimal worst-case performance.
+      update_offset<RandomAccessIter, Unsigned_char_type>(first, finish,
+                                                          char_offset);
+      
       const unsigned bin_count = (1 << (sizeof(Unsigned_char_type)*8));
       //Equal worst-case of radix and comparison is when bin_count = n*log(n).
       const unsigned max_size = bin_count;
@@ -253,7 +267,7 @@ namespace boost {
                             size_t char_offset,
                             std::vector<RandomAccessIter> &bin_cache,
                             unsigned cache_offset,
-                            std::vector<size_t> &bin_sizes)
+                            size_t *bin_sizes)
     {
       typedef typename std::iterator_traits<RandomAccessIter>::value_type
         Data_type;
@@ -268,8 +282,10 @@ namespace boost {
       //Getting the last non-empty
       while ((*(--last)).size() <= char_offset);
       ++last;
-      //Offsetting on identical characters.
-      update_offset(curr, last, char_offset);
+      //Offsetting on identical characters.  This section works
+      //a few characters at a time for optimal worst-case performance.
+      update_offset<RandomAccessIter, Unsigned_char_type>(first, last,
+                                                          char_offset);
       RandomAccessIter * target_bin;
 
       const unsigned bin_count = (1 << (sizeof(Unsigned_char_type)*8));
@@ -361,7 +377,7 @@ namespace boost {
     inline void
     string_sort_rec(RandomAccessIter first, RandomAccessIter last,
               size_t char_offset, std::vector<RandomAccessIter> &bin_cache,
-              unsigned cache_offset, std::vector<size_t> &bin_sizes,
+              unsigned cache_offset, size_t *bin_sizes,
               Get_char getchar, Get_length length)
     {
       typedef typename std::iterator_traits<RandomAccessIter>::value_type
@@ -464,7 +480,7 @@ namespace boost {
     inline void
     string_sort_rec(RandomAccessIter first, RandomAccessIter last,
               size_t char_offset, std::vector<RandomAccessIter> &bin_cache,
-              unsigned cache_offset, std::vector<size_t> &bin_sizes,
+              unsigned cache_offset, size_t *bin_sizes,
               Get_char getchar, Get_length length, Compare comp)
     {
       //This section makes handling of long identical substrings much faster
@@ -565,7 +581,7 @@ namespace boost {
     inline void
     reverse_string_sort_rec(RandomAccessIter first, RandomAccessIter last,
               size_t char_offset, std::vector<RandomAccessIter> &bin_cache,
-              unsigned cache_offset, std::vector<size_t> &bin_sizes,
+              unsigned cache_offset, size_t *bin_sizes,
               Get_char getchar, Get_length length, Compare comp)
     {
       //This section makes handling of long identical substrings much faster
@@ -671,7 +687,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
                 Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type>
         (first, last, 0, bin_cache, 0, bin_sizes);
@@ -695,7 +711,7 @@ namespace boost {
     reverse_string_sort(RandomAccessIter first, RandomAccessIter last,
                         Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type>
         (first, last, 0, bin_cache, 0, bin_sizes);
@@ -722,7 +738,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
                 Get_char getchar, Get_length length, Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
         Get_length>(first, last, 0, bin_cache, 0, bin_sizes, getchar, length);
@@ -748,7 +764,7 @@ namespace boost {
     string_sort(RandomAccessIter first, RandomAccessIter last,
         Get_char getchar, Get_length length, Compare comp, Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char
         , Get_length, Compare>
@@ -776,7 +792,7 @@ namespace boost {
     reverse_string_sort(RandomAccessIter first, RandomAccessIter last,
         Get_char getchar, Get_length length, Compare comp, Unsigned_char_type)
     {
-      std::vector<size_t> bin_sizes;
+      size_t bin_sizes[(1 << (8 * sizeof(Unsigned_char_type))) + 1];
       std::vector<RandomAccessIter> bin_cache;
       reverse_string_sort_rec<RandomAccessIter, Unsigned_char_type, Get_char,
                               Get_length, Compare>
@@ -795,6 +811,7 @@ namespace boost {
       std::sort(first, last, comp);
     }
   }
+}
 }
 
 #endif

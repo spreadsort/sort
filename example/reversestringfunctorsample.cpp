@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/string_sort.hpp>
+#include <boost/sort/spreadsort/string_sort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include <fstream>
 #include <string>
 using std::string;
-using namespace boost;
+using namespace boost::sort;
 
 struct DATA_TYPE {
     string a;
@@ -89,7 +89,7 @@ int main(int argc, const char ** argv) {
       reverse_string_sort(array.begin(), array.end(), bracket(), getsize(),
                           greaterthan());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (stdSort)
       outfile.open("standard_sort_out.txt", std::ios_base::out |
                    std::ios_base::binary | std::ios_base::trunc);

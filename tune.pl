@@ -148,6 +148,8 @@ PerfTest("Verifying string_sort with all functors", "stringfunctorsort");
 PerfTest("Verifying reverse_string_sort", "reversestringsort");
 PerfTest("Verifying reverse_string_sort with functors",
          "reversestringfunctorsort");
+PerfTest("Verifying generalized string_sort with multiple keys of different types",
+         "generalizedstruct");
 PerfTest("Verifying boost::sort on its custom-built worst-case distribution",
          "binaryalrbreaker");
 # clean up once we finish
@@ -201,6 +203,7 @@ sub WriteConstants {
     print CONSTANTS "#define BOOST_SORT_DETAIL_CONSTANTS\n";
     print CONSTANTS "namespace boost {\n";
     print CONSTANTS "namespace detail {\n";
+    print CONSTANTS "namespace sort {\n";
     print CONSTANTS "//Tuning constants\n";
     print CONSTANTS "//This should be tuned to your processor cache;\n"; 
     print CONSTANTS "//if you go too large you get cache misses on bins\n";
@@ -230,7 +233,7 @@ sub WriteConstants {
     print CONSTANTS "float_log_finishing_count = $float_log_finishing_count,\n";
     print CONSTANTS "//There is a minimum size below which it is not worth using spreadsort\n";
     print CONSTANTS "min_sort_size = $min_sort_size };\n";
-    print CONSTANTS "}\n}\n#endif\n";
+    print CONSTANTS "}\n}\n}\n#endif\n";
     close CONSTANTS;
     system("$makename $exename $log");
 }

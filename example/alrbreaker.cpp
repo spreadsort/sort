@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,12 +18,12 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost;
+using namespace boost::sort;
 using namespace std;
 
 #define DATA_TYPE boost::uint64_t
 
-#define ALR_THRESHOLD 20
+#define ALR_THRESHOLD 3
 
 const unsigned max_count = ALR_THRESHOLD - 1;
 const unsigned bit_shift = detail::rough_log_2_size(max_count) -
@@ -51,10 +51,11 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
 }
 
 //Tests boost::sort on the worst-case distribution for standard MSD radix sorts.
-int main(int argc, const char ** argv) {
+int main(int, const char **) {
   vector<DATA_TYPE> input;
   for (int ii = (1 << top_splits) - 1; ii >= 0; --ii)
     fill_vector(input, ii, (sizeof(DATA_TYPE) * 8) - top_splits);
+
   //Run both std::sort and boost::sort
   for (unsigned u = 0; u < 2; ++u) {
     vector<DATA_TYPE> array = input;
@@ -64,9 +65,9 @@ int main(int argc, const char ** argv) {
     if (u)
       std::sort(array.begin(), array.end());
     else
-      boost::sort(array.begin(), array.end());
+      boost::sort::spreadsort(array.begin(), array.end());
     end = clock();
-    elapsed = ((double) (end - start));
+    elapsed = static_cast<double>(end - start);
     if (u)
       printf("std::sort elapsed time %f\n", elapsed / CLOCKS_PER_SEC);
     else

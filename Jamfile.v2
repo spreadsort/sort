@@ -34,3 +34,9 @@ exe randomgen : randomgen.cpp ;
 exe boostrandomgen : boostrandomgen.cpp ;
 exe alrbreaker : alrbreaker.cpp ;
 exe binaryalrbreaker : binaryalrbreaker.cpp ;
+exe caseinsensitive : caseinsensitive.cpp ;
+exe generalizedstruct : generalizedstruct.cpp ;
+
+# benchmarks need to be built with linkflags="-lboost_system -lboost_thread"
+#exe parallelint : parallelint.cpp boost_system ;
+#exe parallelstring : parallelstring.cpp ;

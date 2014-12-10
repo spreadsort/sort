@@ -8,14 +8,17 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 #include <stdio.h>
 #include "stdlib.h"
 #include <fstream>
 #include <iostream>
+using namespace boost;
 
 int main(int argc, const char ** argv) {
-  //Always seed with the same value, to get the same results
-  srand(1);
+  random::mt19937 generator;
+  random::uniform_int_distribution<unsigned> distribution;
   //defaults
   unsigned high_shift = 16;
   unsigned low_shift = 16;
@@ -43,21 +46,23 @@ int main(int argc, const char ** argv) {
   //Skipping buffering for small files
   if (count < uDivideFactor * 100)
     uDivideFactor = count;
-  int * pNumbers = (int *) malloc(uDivideFactor * sizeof(int));
+  unsigned * pNumbers = static_cast<unsigned *>(malloc(uDivideFactor * 
+                                                       sizeof(unsigned)));
   //Generating semirandom numbers
+  unsigned mask = 0;
+  unsigned one = 1;
+  for (unsigned u = 0; u < low_shift; ++u) {
+    mask += one << u;
+  }
+  for (unsigned u = 0; u < high_shift; ++u) {
+    mask += one << (16 + u);
+  }
   for (unsigned u = 0; u < count/uDivideFactor; ++u) {
     unsigned i = 0;
     for (; i< uDivideFactor; ++i) {
-      //Generating a 32-bit random number
-      pNumbers[i] = (rand() % (1 << low_shift)) |
-        ((rand() % (1 << high_shift)) << 16);
-      if (16 == low_shift && rand() % 2)
-        pNumbers[i] |= 1 << 15;
-      //Adding the sign bit
-      if (16 == high_shift && rand() % 2)
-        pNumbers[i] *= -1;
+      pNumbers[i] = distribution(generator) & mask;
     }
-    ofile.write( (char *) pNumbers, uDivideFactor * 4 );
+    ofile.write(reinterpret_cast<char *>(pNumbers), uDivideFactor * 4 );
   }
   ofile.close();
   return 0;

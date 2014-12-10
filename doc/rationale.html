@@ -38,7 +38,7 @@
 
     <dt><a href="#hybrid">Hybrid Radix</a></dt>
 
-    <dt><a href="#sort">why spread_sort?</a></dt>
+    <dt><a href="#sort">why spreadsort?</a></dt>
 
     <dt><a href="#unstable">Unstable Sorting</a></dt>
     
@@ -95,7 +95,7 @@
 		This would be most appropriate in cases where comparisons are extremely slow.
 </p>
 
-  <h2><a name="sort" id="spread_sort"></a>why spread_sort?</h2>
+  <h2><a name="sort" id="spreadsort"></a>why spreadsort?</h2>
   <p>The <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> algorithm used in this library is designed to provide best possible worst-case performance, 
 		while still being cache-friendly.  
 		It provides the better of <img src="equation/worst.png" alt="O(N*log(K/S + S))" /> and <img src="equation/introsort.png" alt="O(N*log(N))" /> worst-case time,

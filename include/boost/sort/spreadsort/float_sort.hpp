@@ -21,10 +21,11 @@ Scott McMurray
 #include <cstring>
 #include <limits>
 #include <boost/static_assert.hpp>
-#include <boost/sort/detail/constants.hpp>
-#include <boost/sort/detail/float_sort.hpp>
+#include <boost/sort/spreadsort/detail/constants.hpp>
+#include <boost/sort/spreadsort/detail/float_sort.hpp>
 
 namespace boost {
+namespace sort {
   //Casts a float to the specified integer type
   template<class Data_type, class Cast_type>
   inline Cast_type
@@ -69,6 +70,7 @@ namespace boost {
     else
       detail::float_sort(first, last, rshift(*first, 0), rshift, comp);
   }
+}
 }
 
 #endif

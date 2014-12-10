@@ -6,9 +6,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/sort for library home page.
-#ifndef BOOST_SORT_DETAIL_CONSTANTS
-#define BOOST_SORT_DETAIL_CONSTANTS
+#ifndef BOOST_SORT_SPREADSORT_DETAIL_CONSTANTS
+#define BOOST_SORT_SPREADSORT_DETAIL_CONSTANTS
 namespace boost {
+namespace sort {
 namespace detail {
 //Tuning constants
 //This should be tuned to your processor cache;
@@ -36,7 +37,8 @@ float_log_min_split_count = 8,
 //iteration.  Make this larger the faster std::sort is relative to float_sort.
 float_log_finishing_count = 4,
 //There is a minimum size below which it is not worth using spreadsort
-min_sort_size = 3000 };
+min_sort_size = 1000 };
+}
 }
 }
 #endif

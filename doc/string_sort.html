@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
   <link rel="stylesheet" type="text/css" href="../../../boost.css">
 
-  <title>Boost Sort library - Header &lt;boost/sort/string_sort.hpp&gt;</title>
+  <title>Boost Sort library - Header &lt;boost/sort/spreadsort/string_sort.hpp&gt;</title>
 </head>
 
 <body link="#0000FF" vlink="#800080">
@@ -21,7 +21,7 @@
       <td valign="top">
         <h1 align="center">Boost Sort library</h1>
 
-        <h2 align="center">Header &lt;boost/sort/string_sort.hpp&gt;</h2>
+        <h2 align="center">Header &lt;boost/sort/spreadsort/string_sort.hpp&gt;</h2>
       </td>
     </tr>
   </table>
@@ -52,11 +52,11 @@
   <hr>
 
   <h2><a name="introduction" id="introduction"></a>Introduction</h2>
-     <p>string_sort is a hybrid radix-based/comparison-based algorithm that sorts strings of characters in ascending order.
+     <p>string_sort is a hybrid radix-based/comparison-based algorithm that sorts strings of characters (or arrays of binary data) in ascending order.
 		The simplest version (no functors) sorts strings of items that can cast to an unsigned data type 
-		(such as an unsigned char), have a &lt; operator, and have a size function, such as a std::string.
-		The functor version can sort any string of discrete elements, via templating, but requires 
-		definitions of a get_char (acts like x[offset] on a string), 
+		(such as an unsigned char), have a &lt; operator, have a size function, and have a data() function that returns a pointer to an array of characters, such as a std::string.
+		The functor version can sort any data type that has a strict weak ordering, via templating, but requires 
+		definitions of a get_char (acts like x[offset] on a string or a byte array), 
 		get_length (returns length of the string being sorted), and a comparison functor.  
 		Individual characters returned by get_char must support the != operator and have an unsigned 
 		value that defines their lexicographical order.  
@@ -259,6 +259,12 @@ O(N * mean_string_length) character comparisons worst-case performance,
 where <tt>N</tt> is <tt>last - first</tt>.
 </dt>
 
+    <dt><b>Exceptions:</b>
+Throws if any of the element comparisons, the element
+swaps (or moves), one of the functors, subtraction of the characters obtained through get_char, 
+or the operations on iterators throws.  Throwing an 
+exception may cause data loss.  This will also throw if a small vector (worst case size proportional to the square root of the number of input bytes) resize throws, in which case there will be no data loss.  Note that invalid arguments cause undefined behavior.
+</dt>
     <dt><b>Rationale:</b><p>This provides a general-case string-sorting algorithm that
     takes asymptotically less time than is possible for a pure comparison-based algorithm.</p>
     <p><b>Why use recursion for string_sort instead of a stack, 
@@ -275,6 +281,8 @@ where <tt>N</tt> is <tt>last - first</tt>.
 </p><p><a href="../example/reversestringsample.cpp">Sorting in reverse order</a>
 </p><p><a href="../example/reversestringfunctorsample.cpp">Sorting in reverse order with functors</a>
 </p><p><a href="../example/stringfunctorsample.cpp">Sorting with functors</a>
+</p><p><a href="../example/caseinsensitive.cpp">Case-insensitive sorting</a>
+</p><p><a href="../example/generalizedstruct.cpp">Generalized sorting with multiple keys and key types</a>
 </p>
 <pre>vector&lt;string&gt; vec;
 vec.push_back("c");

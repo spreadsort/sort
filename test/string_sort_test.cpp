@@ -7,9 +7,9 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/detail/string_sort.hpp>
-#include <boost/sort/string_sort.hpp>
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/detail/string_sort.hpp>
+#include <boost/sort/spreadsort/string_sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/test_tools.hpp>
@@ -18,10 +18,10 @@
 
 
 using namespace std;
-using namespace boost;
-using boost::detail::offset_less_than;
-using boost::detail::offset_greater_than;
-using boost::detail::update_offset;
+using namespace boost::sort;
+using boost::sort::detail::offset_less_than;
+using boost::sort::detail::offset_greater_than;
+using boost::sort::detail::update_offset;
 
 struct bracket {
   unsigned char operator()(const string &x, size_t offset) const {
@@ -33,7 +33,7 @@ struct get_size {
   size_t operator()(const string &x) const{ return x.size(); }
 };
 
-static const unsigned input_count = 32;
+static const unsigned input_count = 100000;
 
 // Test that update_offset finds the first character with a difference.
 void update_offset_test() {
@@ -41,7 +41,9 @@ void update_offset_test() {
   input.push_back("test1");
   input.push_back("test2");
   size_t char_offset = 1;
-  update_offset(input.begin(), input.end(), char_offset);
+  update_offset<vector<string>::iterator, unsigned char>(input.begin(),
+                                                         input.end(),
+                                                         char_offset);
   BOOST_CHECK(char_offset == 4);
 
   // Functor version
@@ -100,7 +102,7 @@ void string_test()
   string_sort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec == sorted_vec);
   //Testing boost::sort wrapper
-  boost::sort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec == sorted_vec);
   //Character functors
   test_vec = base_vec;
@@ -125,12 +127,12 @@ void string_test()
 // Verify that 0, 1, and input_count empty strings all sort correctly.
 void corner_test() {
   vector<string> test_vec;
-  boost::sort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
   test_vec.resize(1);
-  boost::sort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec[0].empty());
   test_vec.resize(input_count);
-  boost::sort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec.size() == input_count);
   for (unsigned i = 0; i < test_vec.size(); ++i) {
     BOOST_CHECK(test_vec[i].empty());
