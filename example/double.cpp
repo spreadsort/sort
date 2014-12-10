@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +17,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-using namespace boost;
+using namespace boost::sort;
 
 #define DATA_TYPE double
 #define CAST_TYPE boost::int64_t

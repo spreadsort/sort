@@ -9,7 +9,7 @@
 //  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/algorithm/string.hpp>
-#include <boost/sort/string_sort.hpp>
+#include <boost/sort/spreadsort/string_sort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +19,7 @@
 #include <fstream>
 #include <string>
 using std::string;
-using namespace boost;
+using namespace boost::sort;
 
 struct DATA_TYPE {
     string a;

@@ -29,7 +29,7 @@
 <a accesskey="p" href="index.html"><img src="../../../doc/html/images/prev.png" alt="Prev"></a>
 <a accesskey="u" href="index.html"><img src="../../../doc/html/images/up.png" alt="Up"></a>
 <a accesskey="h" href="index.html"><img src="../../../doc/html/images/home.png" alt="Home"></a>
-<a accesskey="n" href="sorting.html"><img src="../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="n" href="sort.html"><img src="../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 
   <hr>
@@ -60,12 +60,13 @@
 		so that on real data it can perform substantially better than on random data.
 		Conceptually, <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> can sort any data for which an absolute ordering can be determined, and string_sort is sufficiently flexible that this should be possible. 
 		Situations where <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> is fastest relative to std::sort:
-</p><p> 1. Large number of elements to sort (N >> 1000)
+</p><p> 1. Large number of elements to sort (N >= 10000)
 </p><p> 2. Slow comparison function (such as floating point numbers on x86 processors or strings)
-</p><p> 3. Large data elements (such as key + data sorted on a key) 
-</p><p> Situations where <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> is slowest relative to std::sort:
-</p><p> 1. Integers and mostly-sorted data on x86 processors
-</p><p>    
+</p><p> 3. Large data elements (such as key + data sorted on a key)
+</p><p> 4. Completely sorted data.  Spreadsort has an optimization to quit early in this case. 
+</p><p> Situations where <a href="http://en.wikipedia.org/wiki/Spreadsort">Spreadsort</a> is slower than std::sort:
+</p><p> 1. Data sorted in reverse order.  Both std::sort and Spreadsort are faster on reverse-ordered data than randomized data, but std::sort speeds up more in this special case.
+</p><p> 2. Very small amounts of data (< 1000 elements).  For this reason there is a fallback in Spreadsort to std::sort if the input size is less than 1000, so performance is identical for small amounts of data in practice.   
         These functions are defined in namespace <code class="computeroutput">boost</code>.
     </p>
 
@@ -112,7 +113,7 @@
         Runtime Performance comparisons and graphs were made on a Core 2 Duo laptop running 
         Windows Vista 64 with MSVC 8.0, 
         and an old G4 laptop running Mac OSX with gcc.  bjam was used to control compilation.
-        </p><p>Direct performance comparisons on a newer x86 system running Ubuntu, with the fallback to std::sort at lower input sizes disabled are below.  Note that the fallback to std::sort for smaller input sizes prevents the worse performance seen on the left sides of the first two graphs.  integer_sort starts to become faster than std::sort at about 1000 integers (4000 bytes), and string_sort becomes faster than std::sort at slightly fewer bytes (as few as 30 strings).  Note also that the 4-threaded graph has 4 threads doing separate sorts simultaneously, not splitting up a single sort, as a test for thread cache collision and other multi-threaded performance issues. <br>
+        </p><p>Direct performance comparisons on a newer x86 system running Ubuntu, with the fallback to std::sort at lower input sizes disabled are below.  Note that the fallback to std::sort for smaller input sizes prevents the worse performance seen on the left sides of the first two graphs.  integer_sort starts to become faster than std::sort at about 1000 integers (4000 bytes), and string_sort becomes faster than std::sort at slightly fewer bytes (as few as 30 strings).  Note also that the 4-threaded graph has 4 threads doing separate sorts simultaneously, not splitting up a single sort, as a test for thread cache collision and other multi-threaded performance issues.  float_sort times are very similar to integer_sort times. <br>
   <img src="single_threaded.png">
   <img src="4_threaded.png">
   <img src="entropy.png">
@@ -305,7 +306,7 @@
 <a accesskey="p" href="index.html"><img src="../../../doc/html/images/prev.png" alt="Prev"></a>
 <a accesskey="u" href="index.html"><img src="../../../doc/html/images/up.png" alt="Up"></a>
 <a accesskey="h" href="index.html"><img src="../../../doc/html/images/home.png" alt="Home"></a>
-<a accesskey="n" href="sorting.html"><img src="../../../doc/html/images/next.png" alt="Next"></a>
+<a accesskey="n" href="sort.html"><img src="../../../doc/html/images/next.png" alt="Next"></a>
 </div>
 
   <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=

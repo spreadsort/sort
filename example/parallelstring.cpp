@@ -10,7 +10,7 @@
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <boost/thread.hpp>
 #include <time.h>
 #include <stdio.h>
@@ -21,7 +21,7 @@
 #include <fstream>
 #include <string>
 using std::string;
-using namespace boost;
+using namespace boost::sort;
 
 #define DATA_TYPE string
 
@@ -39,7 +39,7 @@ static void sort_core(std::vector<DATA_TYPE> &array, bool stdSort,
   if (stdSort)
     std::sort(array.begin(), array.end());
   else
-    boost::sort(array.begin(), array.end());
+    boost::sort::spreadsort(array.begin(), array.end());
   if (!is_sorted(array)) {
     fprintf(stderr, "sort failed!\n");
     exit(1);

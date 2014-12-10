@@ -7,7 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/sort for library home page.
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include <sstream>
 #include <iostream>
 
-using namespace boost;
+using namespace boost::sort;
 
 #define CAST_TYPE int
 #define KEY_TYPE float

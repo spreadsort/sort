@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost;
+using namespace boost::sort;
 using namespace std;
 
 #define DATA_TYPE boost::uint64_t
@@ -65,7 +65,7 @@ int main(int, const char **) {
     if (u)
       std::sort(array.begin(), array.end());
     else
-      boost::sort(array.begin(), array.end());
+      boost::sort::spreadsort(array.begin(), array.end());
     end = clock();
     elapsed = static_cast<double>(end - start);
     if (u)

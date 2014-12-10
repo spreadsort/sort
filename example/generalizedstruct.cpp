@@ -8,8 +8,8 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/string_sort.hpp>
-#include <boost/sort/float_sort.hpp>
+#include <boost/sort/spreadsort/string_sort.hpp>
+#include <boost/sort/spreadsort/float_sort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +19,7 @@
 #include <fstream>
 #include <string>
 using std::string;
-using namespace boost;
+using namespace boost::sort;
 
 struct DATA_TYPE {
   time_t birth;
@@ -83,7 +83,7 @@ struct bracket {
     // nulls.  If embedded nulls are not required, then just delete the "* 2"
     // and the inside of the following if just becomes:
     // return x.first_name[offset - first_name_offset];
-    const unsigned first_name_end_offset = 
+    const unsigned first_name_end_offset =
       first_name_offset + x.first_name.size() * 2;
     if (offset < first_name_end_offset) {
       int char_offset = offset - first_name_offset;
@@ -106,9 +106,9 @@ struct bracket {
 };
 
 struct getsize {
-  inline size_t operator()(const DATA_TYPE &x) const { 
-    return first_name_offset + x.first_name.size() * 2 + 1 + 
-      x.last_name.size(); 
+  inline size_t operator()(const DATA_TYPE &x) const {
+    return first_name_offset + x.first_name.size() * 2 + 1 +
+      x.last_name.size();
   }
 };
 
@@ -128,12 +128,12 @@ int main(int argc, const char ** argv) {
   //Run multiple loops, if requested
   std::vector<DATA_TYPE> array;
   for (unsigned u = 0; u < loopCount; ++u) {
-    indata.open("input.txt", std::ios_base::in | std::ios_base::binary);  
+    indata.open("input.txt", std::ios_base::in | std::ios_base::binary);
     if (indata.bad()) {
       printf("input.txt could not be opened\n");
       return 1;
     }
-    
+
     // Read in the data.
     DATA_TYPE inval;
     while (!indata.eof() ) {
@@ -149,7 +149,6 @@ int main(int argc, const char ** argv) {
         break;
       array.push_back(inval);
     }
-    fprintf(stderr, "read in: %lu elements\n", array.size());      
     indata.close();
 
     // Sort the data.

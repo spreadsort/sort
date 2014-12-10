@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <boost/thread.hpp>
 #include <time.h>
 #include <stdio.h>
@@ -19,7 +19,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost;
+using namespace boost::sort;
 
 #define DATA_TYPE int
 
@@ -42,7 +42,7 @@ void sort_loop(const std::vector<DATA_TYPE> &base_array, bool stdSort,
     if (stdSort)
       std::sort(array.begin(), array.end());
     else
-      boost::sort(array.begin(), array.end());
+      boost::sort::spreadsort(array.begin(), array.end());
     if (!is_sorted(array)) {
       fprintf(stderr, "sort failed!\n");
       exit(1);

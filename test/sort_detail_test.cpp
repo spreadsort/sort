@@ -8,11 +8,11 @@
 //  See http://www.boost.org/libs/sort for library home page.
 
 #include <boost/cstdint.hpp>
-#include <boost/sort/detail/spread_sort_common.hpp>
-#include <boost/sort/detail/integer_sort.hpp>
-#include <boost/sort/detail/float_sort.hpp>
-#include <boost/sort/detail/string_sort.hpp>
-#include <boost/sort/float_sort.hpp>
+#include <boost/sort/spreadsort/detail/spreadsort_common.hpp>
+#include <boost/sort/spreadsort/detail/integer_sort.hpp>
+#include <boost/sort/spreadsort/detail/float_sort.hpp>
+#include <boost/sort/spreadsort/detail/string_sort.hpp>
+#include <boost/sort/spreadsort/float_sort.hpp>
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
 #include <boost/test/test_tools.hpp>
@@ -22,8 +22,8 @@
 
 
 using namespace std;
-using namespace boost;
-using namespace boost::detail;
+using namespace boost::sort;
+using namespace boost::sort::detail;
 
 namespace {
 

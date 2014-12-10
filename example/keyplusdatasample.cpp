@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org/libs/sort for library home page.
 
-#include <boost/sort/sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +18,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost;
+using namespace boost::sort;
 
 struct DATA_TYPE {
     int key;
