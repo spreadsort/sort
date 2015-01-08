@@ -28,6 +28,7 @@ Phil Endecott and Frank Gennari
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   namespace detail {
     static const int max_step_size = 64;
 
@@ -811,6 +812,7 @@ namespace sort {
       std::sort(first, last, comp);
     }
   }
+}
 }
 }
 

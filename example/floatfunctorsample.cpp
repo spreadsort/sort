@@ -18,7 +18,7 @@
 #include <sstream>
 #include <iostream>
 
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 #define CAST_TYPE int
 #define KEY_TYPE float

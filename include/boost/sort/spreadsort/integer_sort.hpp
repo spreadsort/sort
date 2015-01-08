@@ -24,6 +24,7 @@ Phil Endecott and Frank Gennari
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   //Top-level sorting call for integers
   template <class RandomAccessIter>
   inline void integer_sort(RandomAccessIter first, RandomAccessIter last) 
@@ -54,6 +55,7 @@ namespace sort {
     else
       detail::integer_sort(first, last, shift(*first, 0), shift);
   }
+}
 }
 }
 

@@ -17,7 +17,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 #define DATA_TYPE float
 #define CAST_TYPE int
@@ -71,8 +71,8 @@ int main(int argc, const char ** argv) {
       //std::sort(&(array[0]), &(array[0]) + uCount);
       std::sort(array.begin(), array.end());
     else
-      //boost::sort::spreadsort(&(array[0]), &(array[0]) + uCount);
-      boost::sort::spreadsort(array.begin(), array.end());
+      //boost::sort::spreadsort::spreadsort(&(array[0]), &(array[0]) + uCount);
+      boost::sort::spreadsort::spreadsort(array.begin(), array.end());
     end = clock();
     elapsed = static_cast<double>(end - start) ;
     std::ofstream ofile;

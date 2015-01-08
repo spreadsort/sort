@@ -17,7 +17,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 #define DATA_TYPE double
 #define CAST_TYPE boost::int64_t

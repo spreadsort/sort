@@ -27,6 +27,7 @@ Phil Endecott and Frank Gennari
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
  namespace detail {
     //This only works on unsigned data types
     template <typename T>
@@ -116,6 +117,7 @@ namespace sort {
       return &(bin_cache[cache_offset]);
     }
   }
+}
 }
 }
 

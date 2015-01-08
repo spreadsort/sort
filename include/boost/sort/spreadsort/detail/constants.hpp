@@ -10,6 +10,7 @@
 #define BOOST_SORT_SPREADSORT_DETAIL_CONSTANTS
 namespace boost {
 namespace sort {
+namespace spreadsort {
 namespace detail {
 //Tuning constants
 //This should be tuned to your processor cache;
@@ -38,6 +39,7 @@ float_log_min_split_count = 8,
 float_log_finishing_count = 4,
 //There is a minimum size below which it is not worth using spreadsort
 min_sort_size = 1000 };
+}
 }
 }
 }

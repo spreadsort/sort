@@ -19,7 +19,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 #define DATA_TYPE int
 
@@ -42,7 +42,7 @@ void sort_loop(const std::vector<DATA_TYPE> &base_array, bool stdSort,
     if (stdSort)
       std::sort(array.begin(), array.end());
     else
-      boost::sort::spreadsort(array.begin(), array.end());
+      boost::sort::spreadsort::spreadsort(array.begin(), array.end());
     if (!is_sorted(array)) {
       fprintf(stderr, "sort failed!\n");
       exit(1);

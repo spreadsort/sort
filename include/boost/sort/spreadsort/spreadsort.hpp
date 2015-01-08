@@ -28,6 +28,7 @@ Scott McMurray
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   //Generic spreadsort call to integer_sort
   template <class RandomAccessIter>
   inline typename boost::enable_if_c< std::numeric_limits< 
@@ -61,6 +62,7 @@ namespace sort {
   {
     string_sort(first, last);
   }
+}
 }
 }
 

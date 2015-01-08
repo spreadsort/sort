@@ -18,7 +18,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 using namespace std;
 
 #define DATA_TYPE boost::uint64_t
@@ -50,7 +50,7 @@ fill_vector(vector<DATA_TYPE> & input, const DATA_TYPE base_value,
   }
 }
 
-//Tests boost::sort on the worst-case distribution for standard MSD radix sorts.
+//Tests boost::sort::spreadsort on the worst-case distribution for standard MSD radix sorts.
 int main(int, const char **) {
   vector<DATA_TYPE> input;
   for (int ii = (1 << top_splits) - 1; ii >= 0; --ii)
@@ -65,7 +65,7 @@ int main(int, const char **) {
     if (u)
       std::sort(array.begin(), array.end());
     else
-      boost::sort::spreadsort(array.begin(), array.end());
+      boost::sort::spreadsort::spreadsort(array.begin(), array.end());
     end = clock();
     elapsed = static_cast<double>(end - start);
     if (u)

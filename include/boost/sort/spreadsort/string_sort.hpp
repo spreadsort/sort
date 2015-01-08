@@ -24,6 +24,7 @@ Phil Endecott and Frank Gennari
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   //Allows character-type overloads
   template <class RandomAccessIter, class Unsigned_char_type>
   inline void string_sort(RandomAccessIter first, RandomAccessIter last,
@@ -124,6 +125,7 @@ namespace sort {
                                   getchar((*last), 0));
     }
   }
+}
 }
 }
 

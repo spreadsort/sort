@@ -18,7 +18,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 struct DATA_TYPE {
     int key;

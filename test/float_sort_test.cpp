@@ -15,7 +15,7 @@
 
 
 using namespace std;
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 //Casting to an integer before bitshifting
 struct rightshift {
@@ -62,9 +62,9 @@ void float_test()
   vector<float> sorted_vec = base_vec;
   vector<float> test_vec = base_vec;
   std::sort(sorted_vec.begin(), sorted_vec.end());
-  //Testing boost::sort version
+  //Testing boost::sort::spreadsort version
   test_vec = base_vec;
-  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec == sorted_vec);
   //One functor
   test_vec = base_vec;
@@ -107,10 +107,10 @@ void double_test() {
 // Verify that 0 and 1 elements work correctly.
 void corner_test() {
   vector<float> test_vec;
-  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort::spreadsort(test_vec.begin(), test_vec.end());
   const float test_value = -0.0;
   test_vec.push_back(test_value);
-  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec.size() == 1);
   BOOST_CHECK(test_vec[0] == test_value);
 }

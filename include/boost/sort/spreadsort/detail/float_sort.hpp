@@ -30,6 +30,7 @@ Scott McMurray
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   namespace detail {
     //Casts a RandomAccessIter to the specified integer type
     template<class Cast_type, class RandomAccessIter>
@@ -798,6 +799,7 @@ namespace sort {
       std::sort(first, last, comp);
     }
   }
+}
 }
 }
 

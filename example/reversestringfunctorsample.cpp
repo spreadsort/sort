@@ -18,7 +18,7 @@
 #include <fstream>
 #include <string>
 using std::string;
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 struct DATA_TYPE {
     string a;

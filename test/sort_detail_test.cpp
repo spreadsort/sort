@@ -22,8 +22,8 @@
 
 
 using namespace std;
-using namespace boost::sort;
-using namespace boost::sort::detail;
+using namespace boost::sort::spreadsort;
+using namespace boost::sort::spreadsort::detail;
 
 namespace {
 

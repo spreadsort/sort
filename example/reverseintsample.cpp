@@ -18,7 +18,7 @@
 #include <fstream>
 #include <iostream>
 #include <functional>
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 #define DATA_TYPE int
 

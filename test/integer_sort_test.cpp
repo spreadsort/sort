@@ -18,7 +18,7 @@
 
 
 using namespace std;
-using namespace boost::sort;
+using namespace boost::sort::spreadsort;
 
 struct rightshift {
   int operator()(int x, unsigned offset) { return x >> offset; }
@@ -66,9 +66,9 @@ void int_test()
   //Testing basic call
   integer_sort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec == sorted_vec);
-  //boost::sort variant
+  //boost::sort::spreadsort variant
   test_vec = base_vec;
-  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec == sorted_vec);
   //One functor
   test_vec = base_vec;
@@ -114,10 +114,10 @@ void int_test()
 // Verify that 0 and 1 elements work correctly.
 void corner_test() {
   vector<int> test_vec;
-  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort::spreadsort(test_vec.begin(), test_vec.end());
   const int test_value = 42;
   test_vec.push_back(test_value);
-  boost::sort::spreadsort(test_vec.begin(), test_vec.end());
+  boost::sort::spreadsort::spreadsort(test_vec.begin(), test_vec.end());
   BOOST_CHECK(test_vec.size() == 1);
   BOOST_CHECK(test_vec[0] == test_value);
 }

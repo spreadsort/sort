@@ -26,6 +26,7 @@ Scott McMurray
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   //Casts a float to the specified integer type
   template<class Data_type, class Cast_type>
   inline Cast_type
@@ -70,6 +71,7 @@ namespace sort {
     else
       detail::float_sort(first, last, rshift(*first, 0), rshift, comp);
   }
+}
 }
 }
 

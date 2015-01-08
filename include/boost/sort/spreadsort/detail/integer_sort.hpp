@@ -27,6 +27,7 @@ Phil Endecott and Frank Gennari
 
 namespace boost {
 namespace sort {
+namespace spreadsort {
   namespace detail {
     // Return true if the list is sorted.  Otherwise, find the minimum and
     // maximum using <.
@@ -486,6 +487,7 @@ namespace sort {
       std::sort(first, last);
     }
   }
+}
 }
 }
 
